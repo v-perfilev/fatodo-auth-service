@@ -1,6 +1,6 @@
 spring:
   application:
-    name: extended-skeleton
+    name: fatodo-auth-service
   cloud:
     config:
       uri: http://${CONFIG_SERVER_HOST:localhost}:8888

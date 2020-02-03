@@ -1,2 +1,2 @@
-# FaToDo extended-skeleton
-Spring app that is used for development of complex microservices.
+# FaToDo auth-service
+Auth service for FaToDo based on extended skeleton.
