@@ -15,6 +15,7 @@
     <description>Auth service for FaToDo</description>
 
     <properties>
+        <!-- Versions -->
         <java.version>13</java.version>
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
         <spring-cloud.version>2.2.1.RELEASE</spring-cloud.version>
@@ -22,11 +23,13 @@
         <zalando-problem.version>0.25.2</zalando-problem.version>
         <lombok.version>1.18.10</lombok.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
-        <mongobee.version>0.13</mongobee.version>
         <swagger.version>2.9.2</swagger.version>
+        <!-- Profiles -->
+        <dev.profile>dev</dev.profile>
+        <docker.profile>docker</docker.profile>
+        <prod.profile>prod</prod.profile>
     </properties>
 
-    <!-- Dependency management -->
     <dependencyManagement>
         <dependencies>
             <!-- Spring Cloud management (extended-skeleton) -->
@@ -89,12 +92,6 @@
                 <version>${mapstruct.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!-- Mongobee management -->
-            <dependency>
-                <groupId>com.github.mongobee</groupId>
-                <artifactId>mongobee</artifactId>
-                <version>${mongobee.version}</version>
-            </dependency>
             <!-- Swagger management -->
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -148,11 +145,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <!-- Spring Boot Data MongoDB -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
         <!-- Spring Boot Cache -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -191,11 +183,6 @@
             <artifactId>mapstruct-processor</artifactId>
         </dependency>
 
-        <!-- Mongobee -->
-        <dependency>
-            <groupId>com.github.mongobee</groupId>
-            <artifactId>mongobee</artifactId>
-        </dependency>
         <!-- Swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -238,5 +225,32 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- dev profile -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>${dev.profile}</spring.profiles.active>
+            </properties>
+        </profile>
+        <!-- docker profile -->
+        <profile>
+            <id>docker</id>
+            <properties>
+                <spring.profiles.active>${docker.profile}</spring.profiles.active>
+            </properties>
+        </profile>
+        <!-- prod profile -->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>${prod.profile}</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
