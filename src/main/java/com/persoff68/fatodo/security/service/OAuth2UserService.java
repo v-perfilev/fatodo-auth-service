@@ -43,7 +43,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2EmailNotFoundException();
         }
 
-        UserPrincipal userPrincipal = userServiceClient.getUserPrincipalByEmail(email);
+        UserPrincipal userPrincipal = userServiceClient.getUserPrincipalByEmailOrNew(email);
         String userProvider = userPrincipal.getProvider();
 
         UserPrincipal userPrincipalResult;

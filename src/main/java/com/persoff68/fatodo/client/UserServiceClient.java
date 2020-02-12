@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-@FeignClient(name = "user-service")
+@FeignClient("user-service")
 public interface UserServiceClient {
 
     @GetMapping(value = "/details/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
