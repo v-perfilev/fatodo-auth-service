@@ -19,9 +19,9 @@ public interface UserMapper {
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "grantedAuthoritiesIntoStrings")
     UserDTO userPrincipalToUserDTO(UserPrincipal userPrincipal);
 
-    @Named("grantedAuthoritiesIntoStrings")
     static Set<String> grantedAuthoritiesIntoStrings(List<? extends GrantedAuthority> grantedAuthorityList) {
-        return grantedAuthorityList.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        return grantedAuthorityList != null
+                ? grantedAuthorityList.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet())
+                : null;
     }
-
 }

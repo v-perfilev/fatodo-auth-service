@@ -12,6 +12,7 @@ public class UserDTO {
     private String email;
     private String username;
     private String provider;
+    private String providerId;
     private Set<String> authorities;
 
 }

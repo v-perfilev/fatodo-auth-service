@@ -19,17 +19,20 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private String username;
     private String password;
     private String provider;
+    private String providerId;
     private Set<String> authorities;
     private Map<String, Object> attributes;
 
     @Override
     public String getName() {
-        return username;
+        return email;
     }
 
     @Override
     public List<? extends GrantedAuthority> getAuthorities() {
-        return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return authorities != null
+                ? authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                : null;
     }
 
     @Override

@@ -61,7 +61,9 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String provider = oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(oAuth2UserInfo.getEmail());
+        userDTO.setUsername(oAuth2UserInfo.getEmail());
         userDTO.setProvider(provider);
+        userDTO.setProviderId(oAuth2UserInfo.getId());
         userDTO = userServiceClient.createUser(userDTO);
         return userMapper.userDTOToUserPrincipal(userDTO);
     }

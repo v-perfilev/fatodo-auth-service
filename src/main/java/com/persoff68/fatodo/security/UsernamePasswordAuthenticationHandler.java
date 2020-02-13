@@ -35,6 +35,9 @@ public class UsernamePasswordAuthenticationHandler extends UsernamePasswordAuthe
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         var username = request.getParameter("username");
         var password = request.getParameter("password");
+        if (username == null || password == null) {
+            // TODO exception for empty form
+        }
         var authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authenticationToken);
     }
