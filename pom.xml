@@ -20,6 +20,7 @@
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
         <spring-cloud.version>2.2.1.RELEASE</spring-cloud.version>
         <jackson.version>2.10.2</jackson.version>
+        <jaxb.version>2.3.1</jaxb.version>
         <jwt.version>0.9.1</jwt.version>
         <zalando-problem.version>0.25.2</zalando-problem.version>
         <lombok.version>1.18.10</lombok.version>
@@ -59,6 +60,12 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <!-- JAXB management -->
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.version}</version>
             </dependency>
             <!-- JWT management -->
             <dependency>
@@ -163,11 +170,17 @@
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
 
-        <!-- Jackson management -->
+        <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <!-- JAXB -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
         <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
