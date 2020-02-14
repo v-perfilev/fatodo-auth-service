@@ -17,10 +17,10 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        String targetUrl = cookieAuthorizationRequestRepository.loadRedirectURI(request).orElse("/");
+//        String targetUrl = cookieAuthorizationRequestRepository.loadRedirectURI(request);
         cookieAuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-        targetUrl = UriComponentsBuilder.fromUriString(targetUrl).build().toUriString();
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+//        targetUrl = UriComponentsBuilder.fromUriString(targetUrl).build().toUriString();
+//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
 }

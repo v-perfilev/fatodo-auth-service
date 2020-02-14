@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.security;
 
+import com.persoff68.fatodo.config.AppProperties;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.util.ResponseUtils;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UsernamePasswordAuthenticationHandler extends UsernamePasswordAuthenticationFilter {
 
+    private final AppProperties appProperties;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -46,7 +48,7 @@ public class UsernamePasswordAuthenticationHandler extends UsernamePasswordAuthe
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) throws IOException {
         String token = jwtTokenProvider.createToken(authentication);
-        ResponseUtils.addTokenToResponse(response, token);
+        ResponseUtils.addTokenToResponse(response, appProperties.getAuth().getAuthorizationHeader(), token);
     }
 
 

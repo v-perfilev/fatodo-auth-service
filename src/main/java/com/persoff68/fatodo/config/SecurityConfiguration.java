@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UsernamePasswordAuthenticationHandler authenticationHandler() throws Exception {
-        return new UsernamePasswordAuthenticationHandler(authenticationManager(), jwtTokenProvider);
+        return new UsernamePasswordAuthenticationHandler(appProperties, authenticationManager(), jwtTokenProvider);
     }
 
     @Bean

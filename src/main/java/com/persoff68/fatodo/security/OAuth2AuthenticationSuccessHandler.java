@@ -31,9 +31,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
         clearAuthenticationAttributes(request, response);
         String token = jwtTokenProvider.createToken(authentication);
-        ResponseUtils.addTokenToResponse(response, token);
-        String targetUrl = determineTargetUrl(request);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        ResponseUtils.addTokenToResponse(response, appProperties.getAuth().getAuthorizationHeader(), token);
+//        String targetUrl = determineTargetUrl(request);
+//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
