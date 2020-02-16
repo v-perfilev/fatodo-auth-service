@@ -18,8 +18,8 @@ public interface UserServiceClient {
     @GetMapping(value = "/details/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipal getUserPrincipalByEmail(@PathVariable("email") String email);
 
-    @GetMapping(value = "/details/email-or-new/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-    UserPrincipal getUserPrincipalByEmailOrNew(@PathVariable("email") String email);
+    @GetMapping(value = "/details/email-if-exists/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    UserPrincipal getUserPrincipalByEmailIfExists(@PathVariable("email") String email);
 
     @PostMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createUser(UserDTO userDTO);
