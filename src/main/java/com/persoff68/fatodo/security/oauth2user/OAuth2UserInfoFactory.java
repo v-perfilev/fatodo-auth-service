@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.security.oauth2user;
 
 import com.persoff68.fatodo.exception.OAuth2ProviderNotSupportedException;
-import com.persoff68.fatodo.model.AuthProvider;
+import com.persoff68.fatodo.model.constant.AuthProvider;
 
 import java.util.Map;
 

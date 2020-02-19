@@ -1,27 +1,23 @@
 package com.persoff68.fatodo.mapper;
 
 import com.persoff68.fatodo.model.UserPrincipal;
+import com.persoff68.fatodo.model.dto.LocalUserDTO;
+import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.security.oauth2user.OAuth2UserInfo;
+import com.persoff68.fatodo.web.rest.vm.RegisterVM;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
     UserPrincipal userDTOToUserPrincipal(UserDTO userDTO);
 
-    @Mapping(source = "authorities", target = "authorities", qualifiedByName = "grantedAuthoritiesIntoStrings")
-    UserDTO userPrincipalToUserDTO(UserPrincipal userPrincipal);
+    LocalUserDTO registerVMToLocalUserDTO(RegisterVM registerVM);
 
-    static Set<String> grantedAuthoritiesIntoStrings(List<? extends GrantedAuthority> grantedAuthorityList) {
-        return grantedAuthorityList != null
-                ? grantedAuthorityList.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet())
-                : null;
-    }
+    @Mapping(source = "email", target = "username")
+    @Mapping(source = "id", target = "providerId")
+    OAuth2UserDTO oAuth2UserInfoToOAuth2UserDTO(OAuth2UserInfo oAuth2UserInfo);
+
 }

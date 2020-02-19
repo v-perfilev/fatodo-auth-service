@@ -1,11 +1,10 @@
 package com.persoff68.fatodo.config;
 
-import com.persoff68.fatodo.security.CookieAuthorizationRequestRepository;
+import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.OAuth2AuthenticationSuccessHandler;
-import com.persoff68.fatodo.security.UsernamePasswordAuthenticationHandler;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
-import com.persoff68.fatodo.security.service.OAuth2UserService;
+import com.persoff68.fatodo.service.OAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -28,20 +27,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AppProperties appProperties;
     private final JwtTokenProvider jwtTokenProvider;
-    private final SecurityProblemSupport securityProblemSupport;
     private final UserDetailsService userDetailsService;
-    private final OAuth2UserService OAuth2UserService;
+    private final SecurityProblemSupport securityProblemSupport;
+    private final OAuth2UserService oAuth2UserService;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     @Override
     protected void configure(AuthenticationManagerBuilder authManager) throws Exception {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         authManager.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
-
-    @Bean
-    public UsernamePasswordAuthenticationHandler authenticationHandler() throws Exception {
-        return new UsernamePasswordAuthenticationHandler(appProperties, authenticationManager(), jwtTokenProvider);
     }
 
     @Bean
@@ -75,12 +69,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .redirectionEndpoint().baseUri("/api/oauth2/code/*")
                 .and()
                 .userInfoEndpoint()
-                .userService(OAuth2UserService)
+                .userService(oAuth2UserService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
-                .failureHandler(oAuth2AuthenticationFailureHandler())
-                .and()
-                .addFilter(authenticationHandler().setUrl("/authenticate"));
+                .failureHandler(oAuth2AuthenticationFailureHandler());
     }
 
 }

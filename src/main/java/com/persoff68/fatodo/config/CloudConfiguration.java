@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = AppConstants.FEIGN_CLIENT_PATH)
 @EnableConfigurationProperties(AppProperties.class)
-@ConditionalOnProperty(prefix = "spring", name = "cloud.disabled", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "spring", name = "cloud.config.enabled", havingValue = "true", matchIfMissing = true)
 public class CloudConfiguration {
 }

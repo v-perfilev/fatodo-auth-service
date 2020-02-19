@@ -3,10 +3,8 @@ package com.persoff68.fatodo.model.dto;
 import com.persoff68.fatodo.model.constant.AuthProvider;
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
-public class UserDTO {
+public class OAuth2UserDTO {
     private static final long serialVersionUID = 1L;
 
     private String id;
@@ -14,6 +12,5 @@ public class UserDTO {
     private String username;
     private AuthProvider provider;
     private String providerId;
-    private Set<String> authorities;
 
 }
