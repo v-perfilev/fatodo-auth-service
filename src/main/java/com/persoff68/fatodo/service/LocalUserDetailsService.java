@@ -17,9 +17,9 @@ public class LocalUserDetailsService implements UserDetailsService {
     private final UserServiceClient userServiceClient;
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        UserPrincipal userPrincipal = userServiceClient.getUserPrincipalByUsername(login);
-        String provider = userPrincipal.getProvider();
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserPrincipal userPrincipal = userServiceClient.getUserPrincipalByUsername(username);
+        String provider = userPrincipal.getProvider().name();
         if (!provider.equals(AuthProvider.LOCAL.name())) {
             throw new AuthWrongProviderException(provider);
         }

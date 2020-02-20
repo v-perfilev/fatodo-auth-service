@@ -32,20 +32,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final OAuth2UserService oAuth2UserService;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder authManager) throws Exception {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        authManager.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
-    public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
+    protected OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
         return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider, cookieAuthorizationRequestRepository);
     }
 
-    @Bean
-    OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
+    protected OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
         return new OAuth2AuthenticationFailureHandler(cookieAuthorizationRequestRepository);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder authManager) throws Exception {
+        authManager.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override

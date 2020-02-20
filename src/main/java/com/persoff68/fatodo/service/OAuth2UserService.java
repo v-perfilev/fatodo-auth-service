@@ -48,7 +48,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         if (userPrincipal == null) {
             userPrincipal = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         } else if (!userPrincipal.getProvider().equals(provider)) {
-            throw new AuthWrongProviderException(userPrincipal.getProvider());
+            throw new AuthWrongProviderException(userPrincipal.getProvider().name());
         }
 
         return userPrincipal;

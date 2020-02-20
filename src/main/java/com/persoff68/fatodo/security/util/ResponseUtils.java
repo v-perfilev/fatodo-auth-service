@@ -16,10 +16,11 @@ public class ResponseUtils {
     }
 
     public static HttpHeaders createHeaderWithToken(AppProperties.Auth auth, String token) {
+        String header = auth.getAuthorizationHeader();
         String prefix = auth.getAuthorizationPrefix();
-        String fullToken = auth.getAuthorizationPrefix() + " " + token;
+        String fullToken = prefix + " " + token;
         HttpHeaders headers = new HttpHeaders();
-        headers.set(prefix, fullToken);
+        headers.set(header, fullToken);
         return headers;
     }
 
