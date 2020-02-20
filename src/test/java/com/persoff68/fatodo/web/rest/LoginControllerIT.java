@@ -57,7 +57,7 @@ public class LoginControllerIT {
     void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 
-        testUserPrincipal = createTestUserPrincipal();
+        testUserPrincipal = createTestUserPrincipal(passwordEncoder);
         testLoginVM = createTestLoginVM();
         testWrongLoginVM = createWrongTestLoginVM();
     }
@@ -85,21 +85,21 @@ public class LoginControllerIT {
                 .andExpect(status().isUnauthorized());
     }
 
-    private LoginVM createTestLoginVM() {
+    private static LoginVM createTestLoginVM() {
         LoginVM loginVM = new LoginVM();
         loginVM.setUsername("test_username");
         loginVM.setPassword("test_password");
         return loginVM;
     }
 
-    private LoginVM createWrongTestLoginVM() {
+    private static LoginVM createWrongTestLoginVM() {
         LoginVM loginVM = new LoginVM();
         loginVM.setUsername("test_username");
         loginVM.setPassword("wrong_password");
         return loginVM;
     }
 
-    private UserPrincipal createTestUserPrincipal() {
+    private static UserPrincipal createTestUserPrincipal(PasswordEncoder passwordEncoder) {
         String password = passwordEncoder.encode("test_password");
 
         UserPrincipal userPrincipal = new UserPrincipal();

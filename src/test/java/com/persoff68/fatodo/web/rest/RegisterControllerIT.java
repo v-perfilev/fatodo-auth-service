@@ -73,7 +73,7 @@ public class RegisterControllerIT {
                 .andExpect(status().isBadRequest());
     }
 
-    private UserDTO createTestUserDTO() {
+    private static UserDTO createTestUserDTO() {
         UserDTO userDTO = new UserDTO();
         userDTO.setId("test_id");
         userDTO.setEmail("test@email.test");
@@ -83,7 +83,7 @@ public class RegisterControllerIT {
         return userDTO;
     }
 
-    private RegisterVM createTestRegisterVM() {
+    private static RegisterVM createTestRegisterVM() {
         RegisterVM registerVM = new RegisterVM();
         registerVM.setUsername("test_username");
         registerVM.setEmail("test@email.test");
@@ -91,7 +91,7 @@ public class RegisterControllerIT {
         return registerVM;
     }
 
-    private RegisterVM createWrongTestRegisterVM() {
+    private static RegisterVM createWrongTestRegisterVM() {
         RegisterVM registerVM = new RegisterVM();
         registerVM.setEmail("test@email.test");
         registerVM.setPassword("test_password");
