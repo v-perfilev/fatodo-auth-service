@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.oauth2;
 
-import com.persoff68.fatodo.FaToDoAuthServiceApplication;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.exception.AuthWrongProviderException;
+import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -10,10 +10,9 @@ import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,18 +35,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = FaToDoAuthServiceApplication.class)
-//@RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)
 public class OAuth2UserDetailsServiceTest {
 
-    @Autowired
     OAuth2UserDetailsService oAuth2UserDetailsService;
 
-    @MockBean
+    @Mock
     DefaultOAuth2UserService defaultOAuth2UserService;
-
-    @MockBean
+    @Mock
     UserServiceClient userServiceClient;
 
     OAuth2UserRequest facebookUserRequest;
@@ -59,6 +54,9 @@ public class OAuth2UserDetailsServiceTest {
 
     @BeforeEach
     void setup() {
+        UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+        oAuth2UserDetailsService = new OAuth2UserDetailsService(defaultOAuth2UserService, userServiceClient, userMapper);
+
         facebookUserRequest = createUserRequest(AuthProvider.FACEBOOK.name());
         googleUserRequest = createUserRequest(AuthProvider.GOOGLE.name());
         newFacebookUserDTO = createNewUserDTO(AuthProvider.FACEBOOK);
@@ -88,7 +86,6 @@ public class OAuth2UserDetailsServiceTest {
     @Test
     void processOAuth2UserTest_facebook_userExist() {
         when(userServiceClient.getUserPrincipalByEmailNullable(any())).thenReturn(existingFacebookUserPrincipal);
-        when(userServiceClient.createOAuth2User(any())).thenReturn(newFacebookUserDTO);
         OAuth2User oAuth2User = oAuth2UserDetailsService.loadUser(facebookUserRequest);
         assertThat(oAuth2User).isNotNull();
     }
@@ -96,7 +93,6 @@ public class OAuth2UserDetailsServiceTest {
     @Test
     void processOAuth2UserTest_facebook_userExist_wrongProvider() {
         when(userServiceClient.getUserPrincipalByEmailNullable(any())).thenReturn(existingGoogleUserPrincipal);
-        when(userServiceClient.createOAuth2User(any())).thenReturn(newFacebookUserDTO);
         assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(facebookUserRequest)).isInstanceOf(AuthWrongProviderException.class);
     }
 
