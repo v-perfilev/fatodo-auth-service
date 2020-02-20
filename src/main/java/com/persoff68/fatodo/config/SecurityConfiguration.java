@@ -3,8 +3,7 @@ package com.persoff68.fatodo.config;
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.OAuth2AuthenticationSuccessHandler;
-import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
-import com.persoff68.fatodo.service.OAuth2UserService;
+import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -25,25 +24,18 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final AppProperties appProperties;
-    private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
     private final SecurityProblemSupport securityProblemSupport;
-    private final OAuth2UserService oAuth2UserService;
+    private final OAuth2UserDetailsService OAuth2UserDetailsService;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 
-    protected OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
-        return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider, cookieAuthorizationRequestRepository);
-    }
-
-    protected OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
-        return new OAuth2AuthenticationFailureHandler(cookieAuthorizationRequestRepository);
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder authManager) throws Exception {
@@ -71,10 +63,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .redirectionEndpoint().baseUri("/api/oauth2/code/*")
                 .and()
                 .userInfoEndpoint()
-                .userService(oAuth2UserService)
+                .userService(OAuth2UserDetailsService)
                 .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler())
-                .failureHandler(oAuth2AuthenticationFailureHandler());
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
     }
 
 }

@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FaToDoAuthServiceApplication.class)
 @ExtendWith(MockitoExtension.class)
 public class LoginControllerIT {
+    private static final String BASE_API = "/authenticate";
 
     @Autowired
     private WebApplicationContext context;
@@ -66,7 +67,7 @@ public class LoginControllerIT {
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(testUserPrincipal);
         String json = this.objectMapper.writeValueAsString(testLoginVM);
 
-        mvc.perform(post("/authenticate")
+        mvc.perform(post(BASE_API)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk())
@@ -78,7 +79,7 @@ public class LoginControllerIT {
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(testUserPrincipal);
         String json = this.objectMapper.writeValueAsString(testWrongLoginVM);
 
-        mvc.perform(post("/authenticate")
+        mvc.perform(post(BASE_API)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isUnauthorized());

@@ -8,15 +8,15 @@ spring:
       client:
         registration:
           google:
-            clientId: 5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
-            clientSecret: tWZKVLxaD_ARWsriiiUFYoIk
+            clientId: google_clientId
+            clientSecret: google_cleintSecret
             redirectUri: "{baseUrl}/api/oauth2/code/{registrationId}"
             scope:
               - email
               - profile
           facebook:
-            clientId: 197718277952800
-            clientSecret: dbb1101c309a837cfa001720a823909c
+            clientId: facebook_clientId
+            clientSecret: facebook_ClientSecret
             redirectUri: "{baseUrl}/api/oauth2/code/{registrationId}"
             scope:
               - email
@@ -26,5 +26,5 @@ app:
   auth:
     authorizationHeader: Authorization
     authorizationPrefix: Bearer
-    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenSecret: test_tokenSecret
     tokenExpirationMSec: 864000000
