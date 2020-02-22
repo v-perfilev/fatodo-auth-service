@@ -55,7 +55,7 @@ public class OAuth2UserDetailsServiceTest {
     @BeforeEach
     void setup() {
         UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-        oAuth2UserDetailsService = new OAuth2UserDetailsService(defaultOAuth2UserService, userServiceClient, userMapper);
+        oAuth2UserDetailsService = new OAuth2UserDetailsService(userServiceClient, userMapper, defaultOAuth2UserService);
 
         facebookUserRequest = createUserRequest(AuthProvider.FACEBOOK.name());
         googleUserRequest = createUserRequest(AuthProvider.GOOGLE.name());

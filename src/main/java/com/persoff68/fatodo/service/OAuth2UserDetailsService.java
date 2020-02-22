@@ -10,7 +10,8 @@ import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.security.oauth2user.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2user.OAuth2UserInfoFactory;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -20,12 +21,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final DefaultOAuth2UserService defaultOAuth2UserService;
     private final UserServiceClient userServiceClient;
     private final UserMapper userMapper;
+    private final DefaultOAuth2UserService defaultOAuth2UserService;
+
+    @Autowired
+    public OAuth2UserDetailsService(UserServiceClient userServiceClient, UserMapper userMapper) {
+        this.userServiceClient = userServiceClient;
+        this.userMapper = userMapper;
+        this.defaultOAuth2UserService = new DefaultOAuth2UserService();
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
