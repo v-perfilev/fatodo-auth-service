@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FaToDoAuthServiceApplication.class)
 @ExtendWith(MockitoExtension.class)
 public class RegisterControllerIT {
-    private static final String BASE_API = "/register";
+    private static final String ENDPOINT = "/register";
 
     @Autowired
     WebApplicationContext context;
@@ -57,7 +57,7 @@ public class RegisterControllerIT {
         when(userServiceClient.createLocalUser(any())).thenReturn(testUserDTO);
         String json = this.objectMapper.writeValueAsString(testRegisterVM);
 
-        mvc.perform(post(BASE_API)
+        mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());
@@ -67,7 +67,7 @@ public class RegisterControllerIT {
     void testRegisterLocal_wrong() throws Exception {
         String json = this.objectMapper.writeValueAsString(testWrongRegisterVM);
 
-        mvc.perform(post(BASE_API)
+        mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isBadRequest());

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FaToDoAuthServiceApplication.class)
 @ExtendWith(MockitoExtension.class)
 public class OAuth2AuthorizationEndpointIT {
-    private static final String BASE_API = "/api/oauth2/authorize";
+    private static final String ENDPOINT = "/api/oauth2/authorize";
 
     @Autowired
     private WebApplicationContext context;
@@ -41,7 +41,7 @@ public class OAuth2AuthorizationEndpointIT {
 
     @Test
     void testAuthorizationEndpoint_facebook() throws Exception {
-        ResultActions resultActions = mvc.perform(get(BASE_API + "/facebook"))
+        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/facebook"))
                 .andExpect(status().isFound())
                 .andExpect(header().exists("Location"))
                 .andExpect(header().exists("Set-Cookie"));
@@ -49,16 +49,13 @@ public class OAuth2AuthorizationEndpointIT {
         String locationHeader = resultActions.andReturn().getResponse().getHeader("Location");
         assertThat(locationHeader).contains("www.facebook.com");
 
-        ResultActions newRes = mvc.perform(get(locationHeader))
-                .andExpect(status().isNotFound());
-
         String setCookieHeader = resultActions.andReturn().getResponse().getHeader("Set-Cookie");
         assertThat(setCookieHeader).contains(OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
     }
 
     @Test
     void testAuthorizationEndpoint_google() throws Exception {
-        ResultActions resultActions = mvc.perform(get(BASE_API + "/google"))
+        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/google"))
                 .andExpect(status().isFound())
                 .andExpect(header().exists("Location"))
                 .andExpect(header().exists("Set-Cookie"));
