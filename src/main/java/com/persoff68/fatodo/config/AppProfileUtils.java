@@ -4,8 +4,7 @@ import com.persoff68.fatodo.config.constant.Profiles;
 
 import java.util.Properties;
 
-public class AppProfileUtil {
-
+public class AppProfileUtils {
     private static final String SPRING_PROFILES_DEFAULT = "spring.profiles.default";
 
     public static Properties getDefaultProfile() {

@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.exception;
+package com.persoff68.fatodo.web.rest.exception;
 
 import com.persoff68.fatodo.exception.constant.ExceptionTypes;
 import org.zalando.problem.AbstractThrowableProblem;
