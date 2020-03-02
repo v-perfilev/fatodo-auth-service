@@ -9,10 +9,11 @@ import java.io.IOException;
 public class ResponseUtils {
 
     public static void addTokenToResponse(HttpServletResponse response, AppProperties.Auth auth, String token) throws IOException {
+        String header = auth.getAuthorizationHeader();
         String prefix = auth.getAuthorizationPrefix();
-        String fullToken = auth.getAuthorizationPrefix() + " " + token;
+        String fullToken = prefix + " " + token;
         response.setStatus(200);
-        response.setHeader(prefix, fullToken);
+        response.setHeader(header, fullToken);
     }
 
     public static HttpHeaders createHeaderWithToken(AppProperties.Auth auth, String token) {
