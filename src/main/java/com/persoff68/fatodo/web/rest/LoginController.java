@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.config.AppProperties;
+import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.util.ResponseUtils;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +30,10 @@ public class LoginController {
     public ResponseEntity<Void> authenticate(@Valid @RequestBody LoginVM loginVM) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        String token = jwtTokenProvider.createToken(authentication);
-        HttpHeaders headers = ResponseUtils.createHeaderWithToken(appProperties.getAuth(), token);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User user = new User(userPrincipal.getUsername(), "", userPrincipal.getAuthorities());
+        String jwt = jwtTokenProvider.createUserJwt(userPrincipal.getId(), user);
+        HttpHeaders headers = ResponseUtils.createHeaderWithJwt(appProperties.getAuth(), jwt);
         return ResponseEntity.ok().headers(headers).build();
     }
 

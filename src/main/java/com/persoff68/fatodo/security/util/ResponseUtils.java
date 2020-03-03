@@ -8,18 +8,18 @@ import java.io.IOException;
 
 public class ResponseUtils {
 
-    public static void addTokenToResponse(HttpServletResponse response, AppProperties.Auth auth, String token) throws IOException {
+    public static void addJwtToResponse(HttpServletResponse response, AppProperties.Auth auth, String jwt) throws IOException {
         String header = auth.getAuthorizationHeader();
         String prefix = auth.getAuthorizationPrefix();
-        String fullToken = prefix + " " + token;
+        String fullToken = prefix + " " + jwt;
         response.setStatus(200);
         response.setHeader(header, fullToken);
     }
 
-    public static HttpHeaders createHeaderWithToken(AppProperties.Auth auth, String token) {
+    public static HttpHeaders createHeaderWithJwt(AppProperties.Auth auth, String jwt) {
         String header = auth.getAuthorizationHeader();
         String prefix = auth.getAuthorizationPrefix();
-        String fullToken = prefix + " " + token;
+        String fullToken = prefix + " " + jwt;
         HttpHeaders headers = new HttpHeaders();
         headers.set(header, fullToken);
         return headers;

@@ -1,11 +1,14 @@
-package com.persoff68.fatodo.security;
+package com.persoff68.fatodo.security.oauth2.handler;
 
 import com.persoff68.fatodo.config.AppProperties;
+import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.util.ResponseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.client.authentication.OAuth2LoginAuthenticationToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +28,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
         clearAuthenticationAttributes(request, response);
-        String token = jwtTokenProvider.createToken(authentication);
-        ResponseUtils.addTokenToResponse(response, appProperties.getAuth(), token);
+        OAuth2LoginAuthenticationToken oAuth2Authentication = (OAuth2LoginAuthenticationToken) authentication;
+        UserPrincipal userPrincipal = (UserPrincipal) oAuth2Authentication.getPrincipal();
+        User user = new User(userPrincipal.getUsername(), "", userPrincipal.getAuthorities());
+        String jwt = jwtTokenProvider.createUserJwt(userPrincipal.getId(), user);
+        ResponseUtils.addJwtToResponse(response, appProperties.getAuth(), jwt);
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

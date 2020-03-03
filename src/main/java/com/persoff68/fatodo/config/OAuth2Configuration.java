@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.config;
 
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
-import com.persoff68.fatodo.security.OAuth2AuthenticationFailureHandler;
-import com.persoff68.fatodo.security.OAuth2AuthenticationSuccessHandler;
+import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

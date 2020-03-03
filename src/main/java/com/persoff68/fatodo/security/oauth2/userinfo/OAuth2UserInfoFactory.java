@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.security.oauth2user;
+package com.persoff68.fatodo.security.oauth2.userinfo;
 
 import com.persoff68.fatodo.exception.OAuth2ProviderNotSupportedException;
 import com.persoff68.fatodo.model.constant.AuthProvider;

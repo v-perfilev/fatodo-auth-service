@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.security.oauth2user;
+package com.persoff68.fatodo.security.oauth2.userinfo;
 
 import java.util.HashMap;
 import java.util.Map;

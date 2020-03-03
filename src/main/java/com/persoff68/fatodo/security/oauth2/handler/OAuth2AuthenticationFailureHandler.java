@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.security;
+package com.persoff68.fatodo.security.oauth2.handler;
 
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
