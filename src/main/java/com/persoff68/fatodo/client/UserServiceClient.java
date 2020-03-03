@@ -16,7 +16,6 @@ public interface UserServiceClient {
     @GetMapping(value = "/auth/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipal getUserPrincipalByUsername(@PathVariable("username") String username);
 
-    // TODO fallback
     @GetMapping(value = "/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipal getUserPrincipalByEmail(@PathVariable("email") String email);
 

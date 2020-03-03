@@ -8,7 +8,7 @@ import com.persoff68.fatodo.security.util.ResponseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.client.authentication.OAuth2LoginAuthenticationToken;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
         clearAuthenticationAttributes(request, response);
-        OAuth2LoginAuthenticationToken oAuth2Authentication = (OAuth2LoginAuthenticationToken) authentication;
+        OAuth2AuthenticationToken oAuth2Authentication = (OAuth2AuthenticationToken) authentication;
         UserPrincipal userPrincipal = (UserPrincipal) oAuth2Authentication.getPrincipal();
         User user = new User(userPrincipal.getUsername(), "", userPrincipal.getAuthorities());
         String jwt = jwtTokenProvider.createUserJwt(userPrincipal.getId(), user);

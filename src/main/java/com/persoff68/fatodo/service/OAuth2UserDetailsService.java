@@ -10,6 +10,7 @@ import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfoFactory;
+import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -50,14 +51,15 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
             throw new OAuth2EmailNotFoundException();
         }
 
-        UserPrincipal userPrincipal = userServiceClient.getUserPrincipalByEmailNullable(email);
-        if (userPrincipal == null) {
-            userPrincipal = registerNewUser(provider, oAuth2UserInfo);
-        } else if (!userPrincipal.getProvider().name().equals(provider)) {
-            throw new AuthWrongProviderException(userPrincipal.getProvider().name());
+        try {
+            UserPrincipal userPrincipal = userServiceClient.getUserPrincipalByEmail(email);
+            if (!userPrincipal.getProvider().name().equals(provider)) {
+                throw new AuthWrongProviderException(userPrincipal.getProvider().name());
+            }
+            return userPrincipal;
+        } catch (FeignException.NotFound ex) {
+            return registerNewUser(provider, oAuth2UserInfo);
         }
-
-        return userPrincipal;
     }
 
     private UserPrincipal registerNewUser(String provider, OAuth2UserInfo oAuth2UserInfo) {

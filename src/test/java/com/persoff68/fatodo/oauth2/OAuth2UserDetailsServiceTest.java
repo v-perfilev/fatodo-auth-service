@@ -69,7 +69,7 @@ public class OAuth2UserDetailsServiceTest {
 
     @Test
     void testProcessOAuth2User_google_userNotExist() {
-        when(userServiceClient.getUserPrincipalByEmailNullable(any())).thenReturn(null);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(null);
         when(userServiceClient.createOAuth2User(any())).thenReturn(newGoogleUserDTO);
         OAuth2User oAuth2User = oAuth2UserDetailsService.loadUser(googleUserRequest);
         assertThat(oAuth2User).isNotNull();
@@ -77,7 +77,7 @@ public class OAuth2UserDetailsServiceTest {
 
     @Test
     void testProcessOAuth2User_facebook_userNotExist() {
-        when(userServiceClient.getUserPrincipalByEmailNullable(any())).thenReturn(null);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(null);
         when(userServiceClient.createOAuth2User(any())).thenReturn(newFacebookUserDTO);
         OAuth2User oAuth2User = oAuth2UserDetailsService.loadUser(facebookUserRequest);
         assertThat(oAuth2User).isNotNull();
@@ -85,14 +85,14 @@ public class OAuth2UserDetailsServiceTest {
 
     @Test
     void testProcessOAuth2User_facebook_userExist() {
-        when(userServiceClient.getUserPrincipalByEmailNullable(any())).thenReturn(existingFacebookUserPrincipal);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(existingFacebookUserPrincipal);
         OAuth2User oAuth2User = oAuth2UserDetailsService.loadUser(facebookUserRequest);
         assertThat(oAuth2User).isNotNull();
     }
 
     @Test
     void testProcessOAuth2User_facebook_userExist_wrongProvider() {
-        when(userServiceClient.getUserPrincipalByEmailNullable(any())).thenReturn(existingGoogleUserPrincipal);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(existingGoogleUserPrincipal);
         assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(facebookUserRequest)).isInstanceOf(AuthWrongProviderException.class);
     }
 
