@@ -7,6 +7,7 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
+import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +70,7 @@ public class OAuth2UserDetailsServiceTest {
 
     @Test
     void testProcessOAuth2User_google_userNotExist() {
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(null);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(FeignException.NotFound.class);
         when(userServiceClient.createOAuth2User(any())).thenReturn(newGoogleUserDTO);
         OAuth2User oAuth2User = oAuth2UserDetailsService.loadUser(googleUserRequest);
         assertThat(oAuth2User).isNotNull();
@@ -77,7 +78,7 @@ public class OAuth2UserDetailsServiceTest {
 
     @Test
     void testProcessOAuth2User_facebook_userNotExist() {
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(null);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(FeignException.NotFound.class);
         when(userServiceClient.createOAuth2User(any())).thenReturn(newFacebookUserDTO);
         OAuth2User oAuth2User = oAuth2UserDetailsService.loadUser(facebookUserRequest);
         assertThat(oAuth2User).isNotNull();
