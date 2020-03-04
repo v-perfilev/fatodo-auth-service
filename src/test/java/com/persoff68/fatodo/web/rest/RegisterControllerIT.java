@@ -78,7 +78,7 @@ public class RegisterControllerIT {
         userDTO.setId("test_id");
         userDTO.setEmail("test@email.test");
         userDTO.setUsername("test_username");
-        userDTO.setProvider(AuthProvider.LOCAL);
+        userDTO.setProvider(AuthProvider.LOCAL.name());
         userDTO.setAuthorities(Collections.singleton("ROLE_USER"));
         return userDTO;
     }

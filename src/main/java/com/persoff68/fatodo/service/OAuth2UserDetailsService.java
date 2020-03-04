@@ -8,6 +8,7 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfoFactory;
 import feign.FeignException;
@@ -52,7 +53,8 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
         }
 
         try {
-            UserPrincipal userPrincipal = userServiceClient.getUserPrincipalByEmail(email);
+            UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByEmail(email);
+            UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
             if (!userPrincipal.getProvider().name().equals(provider)) {
                 throw new AuthWrongProviderException(userPrincipal.getProvider().name());
             }
@@ -64,7 +66,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
 
     private UserPrincipal registerNewUser(String provider, OAuth2UserInfo oAuth2UserInfo) {
         OAuth2UserDTO oAuth2UserDTO = userMapper.oAuth2UserInfoToOAuth2UserDTO(oAuth2UserInfo);
-        oAuth2UserDTO.setProvider(AuthProvider.valueOf(provider));
+        oAuth2UserDTO.setProvider(provider);
         UserDTO userDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
         return userMapper.userDTOToUserPrincipal(userDTO);
     }

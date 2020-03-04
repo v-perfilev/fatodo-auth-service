@@ -13,7 +13,7 @@ public class RegistrationService {
     private final UserServiceClient userServiceClient;
 
     public void register(LocalUserDTO localUserDTO) {
-        localUserDTO.setProvider(AuthProvider.LOCAL);
+        localUserDTO.setProvider(AuthProvider.LOCAL.name());
         userServiceClient.createLocalUser(localUserDTO);
     }
 

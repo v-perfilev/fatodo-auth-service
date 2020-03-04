@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FaToDoAuthServiceApplication;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
-import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.constant.AuthProvider;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ public class LoginControllerIT {
     @MockBean
     UserServiceClient userServiceClient;
 
-    UserPrincipal testUserPrincipal;
+    UserPrincipalDTO userPrincipalDTO;
     LoginVM testLoginVM;
     LoginVM testWrongLoginVM;
 
@@ -57,14 +57,14 @@ public class LoginControllerIT {
     void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 
-        testUserPrincipal = createTestUserPrincipal(passwordEncoder);
+        userPrincipalDTO = createTestUserPrincipalDTO(passwordEncoder);
         testLoginVM = createTestLoginVM();
         testWrongLoginVM = createWrongTestLoginVM();
     }
 
     @Test
     void testLogin_correct() throws Exception {
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(testUserPrincipal);
+        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(userPrincipalDTO);
         String json = this.objectMapper.writeValueAsString(testLoginVM);
 
         mvc.perform(post(ENDPOINT)
@@ -76,7 +76,7 @@ public class LoginControllerIT {
 
     @Test
     void testLogin_wrong() throws Exception {
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(testUserPrincipal);
+        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(userPrincipalDTO);
         String json = this.objectMapper.writeValueAsString(testWrongLoginVM);
 
         mvc.perform(post(ENDPOINT)
@@ -99,16 +99,16 @@ public class LoginControllerIT {
         return loginVM;
     }
 
-    private static UserPrincipal createTestUserPrincipal(PasswordEncoder passwordEncoder) {
+    private static UserPrincipalDTO createTestUserPrincipalDTO(PasswordEncoder passwordEncoder) {
         String password = passwordEncoder.encode("test_password");
 
-        UserPrincipal userPrincipal = new UserPrincipal();
-        userPrincipal.setId("test_id");
-        userPrincipal.setEmail("test@email.test");
-        userPrincipal.setUsername("test_username");
-        userPrincipal.setPassword(password);
-        userPrincipal.setProvider(AuthProvider.LOCAL);
-        userPrincipal.setAuthorities(Collections.singleton("ROLE_USER"));
-        return userPrincipal;
+        UserPrincipalDTO userPrincipalDTO = new UserPrincipalDTO();
+        userPrincipalDTO.setId("test_id");
+        userPrincipalDTO.setEmail("test@email.test");
+        userPrincipalDTO.setUsername("test_username");
+        userPrincipalDTO.setPassword(password);
+        userPrincipalDTO.setProvider(AuthProvider.LOCAL.name());
+        userPrincipalDTO.setAuthorities(Collections.singleton("ROLE_USER"));
+        return userPrincipalDTO;
     }
 }

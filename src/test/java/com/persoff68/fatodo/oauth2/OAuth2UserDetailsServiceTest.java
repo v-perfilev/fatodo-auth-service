@@ -6,6 +6,7 @@ import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,8 +51,8 @@ public class OAuth2UserDetailsServiceTest {
     OAuth2UserRequest googleUserRequest;
     UserDTO newFacebookUserDTO;
     UserDTO newGoogleUserDTO;
-    UserPrincipal existingFacebookUserPrincipal;
-    UserPrincipal existingGoogleUserPrincipal;
+    UserPrincipalDTO existingFacebookUserPrincipalDTO;
+    UserPrincipalDTO existingGoogleUserPrincipalDTO;
 
     @BeforeEach
     void setup() {
@@ -62,8 +63,8 @@ public class OAuth2UserDetailsServiceTest {
         googleUserRequest = createUserRequest(AuthProvider.GOOGLE.name());
         newFacebookUserDTO = createNewUserDTO(AuthProvider.FACEBOOK);
         newGoogleUserDTO = createNewUserDTO(AuthProvider.GOOGLE);
-        existingFacebookUserPrincipal = createExistingUserPrincipal(AuthProvider.FACEBOOK);
-        existingGoogleUserPrincipal = createExistingUserPrincipal(AuthProvider.GOOGLE);
+        existingFacebookUserPrincipalDTO = createExistingUserPrincipalDTO(AuthProvider.FACEBOOK);
+        existingGoogleUserPrincipalDTO = createExistingUserPrincipalDTO(AuthProvider.GOOGLE);
 
         when(defaultOAuth2UserService.loadUser(any())).thenReturn(createOAuth2User());
     }
@@ -86,14 +87,14 @@ public class OAuth2UserDetailsServiceTest {
 
     @Test
     void testProcessOAuth2User_facebook_userExist() {
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(existingFacebookUserPrincipal);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(existingFacebookUserPrincipalDTO);
         OAuth2User oAuth2User = oAuth2UserDetailsService.loadUser(facebookUserRequest);
         assertThat(oAuth2User).isNotNull();
     }
 
     @Test
     void testProcessOAuth2User_facebook_userExist_wrongProvider() {
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(existingGoogleUserPrincipal);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(existingGoogleUserPrincipalDTO);
         assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(facebookUserRequest)).isInstanceOf(AuthWrongProviderException.class);
     }
 
@@ -133,19 +134,19 @@ public class OAuth2UserDetailsServiceTest {
         userDTO.setId("test_id");
         userDTO.setUsername("test@email.com");
         userDTO.setEmail("test@email.com");
-        userDTO.setProvider(authProvider);
+        userDTO.setProvider(authProvider.name());
         userDTO.setAuthorities(authorityList);
         return userDTO;
     }
 
-    private static UserPrincipal createExistingUserPrincipal(AuthProvider authProvider) {
+    private static UserPrincipalDTO createExistingUserPrincipalDTO(AuthProvider authProvider) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
-        UserPrincipal userPrincipal = new UserPrincipal();
-        userPrincipal.setId("test_id");
-        userPrincipal.setUsername("test@email.com");
-        userPrincipal.setEmail("test@email.com");
-        userPrincipal.setProvider(authProvider);
-        userPrincipal.setAuthorities(authorityList);
-        return userPrincipal;
+        UserPrincipalDTO userPrincipalDTO = new UserPrincipalDTO();
+        userPrincipalDTO.setId("test_id");
+        userPrincipalDTO.setUsername("test@email.com");
+        userPrincipalDTO.setEmail("test@email.com");
+        userPrincipalDTO.setProvider(authProvider.name());
+        userPrincipalDTO.setAuthorities(authorityList);
+        return userPrincipalDTO;
     }
 }
