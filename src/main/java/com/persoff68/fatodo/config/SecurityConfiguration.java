@@ -1,9 +1,10 @@
 package com.persoff68.fatodo.config;
 
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
+import com.persoff68.fatodo.security.filter.SecurityLocaleFilter;
+import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
-import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.service.LocalUserDetailsService;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
@@ -31,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final LocalUserDetailsService localUserDetailsService;
     private final OAuth2UserDetailsService OAuth2UserDetailsService;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final SecurityLocaleFilter securityLocaleFilter;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -56,6 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(securityProblemSupport)
                 .accessDeniedHandler(securityProblemSupport)
                 .and()
+                .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
                 .authorizationEndpoint().baseUri("/api/oauth2/authorize")
                 .authorizationRequestRepository(cookieAuthorizationRequestRepository)
