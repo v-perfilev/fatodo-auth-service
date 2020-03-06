@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.security.oauth2.userinfo;
 
-import com.persoff68.fatodo.exception.OAuth2ProviderNotSupportedException;
+import com.persoff68.fatodo.security.exception.OAuth2ProviderNotSupportedProblem;
 import com.persoff68.fatodo.model.constant.AuthProvider;
 
 import java.util.Map;
@@ -20,6 +20,6 @@ public class OAuth2UserInfoFactory {
             return FacebookOAuth2UserInfo.from(attributes);
         }
 
-        throw new OAuth2ProviderNotSupportedException(provider);
+        throw new OAuth2ProviderNotSupportedProblem(provider);
     }
 }

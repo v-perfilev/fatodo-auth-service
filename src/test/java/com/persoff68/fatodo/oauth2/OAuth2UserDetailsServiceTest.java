@@ -1,9 +1,8 @@
 package com.persoff68.fatodo.oauth2;
 
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.exception.AuthWrongProviderException;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
 import com.persoff68.fatodo.mapper.UserMapper;
-import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
@@ -95,7 +94,7 @@ public class OAuth2UserDetailsServiceTest {
     @Test
     void testProcessOAuth2User_facebook_userExist_wrongProvider() {
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(existingGoogleUserPrincipalDTO);
-        assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(facebookUserRequest)).isInstanceOf(AuthWrongProviderException.class);
+        assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(facebookUserRequest)).isInstanceOf(AuthWrongProviderProblem.class);
     }
 
 

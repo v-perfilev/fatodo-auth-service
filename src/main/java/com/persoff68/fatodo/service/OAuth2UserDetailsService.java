@@ -1,11 +1,10 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.exception.AuthWrongProviderException;
-import com.persoff68.fatodo.exception.OAuth2EmailNotFoundException;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
+import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundProblem;
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
-import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
@@ -49,14 +48,14 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
 
         String email = oAuth2UserInfo.getEmail();
         if (StringUtils.isEmpty(email)) {
-            throw new OAuth2EmailNotFoundException();
+            throw new OAuth2EmailNotFoundProblem();
         }
 
         try {
             UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByEmail(email);
             UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
             if (!userPrincipal.getProvider().name().equals(provider)) {
-                throw new AuthWrongProviderException(userPrincipal.getProvider().name());
+                throw new AuthWrongProviderProblem(userPrincipal.getProvider().name());
             }
             return userPrincipal;
         } catch (FeignException.NotFound ex) {

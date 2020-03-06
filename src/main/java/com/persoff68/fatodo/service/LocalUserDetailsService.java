@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.exception.AuthWrongProviderException;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.constant.AuthProvider;
@@ -25,7 +25,7 @@ public class LocalUserDetailsService implements UserDetailsService {
         UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
         String provider = userPrincipal.getProvider().name();
         if (!provider.equals(AuthProvider.LOCAL.name())) {
-            throw new AuthWrongProviderException(provider);
+            throw new AuthWrongProviderProblem(provider);
         }
         return userPrincipal;
     }
