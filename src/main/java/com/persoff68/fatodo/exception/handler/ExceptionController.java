@@ -1,15 +1,15 @@
 package com.persoff68.fatodo.exception.handler;
 
+import com.persoff68.fatodo.exception.RuntimeProblem;
+import com.persoff68.fatodo.exception.UndefinedProblem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,30 +30,20 @@ public class ExceptionController implements ErrorController {
 
     @RequestMapping(value = ERROR_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Problem> error(HttpServletRequest request) {
+        Exception exception = (Exception) request.getAttribute(JAVAX_EXCEPTION);
         Integer statusCode = (Integer) request.getAttribute(JAVAX_STATUS_CODE);
         statusCode = statusCode != null ? statusCode : 500;
-        Status status = Status.valueOf(statusCode);
-        Exception exception = (Exception) request.getAttribute(JAVAX_EXCEPTION);
-        exception = exception != null ? exception : new UndefinedException(statusCode);
-        NativeWebRequest nativeWebRequest = new ServletWebRequest(request);
-        return exceptionTranslator.create(status, exception, nativeWebRequest);
+        Throwable throwable = handleException(exception, statusCode);
+        return exceptionTranslator.create(throwable, new ServletWebRequest(request));
     }
 
-    private static class UndefinedException extends Exception {
-
-        public UndefinedException(int status) {
-            super(getMessage(status));
+    private Throwable handleException(Exception e, int statusCode) {
+        if (e == null) {
+            return new UndefinedProblem(statusCode);
+        } else if (e instanceof RuntimeException) {
+            return new RuntimeProblem(e);
         }
-
-        private static String getMessage(int status) {
-            String msg;
-            if (status == 404) {
-                msg = "Page not found";
-            } else {
-                msg = "Internal server error";
-            }
-            return msg;
-        }
+        return e;
     }
 
 }
