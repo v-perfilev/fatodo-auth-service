@@ -8,8 +8,8 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.persoff68</groupId>
-    <artifactId>fatodo</artifactId>
+    <groupId>com.persoff68.fatodo</groupId>
+    <artifactId>authservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fatodo-auth-service</name>
     <description>Auth service for FaToDo</description>
@@ -240,7 +240,7 @@
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
 
-        <!-- Spring Test -->
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
