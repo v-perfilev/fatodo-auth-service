@@ -30,7 +30,6 @@ public interface UserMapper {
 
     @Mapping(source = "email", target = "username")
     @Mapping(source = "id", target = "providerId")
-    @Mapping(target = "id", ignore = true)
     OAuth2UserDTO oAuth2UserInfoToOAuth2UserDTO(OAuth2UserInfo oAuth2UserInfo);
 
     @Named("stringsIntoGrantedAuthorities")

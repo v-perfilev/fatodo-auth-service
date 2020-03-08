@@ -1,7 +1,6 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.model.constant.AuthProvider;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private String email;
     private String username;
     private String password;
-    private AuthProvider provider;
+    private String provider;
     private String providerId;
     private Set<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;

@@ -3,7 +3,7 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FaToDoAuthServiceApplication;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.model.constant.AuthProvider;
+import com.persoff68.fatodo.config.constant.Providers;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.web.rest.vm.RegisterVM;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,7 +78,7 @@ public class RegisterControllerIT {
         userDTO.setId("test_id");
         userDTO.setEmail("test@email.test");
         userDTO.setUsername("test_username");
-        userDTO.setProvider(AuthProvider.LOCAL.name());
+        userDTO.setProvider(Providers.LOCAL);
         userDTO.setAuthorities(Collections.singleton("ROLE_USER"));
         return userDTO;
     }

@@ -1,11 +1,11 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
+import com.persoff68.fatodo.config.constant.Providers;
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
-import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,8 +23,8 @@ public class LocalUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByUsername(username);
         UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
-        String provider = userPrincipal.getProvider().name();
-        if (!provider.equals(AuthProvider.LOCAL.name())) {
+        String provider = userPrincipal.getProvider();
+        if (!provider.equals(Providers.LOCAL)) {
             throw new AuthWrongProviderProblem(provider);
         }
         return userPrincipal;

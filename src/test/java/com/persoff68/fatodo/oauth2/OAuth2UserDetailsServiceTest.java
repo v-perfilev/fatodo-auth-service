@@ -1,11 +1,11 @@
 package com.persoff68.fatodo.oauth2;
 
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
+import com.persoff68.fatodo.config.constant.Providers;
 import com.persoff68.fatodo.mapper.UserMapper;
-import com.persoff68.fatodo.model.constant.AuthProvider;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,12 +58,12 @@ public class OAuth2UserDetailsServiceTest {
         UserMapper userMapper = Mappers.getMapper(UserMapper.class);
         oAuth2UserDetailsService = new OAuth2UserDetailsService(userServiceClient, userMapper, defaultOAuth2UserService);
 
-        facebookUserRequest = createUserRequest(AuthProvider.FACEBOOK.name());
-        googleUserRequest = createUserRequest(AuthProvider.GOOGLE.name());
-        newFacebookUserDTO = createNewUserDTO(AuthProvider.FACEBOOK);
-        newGoogleUserDTO = createNewUserDTO(AuthProvider.GOOGLE);
-        existingFacebookUserPrincipalDTO = createExistingUserPrincipalDTO(AuthProvider.FACEBOOK);
-        existingGoogleUserPrincipalDTO = createExistingUserPrincipalDTO(AuthProvider.GOOGLE);
+        facebookUserRequest = createUserRequest(Providers.FACEBOOK);
+        googleUserRequest = createUserRequest(Providers.GOOGLE);
+        newFacebookUserDTO = createNewUserDTO(Providers.FACEBOOK);
+        newGoogleUserDTO = createNewUserDTO(Providers.GOOGLE);
+        existingFacebookUserPrincipalDTO = createExistingUserPrincipalDTO(Providers.FACEBOOK);
+        existingGoogleUserPrincipalDTO = createExistingUserPrincipalDTO(Providers.GOOGLE);
 
         when(defaultOAuth2UserService.loadUser(any())).thenReturn(createOAuth2User());
     }
@@ -127,24 +127,24 @@ public class OAuth2UserDetailsServiceTest {
         return new DefaultOAuth2User(authorityList, attributeMap, nameAttributeKey);
     }
 
-    private static UserDTO createNewUserDTO(AuthProvider authProvider) {
+    private static UserDTO createNewUserDTO(String provider) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
         UserDTO userDTO = new UserDTO();
         userDTO.setId("test_id");
         userDTO.setUsername("test@email.com");
         userDTO.setEmail("test@email.com");
-        userDTO.setProvider(authProvider.name());
+        userDTO.setProvider(provider);
         userDTO.setAuthorities(authorityList);
         return userDTO;
     }
 
-    private static UserPrincipalDTO createExistingUserPrincipalDTO(AuthProvider authProvider) {
+    private static UserPrincipalDTO createExistingUserPrincipalDTO(String provider) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
         UserPrincipalDTO userPrincipalDTO = new UserPrincipalDTO();
         userPrincipalDTO.setId("test_id");
         userPrincipalDTO.setUsername("test@email.com");
         userPrincipalDTO.setEmail("test@email.com");
-        userPrincipalDTO.setProvider(authProvider.name());
+        userPrincipalDTO.setProvider(provider);
         userPrincipalDTO.setAuthorities(authorityList);
         return userPrincipalDTO;
     }

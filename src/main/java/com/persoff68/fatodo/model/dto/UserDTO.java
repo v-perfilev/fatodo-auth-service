@@ -1,7 +1,6 @@
 package com.persoff68.fatodo.model.dto;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.model.constant.AuthProvider;
 import lombok.Data;
 
 import java.util.Set;

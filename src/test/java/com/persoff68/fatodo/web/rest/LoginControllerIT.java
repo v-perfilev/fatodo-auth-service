@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FaToDoAuthServiceApplication;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
-import com.persoff68.fatodo.model.constant.AuthProvider;
+import com.persoff68.fatodo.config.constant.Providers;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,7 +107,7 @@ public class LoginControllerIT {
         userPrincipalDTO.setEmail("test@email.test");
         userPrincipalDTO.setUsername("test_username");
         userPrincipalDTO.setPassword(password);
-        userPrincipalDTO.setProvider(AuthProvider.LOCAL.name());
+        userPrincipalDTO.setProvider(Providers.LOCAL);
         userPrincipalDTO.setAuthorities(Collections.singleton("ROLE_USER"));
         return userPrincipalDTO;
     }
