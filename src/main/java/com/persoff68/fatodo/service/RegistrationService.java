@@ -14,7 +14,8 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
 
     public void register(LocalUserDTO localUserDTO) {
-        localUserDTO.setPassword(passwordEncoder.encode(localUserDTO.getPassword()));
+        String encodedPassword = passwordEncoder.encode(localUserDTO.getPassword());
+        localUserDTO.setPassword(encodedPassword);
         userServiceClient.createLocalUser(localUserDTO);
     }
 

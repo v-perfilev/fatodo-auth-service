@@ -1,6 +1,5 @@
 package com.persoff68.fatodo.client;
 
-import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient("user-service")
 public interface UserServiceClient {
 
-    @GetMapping(value = "/auth/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/auth/username/{username}")
     UserPrincipalDTO getUserPrincipalByUsername(@PathVariable("username") String username);
 
     @GetMapping(value = "/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
