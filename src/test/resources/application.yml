@@ -1,3 +1,10 @@
+app:
+  auth:
+    authorizationHeader: Authorization
+    authorizationPrefix: Bearer
+    tokenSecret: 4323B829EF1EEF14E324241FB72E6
+    tokenExpirationSec: 864000
+
 spring:
   security:
     oauth2:
@@ -18,14 +25,7 @@ spring:
               - email
               - public_profile
 
-app:
-  auth:
-    authorizationHeader: Authorization
-    authorizationPrefix: Bearer
-    tokenSecret: 4323B829EF1EEF14E324241FB72E6
-    tokenExpirationSec: 864000
-
-
 stubrunner:
   idsToServiceIds:
+    authservice: auth-service
     userservice: user-service
