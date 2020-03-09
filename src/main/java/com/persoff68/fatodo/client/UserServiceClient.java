@@ -20,10 +20,10 @@ public interface UserServiceClient {
     @GetMapping(value = "/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable("email") String email);
 
-    @PostMapping(value = "/auth/create-oauth2", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/auth/oauth2", produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createOAuth2User(OAuth2UserDTO OAuth2UserDTO);
 
-    @PostMapping(value = "/auth/create-local", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/auth/local", produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createLocalUser(LocalUserDTO userLocalDTO);
 
 }
