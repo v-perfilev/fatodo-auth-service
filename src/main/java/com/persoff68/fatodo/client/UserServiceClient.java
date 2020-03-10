@@ -22,7 +22,7 @@ public interface UserServiceClient {
     @PostMapping(value = "/auth/oauth2", produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createOAuth2User(OAuth2UserDTO OAuth2UserDTO);
 
-    @PostMapping(value = "/auth/local", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/auth/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createLocalUser(LocalUserDTO userLocalDTO);
 
 }
