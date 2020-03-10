@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.contract;
+package com.persoff68.fatodo.contract.main;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMessageVerifier
-public class DefaultBase {
+public class TestBase {
 
     @Autowired
     WebApplicationContext context;

@@ -29,13 +29,6 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     private final UserMapper userMapper;
     private final DefaultOAuth2UserService defaultOAuth2UserService;
 
-    @Autowired
-    public OAuth2UserDetailsService(UserServiceClient userServiceClient, UserMapper userMapper) {
-        this.userServiceClient = userServiceClient;
-        this.userMapper = userMapper;
-        this.defaultOAuth2UserService = new DefaultOAuth2UserService();
-    }
-
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(oAuth2UserRequest);

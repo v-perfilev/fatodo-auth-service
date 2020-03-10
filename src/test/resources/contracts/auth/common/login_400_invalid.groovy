@@ -1,4 +1,4 @@
-package contracts.custom.auth
+package contracts.auth.common
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -10,12 +10,10 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body('''
-            {
-              "username":"",
-              "password":""
-            }
-        ''')
+        body(
+                "username": "",
+                "password": ""
+        )
     }
     response {
         status 400

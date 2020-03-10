@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureStubRunner(
         stubsMode = StubRunnerProperties.StubsMode.LOCAL,
         ids = "com.persoff68.fatodo:userservice:+:stubs")
-public class CustomAuthBase {
+public class AuthCommonBase {
 
     @Autowired
     WebApplicationContext context;

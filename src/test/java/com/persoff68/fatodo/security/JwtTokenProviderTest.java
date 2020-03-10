@@ -25,7 +25,6 @@ public class JwtTokenProviderTest {
     AppProperties appProperties;
     AppProperties.Auth auth;
 
-
     @BeforeEach
     void setup() {
         appProperties = Mockito.mock(AppProperties.class);

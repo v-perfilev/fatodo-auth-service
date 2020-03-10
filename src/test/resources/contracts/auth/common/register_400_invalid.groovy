@@ -1,7 +1,6 @@
-package contracts.custom.auth
+package contracts.auth.common
 
 import org.springframework.cloud.contract.spec.Contract
-import org.springframework.cloud.contract.spec.internal.QueryParameters
 
 Contract.make {
     description "should return 400 cause invalid"
@@ -11,13 +10,11 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body('''
-            {
-              "email":"",
-              "username":"",
-              "password":"test_password"
-            }
-        ''')
+        body(
+                "email": "",
+                "username": "",
+                "password": "test_password"
+        )
     }
     response {
         status 400

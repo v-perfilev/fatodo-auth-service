@@ -29,6 +29,7 @@ public class OAuth2AuthorizationEndpointIT {
     private WebApplicationContext context;
     @Autowired
     private Filter springSecurityFilterChain;
+
     private MockMvc mvc;
 
     @BeforeEach

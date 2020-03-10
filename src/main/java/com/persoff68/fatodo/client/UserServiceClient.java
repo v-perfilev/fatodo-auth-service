@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient("user-service")
 public interface UserServiceClient {
 
-    @GetMapping(value = "/auth/username/{username}")
+    @GetMapping(value = "/auth/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByUsername(@PathVariable("username") String username);
 
     @GetMapping(value = "/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable("email") String email);
 
-    @PostMapping(value = "/auth/oauth2", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/auth/oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createOAuth2User(OAuth2UserDTO OAuth2UserDTO);
 
     @PostMapping(value = "/auth/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
