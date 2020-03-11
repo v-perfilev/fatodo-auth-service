@@ -2,6 +2,8 @@ package com.persoff68.fatodo;
 
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.web.rest.vm.LoginVM;
+import com.persoff68.fatodo.web.rest.vm.RegisterVM;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,33 +22,57 @@ import java.util.Set;
 
 public class FactoryUtils {
 
-    public static OAuth2User createOAuth2User(String id) {
+    public static OAuth2User createOAuth2User(String postfix) {
         List<? extends GrantedAuthority> authorityList = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         Map<String, Object> attributeMap = new HashMap<>();
-        attributeMap.put("id", "test_id_" + id);
-        attributeMap.put("name", "test_name" + id);
-        attributeMap.put("email", "test_" + id + "@email.com");
+        attributeMap.put("id", "test_id_" + postfix);
+        attributeMap.put("name", "test_name" + postfix);
+        attributeMap.put("email", "test_" + postfix + "@email.com");
         String nameAttributeKey = "id";
         return new DefaultOAuth2User(authorityList, attributeMap, nameAttributeKey);
     }
 
-    public static UserDTO createUserDTO(int id, String provider) {
+    public static UserDTO createUserDTO(String postfix, String provider) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
         UserDTO userDTO = new UserDTO();
-        userDTO.setId("test_id_" + id);
-        userDTO.setUsername("test_" + id + "@email.com");
-        userDTO.setEmail("test_" + id + "@email.com");
+        userDTO.setId("test_id_" + postfix);
+        userDTO.setEmail("test_" + postfix + "@email.com");
+        userDTO.setUsername("test_" + postfix + "@email.com");
         userDTO.setProvider(provider);
         userDTO.setAuthorities(authorityList);
         return userDTO;
     }
 
-    public static UserPrincipalDTO createUserPrincipalDTO(int id, String provider) {
+    public static LoginVM createLoginVM(String postfix, String password) {
+        LoginVM vm = new LoginVM();
+        vm.setUsername("test_username_" + postfix);
+        vm.setPassword(password);
+        return vm;
+    }
+
+    public static LoginVM createInvalidLoginVM() {
+        return new LoginVM();
+    }
+
+    public static RegisterVM createRegisterVM(String postfix, String password) {
+        RegisterVM vm = new RegisterVM();
+        vm.setEmail("test_" + postfix + "@email.com");
+        vm.setUsername("test_username_" + postfix);
+        vm.setPassword(password);
+        return vm;
+    }
+
+    public static RegisterVM createInvalidRegisterVM() {
+        return new RegisterVM();
+    }
+
+    public static UserPrincipalDTO createUserPrincipalDTO(String postfix, String provider, String password) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
         UserPrincipalDTO userPrincipalDTO = new UserPrincipalDTO();
-        userPrincipalDTO.setId("test_id_" + id);
-        userPrincipalDTO.setUsername("test_" + id + "@email.com");
-        userPrincipalDTO.setEmail("test_" + id + "@email.com");
+        userPrincipalDTO.setId("test_id_" + postfix);
+        userPrincipalDTO.setEmail("test_" + postfix + "@email.com");
+        userPrincipalDTO.setUsername("test_username_" + postfix);
+        userPrincipalDTO.setPassword(password);
         userPrincipalDTO.setProvider(provider);
         userPrincipalDTO.setAuthorities(authorityList);
         return userPrincipalDTO;

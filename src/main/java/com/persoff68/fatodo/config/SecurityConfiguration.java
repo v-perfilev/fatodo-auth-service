@@ -70,7 +70,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .userService(OAuth2UserDetailsService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
-                .failureHandler(oAuth2AuthenticationFailureHandler());
+                .failureHandler(oAuth2AuthenticationFailureHandler())
+                .and()
+                .authorizeRequests()
+                .anyRequest().anonymous();
     }
 
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
