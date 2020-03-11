@@ -1,9 +1,10 @@
-package contracts.auth.common
+package contracts
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    description "should return 200"
+    name 'register'
+    description 'register: should return status 200'
     request {
         method POST()
         url("/register")
@@ -11,9 +12,9 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "email": "test_local_create@email.com",
-                "username": "test_username_local_create",
-                "password": "test_password"
+                "email": anyEmail(),
+                "username": regex(".{5,50}"),
+                "password": regex(".{5,50}")
         )
     }
     response {
