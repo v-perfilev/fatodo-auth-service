@@ -1,24 +1,23 @@
 package com.persoff68.fatodo.exception.handler;
 
-import com.persoff68.fatodo.exception.InternalServerProblem;
-import com.persoff68.fatodo.exception.PageNotFoundProblem;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.persoff68.fatodo.exception.attribute.AttributeHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.zalando.problem.Problem;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 public class ExceptionController implements ErrorController {
     private final static String ERROR_PATH = "/error";
-    private final static String JAVAX_STATUS_CODE = "javax.servlet.error.status_code";
 
-    private final ExceptionTranslator exceptionTranslator;
+    private final ObjectMapper objectMapper;
 
     @Override
     public String getErrorPath() {
@@ -26,18 +25,8 @@ public class ExceptionController implements ErrorController {
     }
 
     @RequestMapping(value = ERROR_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Problem> error(HttpServletRequest request) {
-        Integer statusCodeInteger = (Integer) request.getAttribute(JAVAX_STATUS_CODE);
-        int statusCode = statusCodeInteger != null ? statusCodeInteger : 500;
-        Problem problem = handleStatus(statusCode);
-        return exceptionTranslator.process(problem, request.getRequestURI());
+    public ResponseEntity<String> error(HttpServletRequest request) throws IOException {
+        return AttributeHandler.from(request).getResponseEntity(objectMapper);
     }
 
-    private Problem handleStatus(int statusCode) {
-        if (statusCode == 404) {
-            return new PageNotFoundProblem();
-        } else {
-            return new InternalServerProblem();
-        }
-    }
 }
