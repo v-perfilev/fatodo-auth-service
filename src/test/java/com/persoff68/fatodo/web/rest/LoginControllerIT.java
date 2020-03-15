@@ -5,8 +5,8 @@ import com.persoff68.fatodo.FaToDoAuthServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
-import com.persoff68.fatodo.config.constant.Authorities;
-import com.persoff68.fatodo.config.constant.Providers;
+import com.persoff68.fatodo.config.constant.Authority;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
 import feign.FeignException;
@@ -53,9 +53,9 @@ public class LoginControllerIT {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
-                Providers.LOCAL, passwordEncoder.encode("test_password"));
+                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
         UserPrincipalDTO oAuth2UserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("google",
-                Providers.GOOGLE, passwordEncoder.encode("test_password"));
+                Provider.Constants.GOOGLE_VALUE, passwordEncoder.encode("test_password"));
 
         when(userServiceClient.getUserPrincipalByUsername("test_username_local"))
                 .thenReturn(localUserPrincipalDTO);
@@ -120,7 +120,7 @@ public class LoginControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.USER)
+    @WithMockUser(authorities = Authority.Constants.USER_VALUE)
     public void testAuthenticate_forbidden() throws Exception {
         LoginVM loginVM = FactoryUtils.createLoginVM("local", "test_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);

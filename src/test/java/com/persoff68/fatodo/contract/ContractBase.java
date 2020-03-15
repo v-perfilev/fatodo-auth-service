@@ -2,9 +2,8 @@ package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.config.constant.Providers;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureM
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -34,7 +31,7 @@ public class ContractBase {
         RestAssuredMockMvc.webAppContextSetup(context);
 
         UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
-                Providers.LOCAL, passwordEncoder.encode("test_password"));
+                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
         when(userServiceClient.getUserPrincipalByUsername(localUserPrincipalDTO.getUsername()))
                 .thenReturn(localUserPrincipalDTO);
     }

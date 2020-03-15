@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.oauth2;
 
 import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.config.constant.Providers;
-import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
+import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.security.exception.WrongProviderException;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ public class OAuth2UserDetailsServiceIT {
     void testProcessOAuth2User_google_userNotExist() {
         OAuth2User oAuth2User = FactoryUtils.createOAuth2User("google");
         when(defaultOAuth2UserService.loadUser(any())).thenReturn(oAuth2User);
-        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Providers.GOOGLE);
+        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Provider.Constants.GOOGLE_VALUE);
         OAuth2User resultOAuth2User = oAuth2UserDetailsService.loadUser(oAuth2UserRequest);
         assertThat(resultOAuth2User).isNotNull();
     }
@@ -55,7 +55,7 @@ public class OAuth2UserDetailsServiceIT {
     void testProcessOAuth2User_facebook_userNotExist() {
         OAuth2User oAuth2User = FactoryUtils.createOAuth2User("facebook");
         when(defaultOAuth2UserService.loadUser(any())).thenReturn(oAuth2User);
-        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Providers.FACEBOOK);
+        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE);
         OAuth2User resultOAuth2User = oAuth2UserDetailsService.loadUser(oAuth2UserRequest);
         assertThat(resultOAuth2User).isNotNull();
     }
@@ -64,7 +64,7 @@ public class OAuth2UserDetailsServiceIT {
     void testProcessOAuth2User_facebook_userExist() {
         OAuth2User oAuth2User = FactoryUtils.createOAuth2User("facebook");
         when(defaultOAuth2UserService.loadUser(any())).thenReturn(oAuth2User);
-        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Providers.FACEBOOK);
+        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE);
         OAuth2User resultOAuth2User = oAuth2UserDetailsService.loadUser(oAuth2UserRequest);
         assertThat(resultOAuth2User).isNotNull();
     }
@@ -73,8 +73,8 @@ public class OAuth2UserDetailsServiceIT {
     void testProcessOAuth2User_facebook_userExist_wrongProvider() {
         OAuth2User oAuth2User = FactoryUtils.createOAuth2User("google");
         when(defaultOAuth2UserService.loadUser(any())).thenReturn(oAuth2User);
-        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Providers.FACEBOOK);
-        assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(oAuth2UserRequest)).isInstanceOf(AuthWrongProviderProblem.class);
+        OAuth2UserRequest oAuth2UserRequest = FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE);
+        assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(oAuth2UserRequest)).isInstanceOf(WrongProviderException.class);
     }
 
 }

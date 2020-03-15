@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.mapper;
 
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
@@ -20,10 +21,12 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoGrantedAuthorities")
+    @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsToGrantedAuthorities")
+    @Mapping(source = "provider", target = "provider", qualifiedByName = "stringToProvider")
     UserPrincipal userPrincipalDTOToUserPrincipal(UserPrincipalDTO userPrincipalDTO);
 
-    @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoGrantedAuthorities")
+    @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsToGrantedAuthorities")
+    @Mapping(source = "provider", target = "provider", qualifiedByName = "stringToProvider")
     UserPrincipal userDTOToUserPrincipal(UserDTO userDTO);
 
     LocalUserDTO registerVMToLocalUserDTO(RegisterVM registerVM);
@@ -32,11 +35,16 @@ public interface UserMapper {
     @Mapping(source = "id", target = "providerId")
     OAuth2UserDTO oAuth2UserInfoToOAuth2UserDTO(OAuth2UserInfo oAuth2UserInfo);
 
-    @Named("stringsIntoGrantedAuthorities")
-    default Set<? extends GrantedAuthority> stringsIntoAuthorities(Set<String> stringSet) {
+    @Named("stringsToGrantedAuthorities")
+    default Set<? extends GrantedAuthority> stringsToAuthorities(Set<String> stringSet) {
         return stringSet != null
                 ? stringSet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet())
                 : null;
+    }
+
+    @Named("stringToProvider")
+    default Provider stringToProvider(String provider) {
+        return Provider.valueOf(provider);
     }
 
 }

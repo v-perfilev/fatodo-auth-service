@@ -6,13 +6,12 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.security.exception.AuthWrongProviderProblem;
-import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundProblem;
+import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundException;
+import com.persoff68.fatodo.security.exception.WrongProviderException;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfoFactory;
 import feign.FeignException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -36,24 +35,24 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-        String provider = oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(provider, oAuth2User.getAttributes());
+        String providerString = oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerString, oAuth2User.getAttributes());
 
         String email = oAuth2UserInfo.getEmail();
         if (StringUtils.isEmpty(email)) {
-            throw new OAuth2EmailNotFoundProblem();
+            throw new OAuth2EmailNotFoundException();
         }
 
         try {
             UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByEmail(email);
             UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
-            String currentProvider = userPrincipal.getProvider();
-            if (!currentProvider.equals(provider)) {
-                throw new AuthWrongProviderProblem(currentProvider);
+            String currentProviderString = userPrincipal.getProvider().getValue();
+            if (!currentProviderString.equals(providerString)) {
+                throw new WrongProviderException(currentProviderString);
             }
             return userPrincipal;
         } catch (FeignException.NotFound ex) {
-            return registerNewUser(provider, oAuth2UserInfo);
+            return registerNewUser(providerString, oAuth2UserInfo);
         }
     }
 

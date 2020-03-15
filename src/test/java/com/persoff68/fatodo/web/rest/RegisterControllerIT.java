@@ -5,8 +5,8 @@ import com.persoff68.fatodo.FaToDoAuthServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
-import com.persoff68.fatodo.config.constant.Authorities;
-import com.persoff68.fatodo.config.constant.Providers;
+import com.persoff68.fatodo.config.constant.Authority;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
@@ -52,7 +52,7 @@ public class RegisterControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
-        UserDTO userDTO = FactoryUtils.createUserDTO("new", Providers.LOCAL);
+        UserDTO userDTO = FactoryUtils.createUserDTO("new", Provider.Constants.LOCAL_VALUE);
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
                 dto != null && "the_username_new".equals(dto.getUsername()))))
                 .thenReturn(userDTO);
@@ -93,7 +93,7 @@ public class RegisterControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.USER)
+    @WithMockUser(authorities = Authority.Constants.USER_VALUE)
     public void testRegister_forbidden() throws Exception {
         LoginVM loginVM = FactoryUtils.createLoginVM("new", "test_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
