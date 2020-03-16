@@ -29,21 +29,7 @@ public class AttributeHandler {
         return new AttributeHandler(request, exception);
     }
 
-    public ResponseEntity<String> getResponseEntity(ObjectMapper objectMapper) throws IOException {
-        HttpStatus status = getStatus();
-        Map<String, Object> errorAttributes = getErrorAttributes();
-        String responseBody = objectMapper.writeValueAsString(errorAttributes);
-        return ResponseEntity.status(status).body(responseBody);
-    }
-
-    public void sendError(ObjectMapper objectMapper, HttpServletResponse response) throws IOException {
-        HttpStatus status = getStatus();
-        Map<String, Object> errorAttributes = getErrorAttributes();
-        String responseBody = objectMapper.writeValueAsString(errorAttributes);
-        response.sendError(status.value(), responseBody);
-    }
-
-    private Map<String, Object> getErrorAttributes() {
+    public Map<String, Object> getErrorAttributes() {
         attributeStrategy.addTimestamp();
         attributeStrategy.addStatus();
         attributeStrategy.addErrorDetails();
@@ -51,7 +37,27 @@ public class AttributeHandler {
         return attributeStrategy.getErrorAttributes();
     }
 
-    private HttpStatus getStatus() {
+    public HttpStatus getStatus() {
         return attributeStrategy.getStatus();
+    }
+
+    public ResponseEntity<String> getResponseEntity(ObjectMapper objectMapper) {
+        HttpStatus status = getStatus();
+        String body = formJson(getErrorAttributes(), objectMapper);
+        return ResponseEntity.status(status).body(body);
+    }
+
+    public void sendError(ObjectMapper objectMapper, HttpServletResponse response) throws IOException {
+        HttpStatus status = getStatus();
+        String body = formJson(getErrorAttributes(), objectMapper);
+        response.sendError(status.value(), body);
+    }
+
+    private String formJson(Map<String, Object> errorAttributes, ObjectMapper objectMapper) {
+        try {
+            return objectMapper.writeValueAsString(errorAttributes);
+        } catch (IOException e) {
+            return "";
+        }
     }
 }
