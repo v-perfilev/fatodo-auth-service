@@ -5,7 +5,7 @@ import com.persoff68.fatodo.FaToDoAuthServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
-import com.persoff68.fatodo.config.constant.Authority;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
@@ -120,7 +120,7 @@ public class LoginControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authority.Constants.USER_VALUE)
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testAuthenticate_forbidden() throws Exception {
         LoginVM loginVM = FactoryUtils.createLoginVM("local", "test_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
