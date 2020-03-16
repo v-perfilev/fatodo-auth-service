@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.client.UserServiceClient;
+import com.persoff68.fatodo.client.UserServiceClientWrapper;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LocalUserDetailsService implements UserDetailsService {
 
-    private final UserServiceClient userServiceClient;
+    private final UserServiceClientWrapper userServiceClientWrapper;
     private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByUsername(username);
+        UserPrincipalDTO userPrincipalDTO = userServiceClientWrapper.getUserPrincipalByUsername(username);
         UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
         Provider provider = userPrincipal.getProvider();
         if (!provider.equals(Provider.LOCAL)) {

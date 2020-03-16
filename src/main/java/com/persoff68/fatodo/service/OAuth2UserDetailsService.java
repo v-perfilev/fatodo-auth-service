@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.client.UserServiceClient;
+import com.persoff68.fatodo.client.UserServiceClientWrapper;
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
@@ -10,7 +10,7 @@ import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundException;
 import com.persoff68.fatodo.security.exception.WrongProviderException;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfoFactory;
-import feign.FeignException;
+import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -24,7 +24,7 @@ import org.springframework.util.StringUtils;
 @AllArgsConstructor
 public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final UserServiceClient userServiceClient;
+    private final UserServiceClientWrapper userServiceClientWrapper;
     private final UserMapper userMapper;
     private final DefaultOAuth2UserService defaultOAuth2UserService;
 
@@ -44,14 +44,14 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
         }
 
         try {
-            UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByEmail(email);
+            UserPrincipalDTO userPrincipalDTO = userServiceClientWrapper.getUserPrincipalByEmail(email);
             UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
             String currentProviderString = userPrincipal.getProvider().getValue();
             if (!currentProviderString.equals(providerString)) {
                 throw new WrongProviderException(currentProviderString);
             }
             return userPrincipal;
-        } catch (FeignException.NotFound ex) {
+        } catch (ModelNotFoundException e) {
             return registerNewUser(providerString, oAuth2UserInfo);
         }
     }
@@ -59,7 +59,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     private UserPrincipal registerNewUser(String provider, OAuth2UserInfo oAuth2UserInfo) {
         OAuth2UserDTO oAuth2UserDTO = userMapper.oAuth2UserInfoToOAuth2UserDTO(oAuth2UserInfo);
         oAuth2UserDTO.setProvider(provider);
-        UserDTO userDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
+        UserDTO userDTO = userServiceClientWrapper.createOAuth2User(oAuth2UserDTO);
         return userMapper.userDTOToUserPrincipal(userDTO);
     }
 
