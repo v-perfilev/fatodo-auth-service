@@ -1,9 +1,8 @@
 package com.persoff68.fatodo.web.rest.exception.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.exception.AbstractException;
 import com.persoff68.fatodo.exception.attribute.AttributeHandler;
-import com.persoff68.fatodo.web.rest.exception.FormNotValidException;
+import com.persoff68.fatodo.web.rest.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -24,7 +23,7 @@ public class RestExceptionHandling {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleAbstractException(HttpServletRequest request) throws IOException {
-        Exception e = new FormNotValidException();
+        Exception e = new ValidationException();
         return AttributeHandler.from(request, e).getResponseEntity(objectMapper);
     }
 
