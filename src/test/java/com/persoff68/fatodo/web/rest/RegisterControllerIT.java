@@ -54,10 +54,10 @@ public class RegisterControllerIT {
 
         UserDTO userDTO = FactoryUtils.createUserDTO("new", Provider.Constants.LOCAL_VALUE);
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
-                dto != null && "the_username_new".equals(dto.getUsername()))))
+                dto != null && "test_username_new".equals(dto.getUsername()))))
                 .thenReturn(userDTO);
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
-                dto != null && "the_username_local".equals(dto.getUsername()))))
+                dto != null && "test_username_local".equals(dto.getUsername()))))
                 .thenThrow(FeignException.Conflict.class);
     }
 
@@ -90,6 +90,7 @@ public class RegisterControllerIT {
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict());
+
     }
 
     @Test
