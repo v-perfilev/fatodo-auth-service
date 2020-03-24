@@ -32,9 +32,9 @@ public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
     public String getImageUrl() {
         if (attributes.containsKey("picture")) {
             Map<String, Object> pictureObj = castToMap(attributes.get("picture"));
-            if (pictureObj.containsKey("data")) {
+            if (pictureObj != null && pictureObj.containsKey("data")) {
                 Map<String, Object> dataObj = castToMap(pictureObj.get("data"));
-                if (dataObj.containsKey("url")) {
+                if (dataObj != null && dataObj.containsKey("url")) {
                     return (String) dataObj.get("url");
                 }
             }

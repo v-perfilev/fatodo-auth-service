@@ -51,13 +51,13 @@ public class JwtTokenFilterIT {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "" + userJwt);
         mvc.perform(get("/").headers(headers))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isNotFound());
     }
 
     @Test
     void testNoHeader() throws Exception {
         mvc.perform(get("/"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class JwtTokenFilterIT {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + invalidExpiredJwt);
         mvc.perform(get("/").headers(headers))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -73,7 +73,7 @@ public class JwtTokenFilterIT {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + invalidFormatJwt);
         mvc.perform(get("/").headers(headers))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -81,6 +81,6 @@ public class JwtTokenFilterIT {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + invalidWrongJwt);
         mvc.perform(get("/").headers(headers))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isNotFound());
     }
 }

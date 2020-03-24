@@ -25,7 +25,7 @@ class FaToDoAuthServiceApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        ExtendedSkeletonApplication.main(new String[]{});
+        FaToDoAuthServiceApplication.main(new String[]{});
         mvc.perform(get("/"))
                 .andExpect(status().isNotFound());
     }
