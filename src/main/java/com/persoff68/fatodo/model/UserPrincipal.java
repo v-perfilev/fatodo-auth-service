@@ -21,7 +21,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private Provider provider;
     private String providerId;
     private Set<? extends GrantedAuthority> authorities;
-    private Map<String, Object> attributes;
+    private transient Map<String, Object> attributes;
 
     @Override
     public String getName() {

@@ -19,16 +19,6 @@ public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getName() {
-        return (String) attributes.get("name");
-    }
-
-    @Override
-    public String getEmail() {
-        return (String) attributes.get("email");
-    }
-
-    @Override
     public String getImageUrl() {
         if (attributes.containsKey("picture")) {
             Map<String, Object> pictureObj = castToMap(attributes.get("picture"));
@@ -43,7 +33,7 @@ public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> castToMap(Object object) throws ClassCastException {
+    private Map<String, Object> castToMap(Object object) {
         return object instanceof HashMap ? (HashMap<String, Object>) object : null;
     }
 

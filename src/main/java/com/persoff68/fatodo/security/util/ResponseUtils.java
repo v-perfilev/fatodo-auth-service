@@ -4,11 +4,13 @@ import com.persoff68.fatodo.config.AppProperties;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class ResponseUtils {
 
-    public static void addJwtToResponse(HttpServletResponse response, AppProperties.Auth auth, String jwt) throws IOException {
+    private ResponseUtils() {
+    }
+
+    public static void addJwtToResponse(HttpServletResponse response, AppProperties.Auth auth, String jwt) {
         String header = auth.getAuthorizationHeader();
         String prefix = auth.getAuthorizationPrefix();
         String fullToken = prefix + " " + jwt;

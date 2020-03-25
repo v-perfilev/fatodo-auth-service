@@ -20,7 +20,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final AppProperties appProperties;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CookieAuthorizationRequestRepository CookieAuthorizationRequestRepository;
+    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -37,7 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        CookieAuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+        cookieAuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
 }

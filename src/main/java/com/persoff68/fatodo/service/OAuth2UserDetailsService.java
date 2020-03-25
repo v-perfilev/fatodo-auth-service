@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,7 +28,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     private final DefaultOAuth2UserService defaultOAuth2UserService;
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
+    public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
         OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(oAuth2UserRequest);
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
     }

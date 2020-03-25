@@ -36,7 +36,7 @@ public interface UserMapper {
     OAuth2UserDTO oAuth2UserInfoToOAuth2UserDTO(OAuth2UserInfo oAuth2UserInfo);
 
     @Named("stringsToGrantedAuthorities")
-    default Set<? extends GrantedAuthority> stringsToAuthorities(Set<String> stringSet) {
+    default Set<GrantedAuthority> stringsToAuthorities(Set<String> stringSet) {
         return stringSet != null
                 ? stringSet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet())
                 : null;

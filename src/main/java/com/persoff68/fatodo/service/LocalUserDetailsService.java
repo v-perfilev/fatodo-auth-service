@@ -9,7 +9,6 @@ import com.persoff68.fatodo.security.exception.WrongProviderException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +19,7 @@ public class LocalUserDetailsService implements UserDetailsService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         UserPrincipalDTO userPrincipalDTO = userServiceClientWrapper.getUserPrincipalByUsername(username);
         UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
         Provider provider = userPrincipal.getProvider();

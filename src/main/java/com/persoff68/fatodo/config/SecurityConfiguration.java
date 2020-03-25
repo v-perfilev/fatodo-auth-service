@@ -19,9 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
@@ -32,7 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
     private final SecurityProblemSupport securityProblemSupport;
     private final LocalUserDetailsService localUserDetailsService;
-    private final OAuth2UserDetailsService OAuth2UserDetailsService;
+    private final OAuth2UserDetailsService oAuth2UserDetailsService;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final SecurityLocaleFilter securityLocaleFilter;
 
@@ -46,6 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         authManager.userDetailsService(localUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .csrf().ignoringAntMatchers("/**")
@@ -69,7 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .redirectionEndpoint().baseUri("/api/oauth2/code/*")
                 .and()
                 .userInfoEndpoint()
-                .userService(OAuth2UserDetailsService)
+                .userService(oAuth2UserDetailsService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
                 .failureHandler(oAuth2AuthenticationFailureHandler())
