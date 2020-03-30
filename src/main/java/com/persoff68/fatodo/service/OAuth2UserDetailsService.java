@@ -35,7 +35,8 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         String providerString = oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerString, oAuth2User.getAttributes());
+        OAuth2UserInfo oAuth2UserInfo =
+                OAuth2UserInfoFactory.getOAuth2UserInfo(providerString, oAuth2User.getAttributes());
 
         String email = oAuth2UserInfo.getEmail();
         if (StringUtils.isEmpty(email)) {

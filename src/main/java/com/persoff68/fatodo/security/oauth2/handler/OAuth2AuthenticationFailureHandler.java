@@ -14,7 +14,9 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
+    public void onAuthenticationFailure(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        AuthenticationException exception) {
         cookieAuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 

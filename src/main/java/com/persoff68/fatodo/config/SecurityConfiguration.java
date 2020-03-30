@@ -77,7 +77,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
-        return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider, cookieAuthorizationRequestRepository);
+        return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider,
+                cookieAuthorizationRequestRepository);
     }
 
     private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {

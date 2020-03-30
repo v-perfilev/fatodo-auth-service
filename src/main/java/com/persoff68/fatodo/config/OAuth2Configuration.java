@@ -24,7 +24,8 @@ public class OAuth2Configuration {
 
     @Bean
     OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
-        return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider, cookieAuthorizationRequestRepository);
+        return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider,
+                cookieAuthorizationRequestRepository);
     }
 
     @Bean
