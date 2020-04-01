@@ -1,7 +1,12 @@
 package com.persoff68.fatodo.exception;
 
 import com.persoff68.fatodo.security.exception.ForbiddenException;
+import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundException;
+import com.persoff68.fatodo.security.exception.OAuth2InternalException;
+import com.persoff68.fatodo.security.exception.OAuth2ProviderNotSupportedException;
+import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
+import com.persoff68.fatodo.security.exception.WrongProviderException;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
@@ -102,6 +107,46 @@ public class ExceptionTest {
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    void testWrongProviderException() {
+        Object exception = new WrongProviderException("test_provider");
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testOAuth2EmailNotFoundException() {
+        Object exception = new OAuth2EmailNotFoundException();
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void testOAuth2InternalException() {
+        Object exception = new OAuth2InternalException();
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    void testOAuth2ProviderNotSupportedException() {
+        Object exception = new OAuth2ProviderNotSupportedException("test_provider");
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    void testOAuth2WrongProviderException() {
+        Object exception = new OAuth2WrongProviderException("test_provider");
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
 }
