@@ -1,5 +1,6 @@
 package com.persoff68.fatodo;
 
+import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
@@ -34,13 +35,21 @@ public class FactoryUtils {
 
     public static UserDTO createUserDTO(String postfix, String provider) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId("test_id_" + postfix);
-        userDTO.setEmail("test_" + postfix + "@email.com");
-        userDTO.setUsername("test_" + postfix + "@email.com");
-        userDTO.setProvider(provider);
-        userDTO.setAuthorities(authorityList);
-        return userDTO;
+        UserDTO dto = new UserDTO();
+        dto.setId("test_id_" + postfix);
+        dto.setEmail("test_" + postfix + "@email.com");
+        dto.setUsername("test_username_" + postfix);
+        dto.setProvider(provider);
+        dto.setAuthorities(authorityList);
+        return dto;
+    }
+
+    public static LocalUserDTO createLocalUserDTO(String postfix, String password) {
+        LocalUserDTO dto = new LocalUserDTO();
+        dto.setEmail("test_" + postfix + "@email.com");
+        dto.setUsername("test_username_" + postfix);
+        dto.setPassword(password);
+        return dto;
     }
 
     public static LoginVM createLoginVM(String postfix, String password) {
@@ -68,14 +77,14 @@ public class FactoryUtils {
 
     public static UserPrincipalDTO createUserPrincipalDTO(String postfix, String provider, String password) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
-        UserPrincipalDTO userPrincipalDTO = new UserPrincipalDTO();
-        userPrincipalDTO.setId("test_id_" + postfix);
-        userPrincipalDTO.setEmail("test_" + postfix + "@email.com");
-        userPrincipalDTO.setUsername("test_username_" + postfix);
-        userPrincipalDTO.setPassword(password);
-        userPrincipalDTO.setProvider(provider);
-        userPrincipalDTO.setAuthorities(authorityList);
-        return userPrincipalDTO;
+        UserPrincipalDTO dto = new UserPrincipalDTO();
+        dto.setId("test_id_" + postfix);
+        dto.setEmail("test_" + postfix + "@email.com");
+        dto.setUsername("test_username_" + postfix);
+        dto.setPassword(password);
+        dto.setProvider(provider);
+        dto.setAuthorities(authorityList);
+        return dto;
     }
 
     public static OAuth2UserRequest createUserRequest(String provider) {

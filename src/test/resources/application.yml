@@ -29,6 +29,7 @@ stubrunner:
   idsToServiceIds:
     authservice: auth-service
     userservice: user-service
+  repositoryRoot: '@maven.repo.url@'
 
 test:
   jwt:
