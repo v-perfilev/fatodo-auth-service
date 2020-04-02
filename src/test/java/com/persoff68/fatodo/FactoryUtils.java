@@ -1,6 +1,7 @@
 package com.persoff68.fatodo;
 
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
+import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.web.rest.vm.LoginVM;
@@ -49,6 +50,15 @@ public class FactoryUtils {
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
         dto.setPassword(password);
+        return dto;
+    }
+
+    public static OAuth2UserDTO createOAuth2UserDTO(String postfix) {
+        OAuth2UserDTO dto = new OAuth2UserDTO();
+        dto.setEmail("test_" + postfix + "@email.com");
+        dto.setUsername("test_" + postfix + "@email.com");
+        dto.setProvider("facebook");
+        dto.setProviderId("test_provider_id");
         return dto;
     }
 
