@@ -65,7 +65,6 @@ sonar:
   dependencies:
     - unit-tests
     - integration-tests
-    - contract-tests
   script:
     - ./mvnw $MAVEN_CLI_OPTS initialize sonar:sonar $MAVEN_OPTS
       -Dsonar.host.url=$SONAR_URL
