@@ -20,7 +20,7 @@
         <!-- Maven variables -->
         <maven.repo.url/>
         <!-- Classes and packages -->
-        <main.class>com.persoff68.fatodo.ExtendedSkeletonApplication</main.class>
+        <main.class>com.persoff68.fatodo.FaToDoAuthServiceApplication</main.class>
         <root.package>com.persoff68.fatodo</root.package>
         <contract.package>com.persoff68.fatodo.contract</contract.package>
         <!-- Dependency versions -->
