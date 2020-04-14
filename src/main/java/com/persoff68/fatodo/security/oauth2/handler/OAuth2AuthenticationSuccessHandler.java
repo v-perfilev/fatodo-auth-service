@@ -37,7 +37,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         User user = new User(userPrincipal.getUsername(), "", userPrincipal.getAuthorities());
         String jwt = jwtTokenProvider.createUserJwt(userPrincipal.getId(), user);
         ResponseUtils.addJwtToResponse(response, appProperties.getAuth(), jwt);
-        log.info("OAuth2 authentication succeed: username {}", ((UserPrincipal) oAuth2Authentication.getPrincipal()).getUsername());
+        log.info("OAuth2 authentication succeed: username {}",
+                ((UserPrincipal) oAuth2Authentication.getPrincipal()).getUsername());
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
