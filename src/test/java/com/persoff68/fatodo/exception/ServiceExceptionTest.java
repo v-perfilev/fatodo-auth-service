@@ -1,35 +1,20 @@
 package com.persoff68.fatodo.exception;
 
-import com.persoff68.fatodo.security.exception.ForbiddenException;
 import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundException;
 import com.persoff68.fatodo.security.exception.OAuth2InternalException;
 import com.persoff68.fatodo.security.exception.OAuth2ProviderNotSupportedException;
 import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
-import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.exception.WrongProviderException;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
-import com.persoff68.fatodo.web.rest.exception.ValidationException;
+import com.persoff68.fatodo.service.exception.PermissionException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExceptionTest {
-
-    // Common exceptions
-
-    @Test
-    void testClientException() {
-        Object exception = new ClientException(HttpStatus.INTERNAL_SERVER_ERROR, "test_message");
-        assertThat(exception).isInstanceOf(AbstractException.class);
-        AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-
-    // Service exceptions
+public class ServiceExceptionTest {
 
     @Test
     void testModelAlreadyExistsException_firstConstructor() {
@@ -79,34 +64,20 @@ public class ExceptionTest {
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
-
-    // Controller exceptions
-
     @Test
-    void testValidationException() {
-        Object exception = new ValidationException();
+    void testPermissionException_firstConstructor() {
+        Object exception = new PermissionException();
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
-
-    // Security exceptions
-
     @Test
-    void testForbiddenException() {
-        Object exception = new ForbiddenException();
+    void testPermissionException_secondConstructor() {
+        Object exception = new PermissionException("test_message");
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.FORBIDDEN);
-    }
-
-    @Test
-    void testUnauthorizedException() {
-        Object exception = new UnauthorizedException();
-        assertThat(exception).isInstanceOf(AbstractException.class);
-        AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
