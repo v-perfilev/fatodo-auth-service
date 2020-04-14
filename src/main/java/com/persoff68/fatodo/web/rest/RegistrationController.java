@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @RequestMapping(RegistrationController.ENDPOINT)
 @RequiredArgsConstructor
 public class RegistrationController {
-    static final String ENDPOINT = "/register";
+    static final String ENDPOINT = "/api/register";
 
     private final RegistrationService registrationService;
     private final UserMapper userMapper;

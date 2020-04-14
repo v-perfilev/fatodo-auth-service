@@ -6,6 +6,7 @@ import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.util.ResponseUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
+@Slf4j
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AppProperties appProperties;
@@ -35,6 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         User user = new User(userPrincipal.getUsername(), "", userPrincipal.getAuthorities());
         String jwt = jwtTokenProvider.createUserJwt(userPrincipal.getId(), user);
         ResponseUtils.addJwtToResponse(response, appProperties.getAuth(), jwt);
+        log.info("OAuth2 authentication succeed: username {}", ((UserPrincipal) oAuth2Authentication.getPrincipal()).getUsername());
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

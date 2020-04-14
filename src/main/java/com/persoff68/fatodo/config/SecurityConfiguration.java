@@ -3,7 +3,6 @@ package com.persoff68.fatodo.config;
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.filter.SecurityLocaleFilter;
 import com.persoff68.fatodo.security.filter.SecurityProblemSupport;
-import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.persoff68.fatodo.service.LocalUserDetailsService;
@@ -25,11 +24,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final AppProperties appProperties;
-    private final JwtTokenProvider jwtTokenProvider;
     private final SecurityProblemSupport securityProblemSupport;
     private final LocalUserDetailsService localUserDetailsService;
     private final OAuth2UserDetailsService oAuth2UserDetailsService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final SecurityLocaleFilter securityLocaleFilter;
 
@@ -69,20 +68,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .userInfoEndpoint()
                 .userService(oAuth2UserDetailsService)
                 .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler())
-                .failureHandler(oAuth2AuthenticationFailureHandler())
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler)
                 .and()
                 .authorizeRequests()
                 .anyRequest().anonymous();
-    }
-
-    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
-        return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider,
-                cookieAuthorizationRequestRepository);
-    }
-
-    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
-        return new OAuth2AuthenticationFailureHandler(cookieAuthorizationRequestRepository);
     }
 
 }
