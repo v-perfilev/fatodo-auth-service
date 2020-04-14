@@ -2,7 +2,6 @@ package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.client.interceptor.JwtInterceptor;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
