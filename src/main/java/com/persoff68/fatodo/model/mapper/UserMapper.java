@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.mapper;
+package com.persoff68.fatodo.model.mapper;
 
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.UserPrincipal;
@@ -7,7 +7,7 @@ import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
-import com.persoff68.fatodo.web.rest.vm.RegisterVM;
+import com.persoff68.fatodo.model.vm.RegisterVM;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

@@ -1,9 +1,9 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.mapper.UserMapper;
+import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.service.RegistrationService;
-import com.persoff68.fatodo.web.rest.vm.RegisterVM;
+import com.persoff68.fatodo.model.vm.RegisterVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

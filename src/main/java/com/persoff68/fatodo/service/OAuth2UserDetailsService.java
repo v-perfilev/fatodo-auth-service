@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.client.UserServiceClientWrapper;
-import com.persoff68.fatodo.mapper.UserMapper;
+import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
