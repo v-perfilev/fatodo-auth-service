@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = FaToDoAuthServiceApplication.class)
 public class RegisterControllerIT {
-    private static final String ENDPOINT = "/register";
+    private static final String ENDPOINT = "/api/register";
 
     @Autowired
     WebApplicationContext context;
