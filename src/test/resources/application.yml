@@ -26,10 +26,10 @@ spring:
               - public_profile
 
 stubrunner:
-  idsToServiceIds:
+  ids-to-service-ids:
     authservice: auth-service
     userservice: user-service
-  repositoryRoot: '@maven.repo.url@'
+  repository-root: '@maven.repo.url@'
 
 test:
   jwt:
