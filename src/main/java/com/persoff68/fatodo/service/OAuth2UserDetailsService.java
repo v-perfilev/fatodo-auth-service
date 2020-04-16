@@ -1,11 +1,11 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.client.UserServiceClientWrapper;
-import com.persoff68.fatodo.model.mapper.UserMapper;
+import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundException;
 import com.persoff68.fatodo.security.exception.WrongProviderException;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
@@ -23,7 +23,7 @@ import org.springframework.util.StringUtils;
 @AllArgsConstructor
 public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final UserServiceClientWrapper userServiceClientWrapper;
+    private final UserServiceClient userServiceClient;
     private final UserMapper userMapper;
     private final DefaultOAuth2UserService defaultOAuth2UserService;
 
@@ -44,7 +44,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
         }
 
         try {
-            UserPrincipalDTO userPrincipalDTO = userServiceClientWrapper.getUserPrincipalByEmail(email);
+            UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByEmail(email);
             UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
             String currentProviderString = userPrincipal.getProvider().getValue();
             if (!currentProviderString.equals(providerString)) {
@@ -59,7 +59,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     private UserPrincipal registerNewUser(String provider, OAuth2UserInfo oAuth2UserInfo) {
         OAuth2UserDTO oAuth2UserDTO = userMapper.oAuth2UserInfoToOAuth2UserDTO(oAuth2UserInfo);
         oAuth2UserDTO.setProvider(provider);
-        UserDTO userDTO = userServiceClientWrapper.createOAuth2User(oAuth2UserDTO);
+        UserDTO userDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
         return userMapper.userDTOToUserPrincipal(userDTO);
     }
 
