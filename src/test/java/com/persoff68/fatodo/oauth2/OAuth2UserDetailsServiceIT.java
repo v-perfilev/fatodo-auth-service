@@ -5,6 +5,7 @@ import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.security.exception.WrongProviderException;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
+import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,7 @@ public class OAuth2UserDetailsServiceIT {
         when(defaultOAuth2UserService.loadUser(any()))
                 .thenReturn(FactoryUtils.createOAuth2User("google"));
         when(userServiceClient.getUserPrincipalByEmail(any()))
-                .thenThrow(FeignException.NotFound.class);
+                .thenThrow(new ModelNotFoundException());
         when(userServiceClient.createOAuth2User(any()))
                 .thenReturn(FactoryUtils.createUserDTO("google", Provider.Constants.GOOGLE_VALUE));
 
@@ -56,7 +57,7 @@ public class OAuth2UserDetailsServiceIT {
         when(defaultOAuth2UserService.loadUser(any()))
                 .thenReturn(FactoryUtils.createOAuth2User("facebook"));
         when(userServiceClient.getUserPrincipalByEmail(any()))
-                .thenThrow(FeignException.NotFound.class);
+                .thenThrow(new ModelNotFoundException());
         when(userServiceClient.createOAuth2User(any()))
                 .thenReturn(FactoryUtils.createUserDTO("facebook", Provider.Constants.FACEBOOK_VALUE));
 

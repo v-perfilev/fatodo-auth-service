@@ -11,7 +11,7 @@ import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.model.vm.RegisterVM;
-import feign.FeignException;
+import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class RegisterControllerIT {
                 .thenReturn(userDTO);
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
                 dto != null && "test_username_local".equals(dto.getUsername()))))
-                .thenThrow(FeignException.Conflict.class);
+                .thenThrow(new ModelDuplicatedException());
     }
 
 

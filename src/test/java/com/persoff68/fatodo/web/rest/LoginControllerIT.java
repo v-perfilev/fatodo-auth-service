@@ -9,7 +9,7 @@ import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.vm.LoginVM;
-import feign.FeignException;
+import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public class LoginControllerIT {
         when(userServiceClient.getUserPrincipalByUsername("test_username_google"))
                 .thenReturn(oAuth2UserPrincipalDTO);
         when(userServiceClient.getUserPrincipalByUsername("test_username_not_exists"))
-                .thenThrow(FeignException.NotFound.class);
+                .thenThrow(new ModelNotFoundException());
     }
 
     @Test
