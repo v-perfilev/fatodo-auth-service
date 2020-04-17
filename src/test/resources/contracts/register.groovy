@@ -19,5 +19,8 @@ Contract.make {
     }
     response {
         status 200
+        headers {
+            contentType applicationJson()
+        }
     }
 }
