@@ -25,9 +25,6 @@ Contract.make {
     response {
         status 200
         headers {
-            contentType applicationJson()
-        }
-        headers {
             header 'Authorization': anyNonBlankString()
         }
     }
