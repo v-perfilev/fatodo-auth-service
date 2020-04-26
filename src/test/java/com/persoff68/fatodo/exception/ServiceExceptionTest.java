@@ -1,10 +1,10 @@
 package com.persoff68.fatodo.exception;
 
-import com.persoff68.fatodo.security.exception.OAuth2EmailNotFoundException;
+import com.persoff68.fatodo.security.exception.OAuth2UserNotFoundException;
 import com.persoff68.fatodo.security.exception.OAuth2InternalException;
 import com.persoff68.fatodo.security.exception.OAuth2ProviderNotSupportedException;
 import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
-import com.persoff68.fatodo.security.exception.WrongProviderException;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
@@ -99,7 +99,7 @@ public class ServiceExceptionTest {
 
     @Test
     void testWrongProviderException() {
-        Object exception = new WrongProviderException("test_provider");
+        Object exception = new AuthWrongProviderException("test_provider");
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -107,7 +107,7 @@ public class ServiceExceptionTest {
 
     @Test
     void testOAuth2EmailNotFoundException() {
-        Object exception = new OAuth2EmailNotFoundException();
+        Object exception = new OAuth2UserNotFoundException();
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);

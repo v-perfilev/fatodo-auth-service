@@ -3,10 +3,9 @@ package com.persoff68.fatodo.oauth2;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
-import com.persoff68.fatodo.security.exception.WrongProviderException;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
-import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,7 +85,7 @@ public class OAuth2UserDetailsServiceIT {
 
         assertThatThrownBy(() -> oAuth2UserDetailsService
                 .loadUser(FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE)))
-                .isInstanceOf(WrongProviderException.class);
+                .isInstanceOf(AuthWrongProviderException.class);
     }
 
 }

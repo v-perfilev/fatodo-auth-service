@@ -5,7 +5,7 @@ import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
-import com.persoff68.fatodo.security.exception.WrongProviderException;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +24,7 @@ public class LocalUserDetailsService implements UserDetailsService {
         UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
         Provider provider = userPrincipal.getProvider();
         if (!provider.equals(Provider.LOCAL)) {
-            throw new WrongProviderException(provider.getValue());
+            throw new AuthWrongProviderException(provider.getValue());
         }
         return userPrincipal;
     }
