@@ -3,20 +3,18 @@ package com.persoff68.fatodo.config;
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.filter.SecurityLocaleFilter;
 import com.persoff68.fatodo.security.filter.SecurityProblemSupport;
+import com.persoff68.fatodo.security.local.LocalAuthenticationProvider;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.persoff68.fatodo.service.LocalUserDetailsService;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -25,21 +23,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProblemSupport securityProblemSupport;
-    private final LocalUserDetailsService localUserDetailsService;
+    private final LocalAuthenticationProvider localAuthenticationProvider;
     private final OAuth2UserDetailsService oAuth2UserDetailsService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final SecurityLocaleFilter securityLocaleFilter;
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
-
     @Override
-    protected void configure(AuthenticationManagerBuilder authManager) throws Exception {
-        authManager.userDetailsService(localUserDetailsService).passwordEncoder(passwordEncoder());
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(localAuthenticationProvider);
     }
 
     @Override

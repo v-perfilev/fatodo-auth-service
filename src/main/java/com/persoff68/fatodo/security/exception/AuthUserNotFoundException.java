@@ -8,6 +8,6 @@ public class AuthUserNotFoundException extends AbstractException {
     private static final String FEEDBACK_CODE = "security.not-registered";
 
     public AuthUserNotFoundException() {
-        super(HttpStatus.BAD_REQUEST, MESSAGE, FEEDBACK_CODE);
+        super(HttpStatus.NOT_FOUND, MESSAGE, FEEDBACK_CODE);
     }
 }

@@ -62,9 +62,16 @@ public class FactoryUtils {
         return dto;
     }
 
-    public static LoginVM createLoginVM(String postfix, String password) {
+    public static LoginVM createUsernameLoginVM(String postfix, String password) {
         LoginVM vm = new LoginVM();
-        vm.setUsername("test_username_" + postfix);
+        vm.setUser("test_username_" + postfix);
+        vm.setPassword(password);
+        return vm;
+    }
+
+    public static LoginVM createEmailLoginVM(String postfix, String password) {
+        LoginVM vm = new LoginVM();
+        vm.setUser("test_" + postfix + "@email.com");
         vm.setPassword(password);
         return vm;
     }

@@ -16,7 +16,7 @@ public class LoginVM {
 
     @NotNull
     @Size(min = 5, max = 50)
-    private String username;
+    private String user;
 
     @NotNull
     @Size(min = 5, max = 100)

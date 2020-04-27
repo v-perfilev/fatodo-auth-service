@@ -12,7 +12,7 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "username": $(
+                "user": $(
                         consumer(regex(".{5,50}")),
                         producer("test_username_local")
                 ),

@@ -96,7 +96,7 @@ public class RegisterControllerIT {
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testRegister_forbidden() throws Exception {
-        LoginVM loginVM = FactoryUtils.createLoginVM("new", "test_password");
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("new", "test_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))

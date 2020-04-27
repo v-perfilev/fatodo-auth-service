@@ -2,19 +2,13 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.config.AppProperties;
 import com.persoff68.fatodo.model.UserPrincipal;
-import com.persoff68.fatodo.security.exception.AuthUserNotFoundException;
-import com.persoff68.fatodo.security.exception.AuthWrongPasswordException;
-import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
+import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.util.ResponseUtils;
-import com.persoff68.fatodo.model.vm.LoginVM;
-import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -38,26 +32,14 @@ public class LoginController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> authenticate(@Valid @RequestBody LoginVM loginVM) {
-        try {
-            var authenticationToken = new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
-            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            User user = new User(userPrincipal.getUsername(), "", userPrincipal.getAuthorities());
-            String jwt = jwtTokenProvider.createUserJwt(userPrincipal.getId(), user);
-            HttpHeaders headers = ResponseUtils.createHeaderWithJwt(appProperties.getAuth(), jwt);
-            return ResponseEntity.ok().headers(headers).build();
-        } catch (InternalAuthenticationServiceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof ModelNotFoundException) {
-                throw new AuthUserNotFoundException();
-            }
-            if (cause instanceof AuthWrongProviderException) {
-                throw (AuthWrongProviderException) cause;
-            }
-            throw e;
-        } catch (BadCredentialsException e) {
-            throw new AuthWrongPasswordException();
-        }
+        var authenticationToken
+                = new UsernamePasswordAuthenticationToken(loginVM.getUser(), loginVM.getPassword());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User user = new User(userPrincipal.getUsername(), "", userPrincipal.getAuthorities());
+        String jwt = jwtTokenProvider.createUserJwt(userPrincipal.getId(), user);
+        HttpHeaders headers = ResponseUtils.createHeaderWithJwt(appProperties.getAuth(), jwt);
+        return ResponseEntity.ok().headers(headers).build();
     }
 
 }

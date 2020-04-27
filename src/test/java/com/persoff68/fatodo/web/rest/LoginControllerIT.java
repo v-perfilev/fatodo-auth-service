@@ -67,8 +67,22 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_ok() throws Exception {
-        LoginVM loginVM = FactoryUtils.createLoginVM("local", "test_password");
+    public void testAuthenticate_ok_username() throws Exception {
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "test_password");
+        String requestBody = objectMapper.writeValueAsString(loginVM);
+        ResultActions resultActions = mvc.perform(post(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(header().exists(appProperties.getAuth().getAuthorizationHeader()));
+
+        String authHeader = resultActions.andReturn().getResponse().getHeader(appProperties.getAuth().getAuthorizationHeader());
+        assertThat(authHeader).startsWith(appProperties.getAuth().getAuthorizationPrefix());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testAuthenticate_ok_email() throws Exception {
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "test_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         ResultActions resultActions = mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -82,7 +96,7 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_wrongPassword() throws Exception {
-        LoginVM loginVM = FactoryUtils.createLoginVM("local", "wrong_password");
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "wrong_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -92,7 +106,7 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_wrongProvider() throws Exception {
-        LoginVM loginVM = FactoryUtils.createLoginVM("google", "wrong_password");
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("google", "wrong_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -112,7 +126,7 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_notExists() throws Exception {
-        LoginVM loginVM = FactoryUtils.createLoginVM("not_exists", "test_password");
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("not_exists", "test_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -122,7 +136,7 @@ public class LoginControllerIT {
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testAuthenticate_forbidden() throws Exception {
-        LoginVM loginVM = FactoryUtils.createLoginVM("local", "test_password");
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "test_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
