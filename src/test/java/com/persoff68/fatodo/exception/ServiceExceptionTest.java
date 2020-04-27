@@ -107,44 +107,4 @@ public class ServiceExceptionTest {
         assertThat(abstractException.getFeedBackCode()).isEqualTo("permission.restricted");
     }
 
-    @Test
-    void testWrongProviderException() {
-        Object exception = new AuthWrongProviderException("test_provider");
-        assertThat(exception).isInstanceOf(AbstractException.class);
-        AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    void testOAuth2EmailNotFoundException() {
-        Object exception = new OAuth2UserNotFoundException();
-        assertThat(exception).isInstanceOf(AbstractException.class);
-        AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    void testOAuth2InternalException() {
-        Object exception = new OAuth2InternalException();
-        assertThat(exception).isInstanceOf(AbstractException.class);
-        AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @Test
-    void testOAuth2ProviderNotSupportedException() {
-        Object exception = new OAuth2ProviderNotSupportedException("test_provider");
-        assertThat(exception).isInstanceOf(AbstractException.class);
-        AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @Test
-    void testOAuth2WrongProviderException() {
-        Object exception = new OAuth2WrongProviderException("test_provider");
-        assertThat(exception).isInstanceOf(AbstractException.class);
-        AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
 }
