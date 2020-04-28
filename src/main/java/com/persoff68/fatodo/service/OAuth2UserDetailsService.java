@@ -7,7 +7,7 @@ import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.security.exception.OAuth2UserNotFoundException;
-import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
+import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfoFactory;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
@@ -48,7 +48,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
             UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
             String currentProviderString = userPrincipal.getProvider().getValue();
             if (!currentProviderString.equals(providerString)) {
-                throw new AuthWrongProviderException(currentProviderString);
+                throw new OAuth2WrongProviderException(currentProviderString);
             }
             return userPrincipal;
         } catch (ModelNotFoundException e) {

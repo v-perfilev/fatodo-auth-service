@@ -4,6 +4,7 @@ import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
+import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +86,7 @@ public class OAuth2UserDetailsServiceIT {
 
         assertThatThrownBy(() -> oAuth2UserDetailsService
                 .loadUser(FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE)))
-                .isInstanceOf(AuthWrongProviderException.class);
+                .isInstanceOf(OAuth2WrongProviderException.class);
     }
 
 }

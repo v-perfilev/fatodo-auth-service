@@ -48,7 +48,7 @@ public class SecurityExceptionTest {
         Object exception = new AuthWrongPasswordException();
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
-        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(abstractException.getFeedBackCode()).isEqualTo("security.wrongPassword");
     }
 

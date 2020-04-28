@@ -8,6 +8,6 @@ public class AuthWrongPasswordException extends AbstractException {
     private static final String FEEDBACK_CODE = "security.wrongPassword";
 
     public AuthWrongPasswordException() {
-        super(HttpStatus.UNAUTHORIZED, MESSAGE, FEEDBACK_CODE);
+        super(HttpStatus.BAD_REQUEST, MESSAGE, FEEDBACK_CODE);
     }
 }

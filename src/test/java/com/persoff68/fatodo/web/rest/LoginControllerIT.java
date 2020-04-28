@@ -100,7 +100,7 @@ public class LoginControllerIT {
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
