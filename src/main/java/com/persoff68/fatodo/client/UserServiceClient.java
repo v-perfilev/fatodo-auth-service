@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "user-service", primary = false)
 public interface UserServiceClient {
 
-    @GetMapping(value = "/api/user/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/auth/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByUsername(@PathVariable("username") String username);
 
-    @GetMapping(value = "/api/user/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable("email") String email);
 
-    @PostMapping(value = "/api/user/oauth2",
+    @PostMapping(value = "/api/auth/oauth2",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createOAuth2User(OAuth2UserDTO oAuth2UserDTO);
 
-    @PostMapping(value = "/api/user/local",
+    @PostMapping(value = "/api/auth/local",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createLocalUser(LocalUserDTO userLocalDTO);
