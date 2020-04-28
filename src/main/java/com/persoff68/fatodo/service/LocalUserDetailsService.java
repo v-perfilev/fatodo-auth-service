@@ -17,7 +17,9 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class LocalUserDetailsService {
-    private final static Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
+    private static final Pattern EMAIL_PATTERN
+            = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+"
+            + "@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
 
     private final UserServiceClient userServiceClient;
     private final UserMapper userMapper;
