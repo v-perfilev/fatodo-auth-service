@@ -6,9 +6,9 @@ import com.persoff68.fatodo.security.filter.SecurityProblemSupport;
 import com.persoff68.fatodo.security.local.LocalAuthenticationProvider;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
-import com.persoff68.fatodo.service.LocalUserDetailsService;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private final AppProperties appProperties;
     private final SecurityProblemSupport securityProblemSupport;
     private final LocalAuthenticationProvider localAuthenticationProvider;
     private final OAuth2UserDetailsService oAuth2UserDetailsService;
@@ -72,10 +73,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        String tokenHeader = appProperties.getAuth().getAuthorizationHeader();
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("*");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
+        config.addExposedHeader(tokenHeader);
         config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
