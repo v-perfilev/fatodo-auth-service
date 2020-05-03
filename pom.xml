@@ -25,6 +25,7 @@
         <!-- Dependency versions -->
         <java.version>13</java.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+        <mongock.version>3.2.4</mongock.version>
         <jackson.version>2.10.2</jackson.version>
         <jaxb.version>2.3.1</jaxb.version>
         <jwt.version>0.9.1</jwt.version>
@@ -33,6 +34,7 @@
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <micrometer-registry-influx.version>1.4.0</micrometer-registry-influx.version>
         <swagger.version>2.9.2</swagger.version>
+        <embedded-mongo.version>2.2.0</embedded-mongo.version>
         <!-- Plugin versions -->
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
@@ -66,6 +68,12 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- Mongock management -->
+            <dependency>
+                <groupId>com.github.cloudyrock.mongock</groupId>
+                <artifactId>mongock-spring</artifactId>
+                <version>${mongock.version}</version>
             </dependency>
             <!-- Jackson management -->
             <dependency>
@@ -123,6 +131,12 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${swagger.version}</version>
+            </dependency>
+            <!-- Embedded mongo management -->
+            <dependency>
+                <groupId>de.flapdoodle.embed</groupId>
+                <artifactId>de.flapdoodle.embed.mongo</artifactId>
+                <version>${embedded-mongo.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -183,6 +197,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Data MongoDB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <!-- Mongock -->
+        <dependency>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongock-spring</artifactId>
         </dependency>
 
         <!-- Jackson -->
@@ -261,6 +286,12 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Embedded Mongo Test -->
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
         </dependency>
         <!-- Spring Cloud Contract Test -->
