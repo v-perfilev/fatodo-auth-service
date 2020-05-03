@@ -13,6 +13,15 @@ spring:
   cache:
     type: none
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 120000
+
 ribbon:
   ReadRimeout: 60000
   ConnectTimeout: 60000
