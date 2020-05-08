@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-class FaToDoAuthServiceApplicationTests {
+class FatodoAuthServiceApplicationTests {
 
     @Autowired
     private WebApplicationContext context;
@@ -25,7 +25,7 @@ class FaToDoAuthServiceApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        FaToDoAuthServiceApplication.main(new String[]{});
+        FatodoAuthServiceApplication.main(new String[]{});
         mvc.perform(get("/"))
                 .andExpect(status().isNotFound());
     }

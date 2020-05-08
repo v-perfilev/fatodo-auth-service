@@ -12,14 +12,14 @@
     <artifactId>authservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fatodo-auth-service</name>
-    <description>Auth service for FaToDo</description>
+    <description>Auth service for Fatodo</description>
 
     <properties>
         <!-- Common variables -->
         <jar.name>fatodo</jar.name>
         <maven.repo.url/>
         <!-- Classes and packages -->
-        <main.class>com.persoff68.fatodo.FaToDoAuthServiceApplication</main.class>
+        <main.class>com.persoff68.fatodo.FatodoAuthServiceApplication</main.class>
         <root.package>com.persoff68.fatodo</root.package>
         <contract.package>com.persoff68.fatodo.contract</contract.package>
         <!-- Dependency versions -->

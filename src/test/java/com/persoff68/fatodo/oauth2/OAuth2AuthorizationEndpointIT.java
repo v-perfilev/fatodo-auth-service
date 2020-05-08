@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.oauth2;
 
-import com.persoff68.fatodo.FaToDoAuthServiceApplication;
+import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = FaToDoAuthServiceApplication.class)
+@SpringBootTest(classes = FatodoAuthServiceApplication.class)
 @ExtendWith(MockitoExtension.class)
 public class OAuth2AuthorizationEndpointIT {
     private static final String ENDPOINT = "/api/oauth2/authorize";

@@ -10,11 +10,11 @@ import java.util.Properties;
 
 @SpringBootApplication
 @EnableConfigurationProperties(AppProperties.class)
-public class FaToDoAuthServiceApplication {
+public class FatodoAuthServiceApplication {
 
     public static void main(String[] args) {
         Properties defaultProfileProperties = AppProfileUtils.getDefaultProfile();
-        SpringApplication app = new SpringApplication(FaToDoAuthServiceApplication.class);
+        SpringApplication app = new SpringApplication(FatodoAuthServiceApplication.class);
         app.setDefaultProperties(defaultProfileProperties);
         app.run();
     }

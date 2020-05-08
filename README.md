@@ -1,2 +1,2 @@
-# FaToDo auth-service
-Auth service for FaToDo based on extended skeleton.
+# Fatodo auth-service
+Auth service for Fatodo based on extended skeleton.

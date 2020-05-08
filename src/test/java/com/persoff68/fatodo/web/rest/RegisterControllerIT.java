@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.FaToDoAuthServiceApplication;
+import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
@@ -31,7 +31,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = FaToDoAuthServiceApplication.class)
+@SpringBootTest(classes = FatodoAuthServiceApplication.class)
 public class RegisterControllerIT {
     private static final String ENDPOINT = "/api/register";
 
