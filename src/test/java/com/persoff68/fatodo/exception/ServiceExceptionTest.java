@@ -1,15 +1,11 @@
 package com.persoff68.fatodo.exception;
 
-import com.persoff68.fatodo.security.exception.OAuth2UserNotFoundException;
-import com.persoff68.fatodo.security.exception.OAuth2InternalException;
-import com.persoff68.fatodo.security.exception.OAuth2ProviderNotSupportedException;
-import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
-import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.PermissionException;
+import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -105,6 +101,15 @@ public class ServiceExceptionTest {
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(abstractException.getFeedBackCode()).isEqualTo("permission.restricted");
+    }
+
+    @Test
+    void testUserAlreadyActivatedException() {
+        Object exception = new UserAlreadyActivatedException();
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.activated");
     }
 
 }

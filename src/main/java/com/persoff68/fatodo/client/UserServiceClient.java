@@ -29,7 +29,7 @@ public interface UserServiceClient {
             produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createLocalUser(LocalUserDTO userLocalDTO);
 
-    @GetMapping(value = "/api/auth/activate/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/auth/activate/{userId}")
     void activate(@PathVariable String userId);
 
 }

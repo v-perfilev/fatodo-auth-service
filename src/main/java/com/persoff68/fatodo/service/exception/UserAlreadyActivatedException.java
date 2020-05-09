@@ -8,7 +8,7 @@ public class UserAlreadyActivatedException extends AbstractException {
     private static final String FEEDBACK_CODE = "auth.activated";
 
     public UserAlreadyActivatedException() {
-        super(HttpStatus.BAD_REQUEST, MESSAGE, FEEDBACK_CODE);
+        super(HttpStatus.CONFLICT, MESSAGE, FEEDBACK_CODE);
     }
 
 }

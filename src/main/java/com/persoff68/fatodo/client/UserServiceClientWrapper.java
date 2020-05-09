@@ -8,6 +8,7 @@ import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
+import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -74,6 +75,8 @@ public class UserServiceClientWrapper implements UserServiceClient {
     public void activate(String userId) {
         try {
             userServiceClient.activate(userId);
+        } catch (FeignException.Conflict e) {
+            throw new UserAlreadyActivatedException();
         } catch (Exception e) {
             throw new ClientException();
         }

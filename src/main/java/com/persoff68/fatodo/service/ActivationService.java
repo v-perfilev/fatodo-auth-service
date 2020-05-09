@@ -22,6 +22,8 @@ public class ActivationService {
                 .orElseThrow(ModelNotFoundException::new);
         if (!activation.isActivated()) {
             userServiceClient.activate(activation.getUserId());
+            activation.setActivated(true);
+            activationRepository.save(activation);
         } else {
             throw new UserAlreadyActivatedException();
         }

@@ -1,5 +1,6 @@
 package com.persoff68.fatodo;
 
+import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class FactoryUtils {
 
@@ -115,6 +117,14 @@ public class FactoryUtils {
                 Instant.now(),
                 Instant.MAX);
         return new OAuth2UserRequest(clientRegistration, oAuth2AccessToken);
+    }
+
+    public static Activation createActivation(String code, boolean activated) {
+        Activation activation = new Activation();
+        activation.setUserId(UUID.randomUUID().toString());
+        activation.setCode(code);
+        activation.setActivated(activated);
+        return activation;
     }
 
 }
