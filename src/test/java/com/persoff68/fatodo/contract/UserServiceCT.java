@@ -53,7 +53,7 @@ public class UserServiceCT {
     @Test
     void testActivate() {
         userServiceClient.activate(UUID.randomUUID().toString());
-        assertThat(true);
+        assertThat(true).isTrue();
     }
 
 }
