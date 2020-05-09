@@ -12,7 +12,7 @@ import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@AutoConfigureStubRunner(ids = {"com.persoff68.fatodo:mailservice:+:stubs:6565"},
+@AutoConfigureStubRunner(ids = {"com.persoff68.fatodo:mailservice:+:stubs"},
         stubsMode = StubRunnerProperties.StubsMode.REMOTE)
 public class MailServiceCT {
 

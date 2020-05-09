@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@AutoConfigureStubRunner(ids = {"com.persoff68.fatodo:userservice:+:stubs:6565"},
+@AutoConfigureStubRunner(ids = {"com.persoff68.fatodo:userservice:+:stubs"},
         stubsMode = StubRunnerProperties.StubsMode.REMOTE)
 public class UserServiceCT {
 
