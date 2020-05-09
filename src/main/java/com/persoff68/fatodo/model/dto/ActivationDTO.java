@@ -2,9 +2,11 @@ package com.persoff68.fatodo.model.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class ActivationDTO extends AbstractDTO {
 
     private String language;
@@ -18,5 +20,5 @@ public class ActivationDTO extends AbstractDTO {
         this.username = userDTO.getUsername();
         this.code = code;
     }
-    
+
 }
