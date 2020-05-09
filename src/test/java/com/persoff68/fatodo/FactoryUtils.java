@@ -1,6 +1,7 @@
 package com.persoff68.fatodo;
 
 import com.persoff68.fatodo.model.Activation;
+import com.persoff68.fatodo.model.dto.ActivationDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -125,6 +126,15 @@ public class FactoryUtils {
         activation.setCode(code);
         activation.setActivated(activated);
         return activation;
+    }
+
+    public static ActivationDTO createActivationDTO() {
+        ActivationDTO dto = new ActivationDTO();
+        dto.setLanguage("en");
+        dto.setEmail("test@email.com");
+        dto.setUsername("test_user");
+        dto.setCode(UUID.randomUUID().toString());
+        return dto;
     }
 
 }
