@@ -1,10 +1,8 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.config.AppProperties;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.repository.ActivationRepository;
@@ -31,10 +29,6 @@ public class ActivationControllerIT {
 
     @Autowired
     WebApplicationContext context;
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    AppProperties appProperties;
     @Autowired
     ActivationRepository activationRepository;
     @MockBean

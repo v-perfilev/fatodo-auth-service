@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -46,6 +48,12 @@ public class UserServiceCT {
     void testGetUserPrincipalByEmail() {
         UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByEmail("test@email.com");
         assertThat(userPrincipalDTO).isNotNull();
+    }
+
+    @Test
+    void testActivate() {
+        userServiceClient.activate(UUID.randomUUID().toString());
+        assertThat(true);
     }
 
 }
