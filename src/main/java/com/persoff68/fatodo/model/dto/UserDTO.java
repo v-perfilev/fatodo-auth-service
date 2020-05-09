@@ -17,5 +17,7 @@ public class UserDTO extends AbstractDTO {
     private String provider;
     private String providerId;
     private Set<String> authorities;
+    private String language;
+    private boolean activated;
 
 }

@@ -18,5 +18,6 @@ public class UserPrincipalDTO extends AbstractDTO {
     private String provider;
     private String providerId;
     private Set<String> authorities;
+    private boolean activated;
 
 }

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface UserServiceClient {
 
     @GetMapping(value = "/api/auth/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    UserPrincipalDTO getUserPrincipalByUsername(@PathVariable("username") String username);
+    UserPrincipalDTO getUserPrincipalByUsername(@PathVariable String username);
 
     @GetMapping(value = "/api/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-    UserPrincipalDTO getUserPrincipalByEmail(@PathVariable("email") String email);
+    UserPrincipalDTO getUserPrincipalByEmail(@PathVariable String email);
 
     @PostMapping(value = "/api/auth/oauth2",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -28,6 +28,9 @@ public interface UserServiceClient {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     UserDTO createLocalUser(LocalUserDTO userLocalDTO);
+
+    @GetMapping(value = "/api/auth/activate/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    void activate(@PathVariable String userId);
 
 }
 

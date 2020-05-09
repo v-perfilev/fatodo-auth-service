@@ -69,4 +69,13 @@ public class UserServiceClientWrapper implements UserServiceClient {
             throw new ClientException();
         }
     }
+
+    @Override
+    public void activate(String userId) {
+        try {
+            userServiceClient.activate(userId);
+        } catch (Exception e) {
+            throw new ClientException();
+        }
+    }
 }
