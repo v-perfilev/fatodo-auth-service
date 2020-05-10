@@ -4,6 +4,7 @@ import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,13 @@ public class UserServiceCT {
     @Test
     void testActivate() {
         userServiceClient.activate(UUID.randomUUID().toString());
+        assertThat(true).isTrue();
+    }
+
+    @Test
+    void testResetPassword() {
+        ResetPasswordDTO dto = FactoryUtils.createResetPasswordDTO();
+        userServiceClient.resetPassword(dto);
         assertThat(true).isTrue();
     }
 

@@ -2,12 +2,14 @@ package com.persoff68.fatodo.client;
 
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "user-service", primary = false)
 public interface UserServiceClient {
@@ -18,18 +20,24 @@ public interface UserServiceClient {
     @GetMapping(value = "/api/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable String email);
 
+    @GetMapping(value = "/api/auth/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    UserPrincipalDTO getUserPrincipalById(@PathVariable String id);
+
     @PostMapping(value = "/api/auth/oauth2",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    UserPrincipalDTO createOAuth2User(OAuth2UserDTO oAuth2UserDTO);
+    UserPrincipalDTO createOAuth2User(@RequestBody OAuth2UserDTO oAuth2UserDTO);
 
     @PostMapping(value = "/api/auth/local",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    UserPrincipalDTO createLocalUser(LocalUserDTO userLocalDTO);
+    UserPrincipalDTO createLocalUser(@RequestBody LocalUserDTO userLocalDTO);
 
     @GetMapping(value = "/api/auth/activate/{userId}")
     void activate(@PathVariable String userId);
+
+    @PostMapping(value = "/api/auth/reset-password")
+    void resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO);
 
 }
 

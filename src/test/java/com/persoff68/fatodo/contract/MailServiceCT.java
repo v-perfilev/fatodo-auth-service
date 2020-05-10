@@ -2,7 +2,8 @@ package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.MailServiceClient;
-import com.persoff68.fatodo.model.dto.ActivationDTO;
+import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +21,16 @@ public class MailServiceCT {
     MailServiceClient mailServiceClient;
 
     @Test
-    void testActivate() {
-        ActivationDTO dto = FactoryUtils.createActivationDTO();
-        mailServiceClient.activate(dto);
+    void testSendActivationCode() {
+        ActivationMailDTO dto = FactoryUtils.createActivationMailDTO();
+        mailServiceClient.sendActivationCode(dto);
+        assertThat(true);
+    }
+
+    @Test
+    void testSendResetPasswordCode() {
+        ResetPasswordMailDTO dto = FactoryUtils.createResetPasswordMailDTO();
+        mailServiceClient.sendResetPasswordCode(dto);
         assertThat(true);
     }
 

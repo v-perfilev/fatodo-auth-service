@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model.dto;
 
+import com.persoff68.fatodo.model.UserPrincipal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -7,17 +8,17 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class PasswordResetDTO extends AbstractDTO {
+public class ActivationMailDTO extends AbstractDTO {
 
     private String language;
     private String email;
     private String username;
     private String code;
 
-    public PasswordResetDTO(UserPrincipalDTO userPrincipalDTO, String code) {
-        this.language = userPrincipalDTO.getLanguage();
-        this.email = userPrincipalDTO.getEmail();
-        this.username = userPrincipalDTO.getUsername();
+    public ActivationMailDTO(UserPrincipal user, String code) {
+        this.language = user.getLanguage();
+        this.email = user.getEmail();
+        this.username = user.getUsername();
         this.code = code;
     }
 

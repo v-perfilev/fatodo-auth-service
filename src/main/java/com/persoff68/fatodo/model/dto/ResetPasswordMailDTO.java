@@ -8,17 +8,17 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class ActivationDTO extends AbstractDTO {
+public class ResetPasswordMailDTO extends AbstractDTO {
 
     private String language;
     private String email;
     private String username;
     private String code;
 
-    public ActivationDTO(UserPrincipal user, String code) {
-        this.language = user.getLanguage();
-        this.email = user.getEmail();
-        this.username = user.getUsername();
+    public ResetPasswordMailDTO(UserPrincipal userPrincipal, String code) {
+        this.language = userPrincipal.getLanguage();
+        this.email = userPrincipal.getEmail();
+        this.username = userPrincipal.getUsername();
         this.code = code;
     }
 

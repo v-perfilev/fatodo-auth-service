@@ -3,6 +3,7 @@ package com.persoff68.fatodo.client;
 import com.persoff68.fatodo.exception.ClientException;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
@@ -45,6 +46,17 @@ public class UserServiceClientWrapper implements UserServiceClient {
     }
 
     @Override
+    public UserPrincipalDTO getUserPrincipalById(String id) {
+        try {
+            return userServiceClient.getUserPrincipalById(id);
+        } catch (FeignException.NotFound e) {
+            throw new ModelNotFoundException();
+        } catch (Exception e) {
+            throw new ClientException();
+        }
+    }
+
+    @Override
     public UserPrincipalDTO createOAuth2User(OAuth2UserDTO oAuth2UserDTO) {
         try {
             return userServiceClient.createOAuth2User(oAuth2UserDTO);
@@ -76,6 +88,15 @@ public class UserServiceClientWrapper implements UserServiceClient {
             userServiceClient.activate(userId);
         } catch (FeignException.Conflict e) {
             throw new UserAlreadyActivatedException();
+        } catch (Exception e) {
+            throw new ClientException();
+        }
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        try {
+            userServiceClient.resetPassword(resetPasswordDTO);
         } catch (Exception e) {
             throw new ClientException();
         }

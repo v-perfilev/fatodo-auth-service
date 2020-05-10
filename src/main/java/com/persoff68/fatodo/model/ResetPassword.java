@@ -8,10 +8,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 
-@Document(collection = "ftd_activation")
+@Document(collection = "ftd_reset_password")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Activation extends AbstractModel {
+public class ResetPassword extends AbstractModel {
 
     @Id
     private String id;
@@ -22,5 +22,7 @@ public class Activation extends AbstractModel {
     @NotNull
     @Indexed(unique = true)
     private String code;
+
+    private boolean finished = false;
 
 }

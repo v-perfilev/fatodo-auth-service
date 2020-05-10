@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordResetVM {
+public class ResetPasswordVM {
 
     @NotNull
     private String code;

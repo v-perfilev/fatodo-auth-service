@@ -1,12 +1,16 @@
 package com.persoff68.fatodo;
 
 import com.persoff68.fatodo.model.Activation;
-import com.persoff68.fatodo.model.dto.ActivationDTO;
+import com.persoff68.fatodo.model.ResetPassword;
+import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.model.vm.RegisterVM;
+import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -111,16 +115,46 @@ public class FactoryUtils {
         return new OAuth2UserRequest(clientRegistration, oAuth2AccessToken);
     }
 
-    public static Activation createActivation(String code, boolean activated) {
+    public static Activation createActivation(String userId, String code) {
         Activation activation = new Activation();
-        activation.setUserId(UUID.randomUUID().toString());
+        activation.setUserId(userId);
         activation.setCode(code);
-        activation.setActivated(activated);
         return activation;
     }
 
-    public static ActivationDTO createActivationDTO() {
-        ActivationDTO dto = new ActivationDTO();
+    public static ActivationMailDTO createActivationMailDTO() {
+        ActivationMailDTO dto = new ActivationMailDTO();
+        dto.setLanguage("en");
+        dto.setEmail("test@email.com");
+        dto.setUsername("test_user");
+        dto.setCode(UUID.randomUUID().toString());
+        return dto;
+    }
+
+    public static ResetPassword createResetPassword(String userId, String code, boolean finished) {
+        ResetPassword resetPassword = new ResetPassword();
+        resetPassword.setCode(code);
+        resetPassword.setUserId(userId);
+        resetPassword.setFinished(finished);
+        return resetPassword;
+    }
+
+    public static ResetPasswordVM createResetPasswordVM(String code) {
+        ResetPasswordVM vm = new ResetPasswordVM();
+        vm.setCode(code);
+        vm.setPassword("test_password");
+        return vm;
+    }
+
+    public static ResetPasswordDTO createResetPasswordDTO() {
+        ResetPasswordDTO dto = new ResetPasswordDTO();
+        dto.setUserId("test_user_id");
+        dto.setPassword("test_password");
+        return dto;
+    }
+
+    public static ResetPasswordMailDTO createResetPasswordMailDTO() {
+        ResetPasswordMailDTO dto = new ResetPasswordMailDTO();
         dto.setLanguage("en");
         dto.setEmail("test@email.com");
         dto.setUsername("test_user");

@@ -23,7 +23,7 @@ public class RegisterService {
         localUserDTO.setPassword(encodedPassword);
         UserPrincipalDTO userPrincipalDTO = userServiceClient.createLocalUser(localUserDTO);
         UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
-        accountService.sendActivationCode(userPrincipal);
+        accountService.sendActivationCodeMail(userPrincipal);
     }
 
 }

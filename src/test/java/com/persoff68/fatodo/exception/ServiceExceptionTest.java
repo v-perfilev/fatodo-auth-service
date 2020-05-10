@@ -5,6 +5,7 @@ import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.PermissionException;
+import com.persoff68.fatodo.service.exception.ResetPasswordNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -110,6 +111,15 @@ public class ServiceExceptionTest {
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.CONFLICT);
         assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.activated");
+    }
+
+    @Test
+    void testResetPasswordNotFoundException() {
+        Object exception = new ResetPasswordNotFoundException();
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.resetPasswordNotFound");
     }
 
 }

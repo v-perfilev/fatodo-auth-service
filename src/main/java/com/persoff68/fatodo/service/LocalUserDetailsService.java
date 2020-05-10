@@ -25,15 +25,19 @@ public class LocalUserDetailsService {
     private final UserMapper userMapper;
 
     public UserDetails loadUser(String emailOrUsername) {
-        UserPrincipalDTO userPrincipalDTO = isEmail(emailOrUsername)
-                ? getByEmail(emailOrUsername)
-                : getByUsername(emailOrUsername);
-        UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
+        UserPrincipal userPrincipal = getUserPrincipalByEmailOrUserName(emailOrUsername);
         Provider provider = userPrincipal.getProvider();
         if (!provider.equals(Provider.LOCAL)) {
             throw new AuthWrongProviderException(provider.getValue());
         }
         return userPrincipal;
+    }
+
+    public UserPrincipal getUserPrincipalByEmailOrUserName(String emailOrUsername) {
+        UserPrincipalDTO userPrincipalDTO = isEmail(emailOrUsername)
+                ? getByEmail(emailOrUsername)
+                : getByUsername(emailOrUsername);
+        return userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
     }
 
     private UserPrincipalDTO getByEmail(String email) {
