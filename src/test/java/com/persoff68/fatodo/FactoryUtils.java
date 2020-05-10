@@ -41,6 +41,7 @@ public class FactoryUtils {
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
         dto.setPassword(password);
+        dto.setLanguage("en");
         return dto;
     }
 
@@ -50,6 +51,7 @@ public class FactoryUtils {
         dto.setUsername("test_" + postfix + "@email.com");
         dto.setProvider("facebook");
         dto.setProviderId("test_provider_id");
+        dto.setLanguage("en");
         return dto;
     }
 
@@ -76,6 +78,7 @@ public class FactoryUtils {
         vm.setEmail("test_" + postfix + "@email.com");
         vm.setUsername("test_username_" + postfix);
         vm.setPassword(password);
+        vm.setLanguage("en");
         return vm;
     }
 

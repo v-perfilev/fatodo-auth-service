@@ -13,5 +13,6 @@ public class OAuth2UserDTO extends AbstractDTO {
     private String username;
     private String provider;
     private String providerId;
+    private String language;
 
 }
