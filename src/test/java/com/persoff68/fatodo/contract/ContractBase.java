@@ -5,7 +5,6 @@ import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Activation;
-import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -47,8 +46,7 @@ public class ContractBase {
                 Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
         when(userServiceClient.getUserPrincipalByUsername(localUserPrincipalDTO.getUsername()))
                 .thenReturn(localUserPrincipalDTO);
-        UserDTO userDTO = FactoryUtils.createUserDTO("_local", Provider.LOCAL.getValue());
-        when(userServiceClient.createLocalUser(any())).thenReturn(userDTO);
+        when(userServiceClient.createLocalUser(any())).thenReturn(localUserPrincipalDTO);
     }
 
 }

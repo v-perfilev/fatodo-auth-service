@@ -1,10 +1,10 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.model.dto.ActivationDTO;
+import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,16 +15,15 @@ public class RegistrationService {
 
     private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
-    private final ActivationService activationService;
-    private final MailServiceClient mailServiceClient;
+    private final AccountService accountService;
+    private final UserMapper userMapper;
 
     public void register(LocalUserDTO localUserDTO) {
         String encodedPassword = passwordEncoder.encode(localUserDTO.getPassword());
         localUserDTO.setPassword(encodedPassword);
-        UserDTO userDTO = userServiceClient.createLocalUser(localUserDTO);
-        String activationCode = activationService.addActivation(userDTO.getId());
-        ActivationDTO activationDTO = new ActivationDTO(userDTO, activationCode);
-        mailServiceClient.activate(activationDTO);
+        UserPrincipalDTO userPrincipalDTO = userServiceClient.createLocalUser(localUserDTO);
+        UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
+        accountService.sendActivationCode(userPrincipal);
     }
 
 }

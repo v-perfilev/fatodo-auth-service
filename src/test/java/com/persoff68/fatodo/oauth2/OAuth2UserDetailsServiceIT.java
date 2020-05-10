@@ -3,6 +3,7 @@ package com.persoff68.fatodo.oauth2;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
@@ -42,8 +43,10 @@ public class OAuth2UserDetailsServiceIT {
                 .thenReturn(FactoryUtils.createOAuth2User("google"));
         when(userServiceClient.getUserPrincipalByEmail(any()))
                 .thenThrow(new ModelNotFoundException());
+        UserPrincipalDTO googleUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("google",
+                Provider.Constants.GOOGLE_VALUE, null);
         when(userServiceClient.createOAuth2User(any()))
-                .thenReturn(FactoryUtils.createUserDTO("google", Provider.Constants.GOOGLE_VALUE));
+                .thenReturn(googleUserPrincipalDTO);
 
         OAuth2User resultOAuth2User = oAuth2UserDetailsService
                 .loadUser(FactoryUtils.createUserRequest(Provider.Constants.GOOGLE_VALUE));
@@ -56,8 +59,10 @@ public class OAuth2UserDetailsServiceIT {
                 .thenReturn(FactoryUtils.createOAuth2User("facebook"));
         when(userServiceClient.getUserPrincipalByEmail(any()))
                 .thenThrow(new ModelNotFoundException());
+        UserPrincipalDTO facebookUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("facebook",
+                Provider.Constants.FACEBOOK_VALUE, null);
         when(userServiceClient.createOAuth2User(any()))
-                .thenReturn(FactoryUtils.createUserDTO("facebook", Provider.Constants.FACEBOOK_VALUE));
+                .thenReturn(facebookUserPrincipalDTO);
 
         OAuth2User resultOAuth2User = oAuth2UserDetailsService
                 .loadUser(FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE));

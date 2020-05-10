@@ -4,7 +4,6 @@ import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,15 @@ public class UserServiceCT {
     @Test
     void testCreateLocalUserDTO() {
         LocalUserDTO localUserDTO = FactoryUtils.createLocalUserDTO("new", "test_password");
-        UserDTO userDTO = userServiceClient.createLocalUser(localUserDTO);
-        assertThat(userDTO).isNotNull();
+        UserPrincipalDTO dto = userServiceClient.createLocalUser(localUserDTO);
+        assertThat(dto).isNotNull();
     }
 
     @Test
     void testCreateOAuth2lUserDTO() {
         OAuth2UserDTO oAuth2UserDTO = FactoryUtils.createOAuth2UserDTO("facebook");
-        UserDTO userDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
-        assertThat(userDTO).isNotNull();
+        UserPrincipalDTO dto = userServiceClient.createOAuth2User(oAuth2UserDTO);
+        assertThat(dto).isNotNull();
     }
 
     @Test

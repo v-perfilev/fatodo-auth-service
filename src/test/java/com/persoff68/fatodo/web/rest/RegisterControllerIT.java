@@ -1,15 +1,15 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.model.vm.RegisterVM;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
@@ -26,7 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -56,10 +55,11 @@ public class RegisterControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
-        UserDTO userDTO = FactoryUtils.createUserDTO("new", Provider.Constants.LOCAL_VALUE);
+        UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
+                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
                 dto != null && "test_username_new".equals(dto.getUsername()))))
-                .thenReturn(userDTO);
+                .thenReturn(localUserPrincipalDTO);
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
                 dto != null && "test_username_local".equals(dto.getUsername()))))
                 .thenThrow(new ModelDuplicatedException());

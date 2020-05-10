@@ -3,7 +3,6 @@ package com.persoff68.fatodo.service;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.security.exception.OAuth2UserNotFoundException;
@@ -59,8 +58,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     private UserPrincipal registerNewUser(String provider, OAuth2UserInfo oAuth2UserInfo) {
         OAuth2UserDTO oAuth2UserDTO = userMapper.oAuth2UserInfoToOAuth2UserDTO(oAuth2UserInfo);
         oAuth2UserDTO.setProvider(provider);
-        UserDTO userDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
-        return userMapper.userDTOToUserPrincipal(userDTO);
+        UserPrincipalDTO userPrincipalDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
+        return userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
     }
-
 }

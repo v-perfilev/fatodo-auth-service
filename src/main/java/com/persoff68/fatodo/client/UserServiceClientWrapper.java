@@ -3,7 +3,6 @@ package com.persoff68.fatodo.client;
 import com.persoff68.fatodo.exception.ClientException;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
@@ -46,7 +45,7 @@ public class UserServiceClientWrapper implements UserServiceClient {
     }
 
     @Override
-    public UserDTO createOAuth2User(OAuth2UserDTO oAuth2UserDTO) {
+    public UserPrincipalDTO createOAuth2User(OAuth2UserDTO oAuth2UserDTO) {
         try {
             return userServiceClient.createOAuth2User(oAuth2UserDTO);
         } catch (FeignException.BadRequest e) {
@@ -59,7 +58,7 @@ public class UserServiceClientWrapper implements UserServiceClient {
     }
 
     @Override
-    public UserDTO createLocalUser(LocalUserDTO userLocalDTO) {
+    public UserPrincipalDTO createLocalUser(LocalUserDTO userLocalDTO) {
         try {
             return userServiceClient.createLocalUser(userLocalDTO);
         } catch (FeignException.BadRequest e) {

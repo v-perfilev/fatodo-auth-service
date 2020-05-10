@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoAuthServiceApplication.class)
-public class ActivationControllerIT {
-    private static final String ENDPOINT = "/api/activation";
+public class AccountControllerIT {
+    private static final String ENDPOINT = "/api/account";
 
     @Autowired
     WebApplicationContext context;

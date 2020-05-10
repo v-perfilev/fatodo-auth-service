@@ -23,6 +23,8 @@ public class UserPrincipal extends AbstractModel implements UserDetails, OAuth2U
     private Provider provider;
     private String providerId;
     private Set<? extends GrantedAuthority> authorities;
+    private String language;
+    private boolean activated;
     private transient Map<String, Object> attributes;
 
     @Override

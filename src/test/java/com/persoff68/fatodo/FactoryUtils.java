@@ -4,7 +4,6 @@ import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.dto.ActivationDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.model.vm.RegisterVM;
@@ -35,17 +34,6 @@ public class FactoryUtils {
         attributeMap.put("email", "test_" + postfix + "@email.com");
         String nameAttributeKey = "id";
         return new DefaultOAuth2User(authorityList, attributeMap, nameAttributeKey);
-    }
-
-    public static UserDTO createUserDTO(String postfix, String provider) {
-        Set<String> authorityList = Collections.singleton("ROLE_USER");
-        UserDTO dto = new UserDTO();
-        dto.setId("test_id_" + postfix);
-        dto.setEmail("test_" + postfix + "@email.com");
-        dto.setUsername("test_username_" + postfix);
-        dto.setProvider(provider);
-        dto.setAuthorities(authorityList);
-        return dto;
     }
 
     public static LocalUserDTO createLocalUserDTO(String postfix, String password) {
