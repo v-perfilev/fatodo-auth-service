@@ -9,6 +9,8 @@ import java.util.Optional;
 @Repository
 public interface ResetPasswordRepository extends MongoRepository<ResetPassword, String> {
 
+    Optional<ResetPassword> findByUserIdAndFinished(String code, boolean finished);
+
     Optional<ResetPassword> findByCode(String code);
 
 }

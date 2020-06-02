@@ -114,7 +114,7 @@ public class AccountControllerIT {
                 Provider.Constants.LOCAL_VALUE, "test_password");
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
-        String url = ENDPOINT + "/send-activation-code/test_username_new";
+        String url = ENDPOINT + "/request-activation-code/test_username_new";
         mvc.perform(get(url))
                 .andExpect(status().isOk());
     }
@@ -124,7 +124,7 @@ public class AccountControllerIT {
     public void testSendActivationCode_notFound() throws Exception {
         when(userServiceClient.getUserPrincipalByUsername(any())).thenThrow(ModelNotFoundException.class);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(ModelNotFoundException.class);
-        String url = ENDPOINT + "/send-activation-code/test_username_notFound";
+        String url = ENDPOINT + "/request-activation-code/test_username_notFound";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -137,7 +137,7 @@ public class AccountControllerIT {
         dto.setActivated(true);
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
-        String url = ENDPOINT + "/send-activation-code/test_username_activated";
+        String url = ENDPOINT + "/request-activation-code/test_username_activated";
         mvc.perform(get(url))
                 .andExpect(status().isConflict());
     }
@@ -145,7 +145,7 @@ public class AccountControllerIT {
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testSendActivationCode_forbidden() throws Exception {
-        String url = ENDPOINT + "/send-activation-code/test_username_new";
+        String url = ENDPOINT + "/request-activation-code/test_username_new";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
@@ -205,7 +205,7 @@ public class AccountControllerIT {
                 Provider.Constants.LOCAL_VALUE, "test_password");
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
-        String url = ENDPOINT + "/send-reset-password-code/test_username_new";
+        String url = ENDPOINT + "/request-reset-password-code/test_username_new";
         mvc.perform(get(url))
                 .andExpect(status().isOk());
     }
@@ -215,7 +215,7 @@ public class AccountControllerIT {
     public void testSendResetPasswordCode_notFound() throws Exception {
         when(userServiceClient.getUserPrincipalByUsername(any())).thenThrow(ModelNotFoundException.class);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(ModelNotFoundException.class);
-        String url = ENDPOINT + "/send-reset-password-code/test_username_notFound";
+        String url = ENDPOINT + "/request-reset-password-code/test_username_notFound";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -223,7 +223,7 @@ public class AccountControllerIT {
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testSendResetPasswordCode_forbidden() throws Exception {
-        String url = ENDPOINT + "/send-reset-password-code/test_username_new";
+        String url = ENDPOINT + "/request-reset-password-code/test_username_new";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }

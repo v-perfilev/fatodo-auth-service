@@ -28,9 +28,9 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/send-activation-code/{user}")
-    public ResponseEntity<Void> sendActivationCode(@PathVariable String user) {
-        accountService.sendActivationCodeMailByEmailOrUsername(user);
+    @GetMapping(value = "/request-activation-code/{user}")
+    public ResponseEntity<Void> requestActivationCode(@PathVariable String user) {
+        accountService.sendActivationCodeMail(user);
         return ResponseEntity.ok().build();
     }
 
@@ -40,8 +40,8 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/send-reset-password-code/{user}")
-    public ResponseEntity<Void> sendResetPasswordCode(@PathVariable String user) {
+    @GetMapping(value = "/request-reset-password-code/{user}")
+    public ResponseEntity<Void> requestResetPasswordCode(@PathVariable String user) {
         accountService.sendResetPasswordMail(user);
         return ResponseEntity.ok().build();
     }

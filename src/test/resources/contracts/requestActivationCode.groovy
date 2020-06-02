@@ -3,13 +3,13 @@ package contracts
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'send reset password code'
+    name 'send activation code'
     description 'should return status 200'
     request {
         method GET()
         url($(
-                consumer(regex('\\/api\\/account\\/send-reset-password-code\\/[\\w-\\@\\.]+')),
-                producer("/api/account/send-reset-password-code/test_username_local")
+                consumer(regex('\\/api\\/account\\/request-activation-code\\/[\\w-\\@\\.]+')),
+                producer("/api/account/request-activation-code/test_username_local")
         ))
     }
     response {

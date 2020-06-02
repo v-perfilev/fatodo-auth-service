@@ -37,7 +37,7 @@ public class AccountService {
         userServiceClient.activate(activation.getUserId());
     }
 
-    public void sendActivationCodeMailByEmailOrUsername(String emailOrUsername) {
+    public void sendActivationCodeMail(String emailOrUsername) {
         UserPrincipal userPrincipal = localUserDetailsService.getUserPrincipalByEmailOrUserName(emailOrUsername);
         if (userPrincipal.isActivated()) {
             throw new UserAlreadyActivatedException();
@@ -75,13 +75,17 @@ public class AccountService {
         if (activation == null) {
             activation = new Activation();
             activation.setUserId(userId);
-            activation.setCode(UUID.randomUUID().toString());
         }
+        activation.setCode(UUID.randomUUID().toString());
         activationRepository.save(activation);
         return activation.getCode();
     }
 
     private String getResetPasswordCode(String userId) {
+        resetPasswordRepository.findByUserIdAndFinished(userId, false).ifPresent(resetPassword -> {
+            resetPassword.setFinished(true);
+            resetPasswordRepository.save(resetPassword);
+        });
         ResetPassword resetPassword = new ResetPassword();
         resetPassword.setUserId(userId);
         resetPassword.setCode(UUID.randomUUID().toString());
