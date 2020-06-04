@@ -43,7 +43,8 @@ public class ContractBase {
         RestAssuredMockMvc.webAppContextSetup(context);
 
         activationRepository.deleteAll();
-        Activation activation = FactoryUtils.createActivation("test_user_local", "1");
+        Activation activation = FactoryUtils.createActivation("test_user_local",
+                "1");
         activationRepository.save(activation);
 
         resetPasswordRepository.deleteAll();
@@ -58,6 +59,11 @@ public class ContractBase {
         when(userServiceClient.getUserPrincipalByEmail(localUserPrincipalDTO.getEmail()))
                 .thenReturn(localUserPrincipalDTO);
         when(userServiceClient.createLocalUser(any())).thenReturn(localUserPrincipalDTO);
+
+        UserPrincipalDTO notActivatedUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("not_activated",
+                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"), false);
+        when(userServiceClient.getUserPrincipalByUsername(notActivatedUserPrincipalDTO.getUsername()))
+                .thenReturn(notActivatedUserPrincipalDTO);
     }
 
 }

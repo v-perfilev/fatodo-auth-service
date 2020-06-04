@@ -24,7 +24,7 @@ public class LocalUserDetailsService {
     private final UserServiceClient userServiceClient;
     private final UserMapper userMapper;
 
-    public UserDetails loadUser(String emailOrUsername) {
+    public UserPrincipal loadUser(String emailOrUsername) {
         UserPrincipal userPrincipal = getUserPrincipalByEmailOrUserName(emailOrUsername);
         Provider provider = userPrincipal.getProvider();
         if (!provider.equals(Provider.LOCAL)) {

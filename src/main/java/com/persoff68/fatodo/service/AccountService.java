@@ -37,12 +37,13 @@ public class AccountService {
         userServiceClient.activate(activation.getUserId());
     }
 
-    public void sendActivationCodeMail(String emailOrUsername) {
+    public UserPrincipal sendActivationCodeMail(String emailOrUsername) {
         UserPrincipal userPrincipal = localUserDetailsService.getUserPrincipalByEmailOrUserName(emailOrUsername);
         if (userPrincipal.isActivated()) {
             throw new UserAlreadyActivatedException();
         }
         sendActivationCodeMail(userPrincipal);
+        return userPrincipal;
     }
 
     public void sendActivationCodeMail(UserPrincipal userPrincipal) {

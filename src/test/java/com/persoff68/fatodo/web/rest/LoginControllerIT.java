@@ -54,11 +54,15 @@ public class LoginControllerIT {
 
         UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
                 Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
+        UserPrincipalDTO notActivatedUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("not_activated",
+                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"), false);
         UserPrincipalDTO oAuth2UserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("google",
                 Provider.Constants.GOOGLE_VALUE, passwordEncoder.encode("test_password"));
 
         when(userServiceClient.getUserPrincipalByUsername("test_username_local"))
                 .thenReturn(localUserPrincipalDTO);
+        when(userServiceClient.getUserPrincipalByUsername("test_username_not_activated"))
+                .thenReturn(notActivatedUserPrincipalDTO);
         when(userServiceClient.getUserPrincipalByUsername("test_username_google"))
                 .thenReturn(oAuth2UserPrincipalDTO);
         when(userServiceClient.getUserPrincipalByUsername("test_username_not_exists"))
@@ -95,7 +99,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_wrongPassword() throws Exception {
+    public void testAuthenticate_badRequest_wrongPassword() throws Exception {
         LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "wrong_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
@@ -105,12 +109,22 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_wrongProvider() throws Exception {
+    public void testAuthenticate_badRequest_wrongProvider() throws Exception {
         LoginVM loginVM = FactoryUtils.createUsernameLoginVM("google", "wrong_password");
         String requestBody = objectMapper.writeValueAsString(loginVM);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testAuthenticate_locked_notActivated() throws Exception {
+        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("not_activated", "test_password");
+        String requestBody = objectMapper.writeValueAsString(loginVM);
+        mvc.perform(post(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isLocked());
     }
 
     @Test

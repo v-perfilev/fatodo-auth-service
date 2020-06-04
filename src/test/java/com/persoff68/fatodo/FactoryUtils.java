@@ -91,6 +91,11 @@ public class FactoryUtils {
     }
 
     public static UserPrincipalDTO createUserPrincipalDTO(String postfix, String provider, String password) {
+        return createUserPrincipalDTO(postfix, provider, password, true);
+    }
+
+    public static UserPrincipalDTO createUserPrincipalDTO(String postfix, String provider,
+                                                          String password, boolean isActivated) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
         UserPrincipalDTO dto = new UserPrincipalDTO();
         dto.setId("test_id_" + postfix);
@@ -99,6 +104,7 @@ public class FactoryUtils {
         dto.setPassword(password);
         dto.setProvider(provider);
         dto.setAuthorities(authorityList);
+        dto.setActivated(isActivated);
         return dto;
     }
 

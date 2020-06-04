@@ -7,6 +7,7 @@ import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.PermissionException;
 import com.persoff68.fatodo.service.exception.ResetPasswordNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
+import com.persoff68.fatodo.service.exception.UserNotActivatedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -110,7 +111,16 @@ public class ServiceExceptionTest {
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.activated");
+        assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.alreadyActivated");
+    }
+
+    @Test
+    void testUserNotActivatedException() {
+        Object exception = new UserNotActivatedException();
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.LOCKED);
+        assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.notActivated");
     }
 
     @Test
