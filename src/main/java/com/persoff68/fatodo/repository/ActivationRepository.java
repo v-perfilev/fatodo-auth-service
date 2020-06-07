@@ -11,6 +11,6 @@ public interface ActivationRepository extends MongoRepository<Activation, String
 
     Optional<Activation> findByCode(String code);
 
-    Optional<Activation> findByUserId(String userId);
+    Optional<Activation> findByUserIdAndCompleted(String userId, boolean completed);
 
 }

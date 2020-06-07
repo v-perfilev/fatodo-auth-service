@@ -42,14 +42,14 @@ public class ContractBase {
     public void setup() {
         RestAssuredMockMvc.webAppContextSetup(context);
 
+        Activation activation;
         activationRepository.deleteAll();
-        Activation activation = FactoryUtils.createActivation("test_user_local",
-                "1");
+        activation = FactoryUtils.createActivation("test_user_local", "1", false);
         activationRepository.save(activation);
 
+        ResetPassword resetPassword;
         resetPasswordRepository.deleteAll();
-        ResetPassword resetPassword = FactoryUtils.createResetPassword("test_username_local",
-                "1", false);
+        resetPassword = FactoryUtils.createResetPassword("test_username_local", "1", false);
         resetPasswordRepository.save(resetPassword);
 
         UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",

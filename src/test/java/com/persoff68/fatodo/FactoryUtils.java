@@ -121,10 +121,11 @@ public class FactoryUtils {
         return new OAuth2UserRequest(clientRegistration, oAuth2AccessToken);
     }
 
-    public static Activation createActivation(String userId, String code) {
+    public static Activation createActivation(String userId, String code, boolean completed) {
         Activation activation = new Activation();
         activation.setUserId(userId);
         activation.setCode(code);
+        activation.setCompleted(completed);
         return activation;
     }
 
@@ -137,11 +138,11 @@ public class FactoryUtils {
         return dto;
     }
 
-    public static ResetPassword createResetPassword(String userId, String code, boolean finished) {
+    public static ResetPassword createResetPassword(String userId, String code, boolean completed) {
         ResetPassword resetPassword = new ResetPassword();
         resetPassword.setCode(code);
         resetPassword.setUserId(userId);
-        resetPassword.setFinished(finished);
+        resetPassword.setCompleted(completed);
         return resetPassword;
     }
 

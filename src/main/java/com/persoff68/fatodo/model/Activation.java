@@ -11,10 +11,7 @@ import javax.validation.constraints.NotNull;
 @Document(collection = "ftd_activation")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Activation extends AbstractModel {
-
-    @Id
-    private String id;
+public class Activation extends AbstractAuditingModel {
 
     @NotNull
     private String userId;
@@ -22,5 +19,7 @@ public class Activation extends AbstractModel {
     @NotNull
     @Indexed(unique = true)
     private String code;
+
+    private boolean completed = false;
 
 }

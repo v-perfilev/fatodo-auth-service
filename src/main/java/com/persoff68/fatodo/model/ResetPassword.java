@@ -11,10 +11,7 @@ import javax.validation.constraints.NotNull;
 @Document(collection = "ftd_reset_password")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ResetPassword extends AbstractModel {
-
-    @Id
-    private String id;
+public class ResetPassword extends AbstractAuditingModel {
 
     @NotNull
     private String userId;
@@ -23,6 +20,6 @@ public class ResetPassword extends AbstractModel {
     @Indexed(unique = true)
     private String code;
 
-    private boolean finished = false;
+    private boolean completed = false;
 
 }

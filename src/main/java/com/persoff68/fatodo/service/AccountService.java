@@ -34,7 +34,12 @@ public class AccountService {
     public void activate(String code) {
         Activation activation = activationRepository.findByCode(code)
                 .orElseThrow(ModelNotFoundException::new);
+        if (activation.isCompleted()) {
+            throw new UserAlreadyActivatedException();
+        }
         userServiceClient.activate(activation.getUserId());
+        activation.setCompleted(true);
+        activationRepository.save(activation);
     }
 
     public UserPrincipal sendActivationCodeMail(String emailOrUsername) {
@@ -55,13 +60,15 @@ public class AccountService {
     public void resetPassword(ResetPasswordVM resetPasswordVM) {
         ResetPassword resetPassword = resetPasswordRepository.findByCode(resetPasswordVM.getCode())
                 .orElseThrow(ResetPasswordNotFoundException::new);
-        if (resetPassword.isFinished()) {
+        if (resetPassword.isCompleted()) {
             throw new ResetPasswordNotFoundException();
         }
         ResetPasswordDTO resetPasswordDTO = new ResetPasswordDTO();
         resetPasswordDTO.setUserId(resetPassword.getUserId());
         resetPasswordDTO.setPassword(passwordEncoder.encode(resetPasswordVM.getPassword()));
         userServiceClient.resetPassword(resetPasswordDTO);
+        resetPassword.setCompleted(true);
+        resetPasswordRepository.save(resetPassword);
     }
 
     public void sendResetPasswordMail(String emailOrUsername) {
@@ -72,7 +79,8 @@ public class AccountService {
     }
 
     private String getActivationCode(String userId) {
-        Activation activation = activationRepository.findByUserId(userId).orElse(null);
+        Activation activation = activationRepository.findByUserIdAndCompleted(userId, false)
+                .orElse(null);
         if (activation == null) {
             activation = new Activation();
             activation.setUserId(userId);
@@ -83,10 +91,11 @@ public class AccountService {
     }
 
     private String getResetPasswordCode(String userId) {
-        resetPasswordRepository.findByUserIdAndFinished(userId, false).ifPresent(resetPassword -> {
-            resetPassword.setFinished(true);
-            resetPasswordRepository.save(resetPassword);
-        });
+        resetPasswordRepository.findByUserIdAndCompleted(userId, false)
+                .ifPresent(resetPassword -> {
+                    resetPassword.setCompleted(true);
+                    resetPasswordRepository.save(resetPassword);
+                });
         ResetPassword resetPassword = new ResetPassword();
         resetPassword.setUserId(userId);
         resetPassword.setCode(UUID.randomUUID().toString());

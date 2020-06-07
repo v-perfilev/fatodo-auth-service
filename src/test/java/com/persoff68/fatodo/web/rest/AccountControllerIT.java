@@ -61,14 +61,16 @@ public class AccountControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
+        Activation activation;
         activationRepository.deleteAll();
-        Activation activation = FactoryUtils.createActivation("test_username_activated", "1");
+        activation = FactoryUtils.createActivation("test_username_activated", "1", true);
         activationRepository.save(activation);
-        activation = FactoryUtils.createActivation("test_username_new", "2");
+        activation = FactoryUtils.createActivation("test_username_new", "2", false);
         activationRepository.save(activation);
 
+        ResetPassword resetPassword;
         resetPasswordRepository.deleteAll();
-        ResetPassword resetPassword = FactoryUtils.createResetPassword("test_user_1", "1", false);
+        resetPassword = FactoryUtils.createResetPassword("test_user_1", "1", false);
         resetPasswordRepository.save(resetPassword);
         resetPassword = FactoryUtils.createResetPassword("test_user_2", "2", true);
         resetPasswordRepository.save(resetPassword);
