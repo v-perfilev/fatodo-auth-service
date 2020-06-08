@@ -24,14 +24,14 @@ public class MailServiceCT {
     void testSendActivationCode() {
         ActivationMailDTO dto = FactoryUtils.createActivationMailDTO();
         mailServiceClient.sendActivationCode(dto);
-        assertThat(true);
+        assertThat(true).isTrue();
     }
 
     @Test
     void testSendResetPasswordCode() {
         ResetPasswordMailDTO dto = FactoryUtils.createResetPasswordMailDTO();
         mailServiceClient.sendResetPasswordCode(dto);
-        assertThat(true);
+        assertThat(true).isTrue();
     }
 
 }

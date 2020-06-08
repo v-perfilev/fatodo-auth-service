@@ -9,7 +9,6 @@ import com.persoff68.fatodo.security.exception.AuthUserNotFoundException;
 import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
