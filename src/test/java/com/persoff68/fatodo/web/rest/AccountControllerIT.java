@@ -113,7 +113,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testSendActivationCode_ok() throws Exception {
         UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_new",
-                Provider.Constants.LOCAL_VALUE, "test_password", false);
+                Provider.LOCAL.getValue(), "test_password", false);
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-activation-code/test_username_new";
@@ -125,7 +125,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testSendActivationCode_badRequest_alreadyActivated() throws Exception {
         UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_new",
-                Provider.Constants.LOCAL_VALUE, "test_password");
+                Provider.LOCAL.getValue(), "test_password");
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-activation-code/test_username_new";
@@ -147,7 +147,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testSendActivationCode_conflict() throws Exception {
         UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_activated",
-                Provider.Constants.LOCAL_VALUE, "test_password");
+                Provider.LOCAL.getValue(), "test_password");
         dto.setActivated(true);
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
@@ -216,7 +216,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testSendResetPasswordCode_ok() throws Exception {
         UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_new",
-                Provider.Constants.LOCAL_VALUE, "test_password");
+                Provider.LOCAL.getValue(), "test_password");
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-reset-password-code/test_username_new";

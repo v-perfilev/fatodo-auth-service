@@ -56,7 +56,7 @@ public class RegisterControllerIT {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
-                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
+                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"));
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
                 dto != null && "test_username_new".equals(dto.getUsername()))))
                 .thenReturn(localUserPrincipalDTO);

@@ -53,11 +53,11 @@ public class LoginControllerIT {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
-                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
+                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"));
         UserPrincipalDTO notActivatedUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("not_activated",
-                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"), false);
+                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"), false);
         UserPrincipalDTO oAuth2UserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("google",
-                Provider.Constants.GOOGLE_VALUE, passwordEncoder.encode("test_password"));
+                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"));
 
         when(userServiceClient.getUserPrincipalByUsername("test_username_local"))
                 .thenReturn(localUserPrincipalDTO);

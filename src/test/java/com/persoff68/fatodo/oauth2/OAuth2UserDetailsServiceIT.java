@@ -44,12 +44,12 @@ public class OAuth2UserDetailsServiceIT {
         when(userServiceClient.getUserPrincipalByEmail(any()))
                 .thenThrow(new ModelNotFoundException());
         UserPrincipalDTO googleUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("google",
-                Provider.Constants.GOOGLE_VALUE, null);
+                Provider.GOOGLE.getValue(), null);
         when(userServiceClient.createOAuth2User(any()))
                 .thenReturn(googleUserPrincipalDTO);
 
         OAuth2User resultOAuth2User = oAuth2UserDetailsService
-                .loadUser(FactoryUtils.createUserRequest(Provider.Constants.GOOGLE_VALUE));
+                .loadUser(FactoryUtils.createUserRequest(Provider.GOOGLE.getValue()));
         assertThat(resultOAuth2User).isNotNull();
     }
 
@@ -60,12 +60,12 @@ public class OAuth2UserDetailsServiceIT {
         when(userServiceClient.getUserPrincipalByEmail(any()))
                 .thenThrow(new ModelNotFoundException());
         UserPrincipalDTO facebookUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("facebook",
-                Provider.Constants.FACEBOOK_VALUE, null);
+                Provider.FACEBOOK.getValue(), null);
         when(userServiceClient.createOAuth2User(any()))
                 .thenReturn(facebookUserPrincipalDTO);
 
         OAuth2User resultOAuth2User = oAuth2UserDetailsService
-                .loadUser(FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE));
+                .loadUser(FactoryUtils.createUserRequest(Provider.FACEBOOK.getValue()));
         assertThat(resultOAuth2User).isNotNull();
     }
 
@@ -74,10 +74,11 @@ public class OAuth2UserDetailsServiceIT {
         when(defaultOAuth2UserService.loadUser(any()))
                 .thenReturn(FactoryUtils.createOAuth2User("facebook"));
         when(userServiceClient.getUserPrincipalByEmail(any()))
-                .thenReturn(FactoryUtils.createUserPrincipalDTO("facebook", Provider.Constants.FACEBOOK_VALUE, null));
+                .thenReturn(FactoryUtils.createUserPrincipalDTO("facebook",
+                        Provider.FACEBOOK.getValue(), null));
 
         OAuth2User resultOAuth2User = oAuth2UserDetailsService
-                .loadUser(FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE));
+                .loadUser(FactoryUtils.createUserRequest(Provider.FACEBOOK.getValue()));
         assertThat(resultOAuth2User).isNotNull();
     }
 
@@ -86,10 +87,11 @@ public class OAuth2UserDetailsServiceIT {
         when(defaultOAuth2UserService.loadUser(any()))
                 .thenReturn(FactoryUtils.createOAuth2User("facebook"));
         when(userServiceClient.getUserPrincipalByEmail(any()))
-                .thenReturn(FactoryUtils.createUserPrincipalDTO("facebook", Provider.Constants.GOOGLE_VALUE, null));
+                .thenReturn(FactoryUtils.createUserPrincipalDTO("facebook",
+                        Provider.GOOGLE.getValue(), null));
 
         assertThatThrownBy(() -> oAuth2UserDetailsService
-                .loadUser(FactoryUtils.createUserRequest(Provider.Constants.FACEBOOK_VALUE)))
+                .loadUser(FactoryUtils.createUserRequest(Provider.FACEBOOK.getValue())))
                 .isInstanceOf(OAuth2WrongProviderException.class);
     }
 
