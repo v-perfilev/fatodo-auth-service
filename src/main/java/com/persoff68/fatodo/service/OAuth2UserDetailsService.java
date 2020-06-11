@@ -21,8 +21,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Service
 @AllArgsConstructor
 public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -57,8 +55,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
             }
             return userPrincipal;
         } catch (ModelNotFoundException e) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            String language = cookieAuthorizationRequestRepository.loadLanguage(request);
+            String language = getLanguageFromCookies();
             return registerNewUser(oAuth2UserInfo, providerString, language);
         }
     }
@@ -69,5 +66,13 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
         oAuth2UserDTO.setLanguage(language);
         UserPrincipalDTO userPrincipalDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
         return userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
+    }
+
+    private String getLanguageFromCookies() {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return requestAttributes != null
+                ? cookieAuthorizationRequestRepository.loadLanguage(requestAttributes.getRequest())
+                : null;
     }
 }
