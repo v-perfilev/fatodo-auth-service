@@ -5,6 +5,7 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
+import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.exception.OAuth2UserNotFoundException;
 import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
@@ -17,6 +18,10 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +30,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     private final UserServiceClient userServiceClient;
     private final UserMapper userMapper;
     private final DefaultOAuth2UserService defaultOAuth2UserService;
+    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
@@ -51,13 +57,16 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
             }
             return userPrincipal;
         } catch (ModelNotFoundException e) {
-            return registerNewUser(providerString, oAuth2UserInfo);
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String language = cookieAuthorizationRequestRepository.loadLanguage(request);
+            return registerNewUser(oAuth2UserInfo, providerString, language);
         }
     }
 
-    private UserPrincipal registerNewUser(String provider, OAuth2UserInfo oAuth2UserInfo) {
+    private UserPrincipal registerNewUser(OAuth2UserInfo oAuth2UserInfo, String provider, String language) {
         OAuth2UserDTO oAuth2UserDTO = userMapper.oAuth2UserInfoToOAuth2UserDTO(oAuth2UserInfo);
         oAuth2UserDTO.setProvider(provider);
+        oAuth2UserDTO.setLanguage(language);
         UserPrincipalDTO userPrincipalDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
         return userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
     }
