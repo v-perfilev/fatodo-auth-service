@@ -14,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
 
-import static com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME;
+import static com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository.OAUTH2_REQUEST_COOKIE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -51,7 +51,7 @@ public class OAuth2AuthorizationEndpointIT {
         assertThat(locationHeader).contains("www.facebook.com");
 
         String setCookieHeader = resultActions.andReturn().getResponse().getHeader("Set-Cookie");
-        assertThat(setCookieHeader).contains(OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+        assertThat(setCookieHeader).contains(OAUTH2_REQUEST_COOKIE_NAME);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class OAuth2AuthorizationEndpointIT {
         assertThat(locationHeader).contains("accounts.google.com");
 
         String setCookieHeader = resultActions.andReturn().getResponse().getHeader("Set-Cookie");
-        assertThat(setCookieHeader).contains(OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+        assertThat(setCookieHeader).contains(OAUTH2_REQUEST_COOKIE_NAME);
     }
 
 }

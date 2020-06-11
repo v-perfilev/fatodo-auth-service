@@ -10,14 +10,6 @@ public class ResponseUtils {
     private ResponseUtils() {
     }
 
-    public static void addJwtToResponse(HttpServletResponse response, AppProperties.Auth auth, String jwt) {
-        String header = auth.getAuthorizationHeader();
-        String prefix = auth.getAuthorizationPrefix();
-        String fullToken = prefix + " " + jwt;
-        response.setStatus(200);
-        response.setHeader(header, fullToken);
-    }
-
     public static HttpHeaders createHeaderWithJwt(AppProperties.Auth auth, String jwt) {
         String header = auth.getAuthorizationHeader();
         String prefix = auth.getAuthorizationPrefix();

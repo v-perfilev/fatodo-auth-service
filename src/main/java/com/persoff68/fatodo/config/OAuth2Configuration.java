@@ -1,9 +1,9 @@
 package com.persoff68.fatodo.config;
 
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
+import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
-import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 @RequiredArgsConstructor
 public class OAuth2Configuration {
 
-    private final AppProperties appProperties;
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
@@ -24,8 +23,7 @@ public class OAuth2Configuration {
 
     @Bean
     OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
-        return new OAuth2AuthenticationSuccessHandler(appProperties, jwtTokenProvider,
-                cookieAuthorizationRequestRepository);
+        return new OAuth2AuthenticationSuccessHandler(jwtTokenProvider, cookieAuthorizationRequestRepository);
     }
 
     @Bean
