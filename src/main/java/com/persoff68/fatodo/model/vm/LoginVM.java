@@ -15,11 +15,11 @@ import javax.validation.constraints.Size;
 public class LoginVM {
 
     @NotNull
-    @Size(min = 5, max = 50)
+    @Size(max = 50)
     private String user;
 
     @NotNull
-    @Size(min = 5, max = 100)
+    @Size(max = 100)
     private String password;
 
 }
