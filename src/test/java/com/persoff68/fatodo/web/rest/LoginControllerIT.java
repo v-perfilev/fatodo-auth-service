@@ -3,10 +3,12 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
@@ -25,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,6 +48,8 @@ public class LoginControllerIT {
     PasswordEncoder passwordEncoder;
     @MockBean
     UserServiceClient userServiceClient;
+    @MockBean
+    CaptchaClient captchaClient;
 
     MockMvc mvc;
 
@@ -67,6 +72,9 @@ public class LoginControllerIT {
                 .thenReturn(oAuth2UserPrincipalDTO);
         when(userServiceClient.getUserPrincipalByUsername("test_username_not_exists"))
                 .thenThrow(new ModelNotFoundException());
+
+        CaptchaResponseDTO captchaResponseDTO = FactoryUtils.createCaptchaResponseDTO(true);
+        when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
     }
 
     @Test

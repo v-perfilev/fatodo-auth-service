@@ -3,13 +3,16 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
+import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
+import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
 import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
@@ -54,6 +57,8 @@ public class AccountControllerIT {
     UserServiceClient userServiceClient;
     @MockBean
     MailServiceClient mailServiceClient;
+    @MockBean
+    CaptchaClient captchaClient;
 
     MockMvc mvc;
 
@@ -74,6 +79,9 @@ public class AccountControllerIT {
         resetPasswordRepository.save(resetPassword);
         resetPassword = FactoryUtils.createResetPassword("test_user_2", "2", true);
         resetPasswordRepository.save(resetPassword);
+
+        CaptchaResponseDTO captchaResponseDTO = FactoryUtils.createCaptchaResponseDTO(true);
+        when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
     }
 
     @Test
@@ -215,12 +223,15 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testSendResetPasswordCode_ok() throws Exception {
-        UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_new",
+        UserPrincipalDTO userPrincipalDTO = FactoryUtils.createUserPrincipalDTO("_new",
                 Provider.LOCAL.getValue(), "test_password");
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
-        String url = ENDPOINT + "/request-reset-password-code/test_username_new";
-        mvc.perform(get(url))
+        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(userPrincipalDTO);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(userPrincipalDTO);
+        ForgotPasswordVM vm = FactoryUtils.createForgotPasswordVM("test_user_new");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/request-reset-password-code";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
     }
 
@@ -229,16 +240,22 @@ public class AccountControllerIT {
     public void testSendResetPasswordCode_notFound() throws Exception {
         when(userServiceClient.getUserPrincipalByUsername(any())).thenThrow(ModelNotFoundException.class);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(ModelNotFoundException.class);
-        String url = ENDPOINT + "/request-reset-password-code/test_username_notFound";
-        mvc.perform(get(url))
+        ForgotPasswordVM vm = FactoryUtils.createForgotPasswordVM("test_user_notFound");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/request-reset-password-code";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testSendResetPasswordCode_forbidden() throws Exception {
-        String url = ENDPOINT + "/request-reset-password-code/test_username_new";
-        mvc.perform(get(url))
+        ForgotPasswordVM vm = FactoryUtils.createForgotPasswordVM("test_user_new");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/request-reset-password-code";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 

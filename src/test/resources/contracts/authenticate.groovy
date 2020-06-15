@@ -20,6 +20,7 @@ Contract.make {
                         consumer(regex(".{5,50}")),
                         producer("test_password")
                 ),
+                "token": anyNonEmptyString()
         )
     }
     response {

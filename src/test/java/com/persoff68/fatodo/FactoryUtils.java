@@ -3,11 +3,13 @@ package com.persoff68.fatodo;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.model.vm.RegisterVM;
 import com.persoff68.fatodo.model.vm.ResetPasswordVM;
@@ -63,13 +65,7 @@ public class FactoryUtils {
         LoginVM vm = new LoginVM();
         vm.setUser("test_username_" + postfix);
         vm.setPassword(password);
-        return vm;
-    }
-
-    public static LoginVM createEmailLoginVM(String postfix, String password) {
-        LoginVM vm = new LoginVM();
-        vm.setUser("test_" + postfix + "@email.com");
-        vm.setPassword(password);
+        vm.setToken("test_token");
         return vm;
     }
 
@@ -83,6 +79,7 @@ public class FactoryUtils {
         vm.setUsername("test_username_" + postfix);
         vm.setPassword(password);
         vm.setLanguage("en");
+        vm.setToken("test_token");
         return vm;
     }
 
@@ -150,6 +147,7 @@ public class FactoryUtils {
         ResetPasswordVM vm = new ResetPasswordVM();
         vm.setCode(code);
         vm.setPassword("test_password");
+        vm.setToken("test_token");
         return vm;
     }
 
@@ -167,6 +165,19 @@ public class FactoryUtils {
         dto.setUsername("test_user");
         dto.setCode(UUID.randomUUID().toString());
         return dto;
+    }
+
+    public static CaptchaResponseDTO createCaptchaResponseDTO(boolean success) {
+        CaptchaResponseDTO dto = new CaptchaResponseDTO();
+        dto.setSuccess(success);
+        return dto;
+    }
+
+    public static ForgotPasswordVM createForgotPasswordVM(String user) {
+        ForgotPasswordVM vm = new ForgotPasswordVM();
+        vm.setUser(user);
+        vm.setToken("test_token");
+        return vm;
     }
 
 }

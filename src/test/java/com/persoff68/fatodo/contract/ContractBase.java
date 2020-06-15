@@ -1,11 +1,13 @@
 package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
+import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
@@ -37,6 +39,8 @@ public class ContractBase {
     UserServiceClient userServiceClient;
     @MockBean
     MailServiceClient mailServiceClient;
+    @MockBean
+    CaptchaClient captchaClient;
 
     @BeforeEach
     public void setup() {
@@ -64,6 +68,9 @@ public class ContractBase {
                 Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"), false);
         when(userServiceClient.getUserPrincipalByUsername(notActivatedUserPrincipalDTO.getUsername()))
                 .thenReturn(notActivatedUserPrincipalDTO);
+
+        CaptchaResponseDTO captchaResponseDTO = FactoryUtils.createCaptchaResponseDTO(true);
+        when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
     }
 
 }

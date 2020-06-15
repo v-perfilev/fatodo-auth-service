@@ -15,7 +15,8 @@ Contract.make {
                 "email": anyEmail(),
                 "username": regex(".{5,50}"),
                 "password": regex(".{5,50}"),
-                "language": anyNonBlankString()
+                "language": anyNonBlankString(),
+                "token": anyNonEmptyString()
         )
     }
     response {

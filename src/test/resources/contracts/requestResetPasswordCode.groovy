@@ -6,11 +6,18 @@ Contract.make {
     name 'request reset password code'
     description 'should return status 200'
     request {
-        method GET()
-        url($(
-                consumer(regex('\\/api\\/account\\/request-reset-password-code\\/[\\w-\\@\\.]+')),
-                producer("/api/account/request-reset-password-code/test_username_local")
-        ))
+        method POST()
+        url("/api/account/request-reset-password-code")
+        headers {
+            contentType applicationJson()
+        }
+        body(
+                "user": $(
+                        consumer(regex(".{5,50}")),
+                        producer("test_username_local")
+                ),
+                "token": anyNonEmptyString()
+        )
     }
     response {
         status 200

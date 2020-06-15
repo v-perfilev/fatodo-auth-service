@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.exception;
 
+import com.persoff68.fatodo.service.exception.CaptchaException;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
@@ -130,6 +131,15 @@ public class ServiceExceptionTest {
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.resetPasswordNotFound");
+    }
+
+    @Test
+    void testCaptchaException() {
+        Object exception = new CaptchaException();
+        assertThat(exception).isInstanceOf(AbstractException.class);
+        AbstractException abstractException = (AbstractException) exception;
+        assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(abstractException.getFeedBackCode()).isEqualTo("auth.captchaCheckFailed");
     }
 
 }
