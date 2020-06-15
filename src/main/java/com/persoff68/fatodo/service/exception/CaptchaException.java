@@ -4,7 +4,7 @@ import com.persoff68.fatodo.exception.AbstractException;
 import org.springframework.http.HttpStatus;
 
 public final class CaptchaException extends AbstractException {
-    private static final String MESSAGE = "Robot test failed";
+    private static final String MESSAGE = "Captcha check failed";
     private static final String FEEDBACK_CODE = "auth.captchaCheckFailed";
 
     public CaptchaException() {
