@@ -22,4 +22,6 @@ public class LoginVM {
     @Size(max = 100)
     private String password;
 
+    private String token;
+
 }

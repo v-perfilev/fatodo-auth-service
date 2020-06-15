@@ -12,14 +12,11 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResetPasswordVM {
+public class ForgotPasswordVM {
 
     @NotNull
-    private String code;
-
-    @NotNull
-    @Size(min = 5, max = 100)
-    private String password;
+    @Size(max = 50)
+    private String user;
 
     private String token;
 

@@ -8,6 +8,7 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
+import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
 import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
@@ -42,13 +43,12 @@ public class AccountService {
         activationRepository.save(activation);
     }
 
-    public UserPrincipal sendActivationCodeMail(String emailOrUsername) {
+    public void sendActivationCodeMail(String emailOrUsername) {
         UserPrincipal userPrincipal = localUserDetailsService.getUserPrincipalByEmailOrUserName(emailOrUsername);
         if (userPrincipal.isActivated()) {
             throw new UserAlreadyActivatedException();
         }
         sendActivationCodeMail(userPrincipal);
-        return userPrincipal;
     }
 
     public void sendActivationCodeMail(UserPrincipal userPrincipal) {
@@ -71,8 +71,9 @@ public class AccountService {
         resetPasswordRepository.save(resetPassword);
     }
 
-    public void sendResetPasswordMail(String emailOrUsername) {
-        UserPrincipal userPrincipal = localUserDetailsService.getUserPrincipalByEmailOrUserName(emailOrUsername);
+    public void sendResetPasswordMail(ForgotPasswordVM forgotPasswordVM) {
+        UserPrincipal userPrincipal = localUserDetailsService
+                .getUserPrincipalByEmailOrUserName(forgotPasswordVM.getUser());
         String resetPasswordCode = getResetPasswordCode(userPrincipal.getId());
         ResetPasswordMailDTO resetPasswordMailDTO = new ResetPasswordMailDTO(userPrincipal, resetPasswordCode);
         mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);

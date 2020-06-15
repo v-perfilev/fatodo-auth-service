@@ -31,4 +31,6 @@ public class RegisterVM {
     @NotNull
     private String language;
 
+    private String token;
+
 }

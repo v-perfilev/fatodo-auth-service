@@ -5,6 +5,7 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.util.ResponseUtils;
+import com.persoff68.fatodo.service.CaptchaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -27,11 +28,13 @@ public class LoginController {
     static final String ENDPOINT = "/api/authenticate";
 
     private final AppProperties appProperties;
+    private final CaptchaService captchaService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> authenticate(@Valid @RequestBody LoginVM loginVM) {
+        captchaService.captchaCheck(loginVM.getToken());
         var authenticationToken
                 = new UsernamePasswordAuthenticationToken(loginVM.getUser(), loginVM.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
