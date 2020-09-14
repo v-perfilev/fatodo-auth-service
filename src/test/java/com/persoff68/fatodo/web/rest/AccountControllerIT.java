@@ -3,10 +3,10 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
+import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
@@ -25,7 +25,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -110,7 +109,7 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testActivate_forbidden() throws Exception {
         String url = ENDPOINT + "/activate/" + UUID.randomUUID().toString();
         mvc.perform(get(url))
@@ -165,7 +164,7 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testSendActivationCode_forbidden() throws Exception {
         String url = ENDPOINT + "/request-activation-code/test_username_new";
         mvc.perform(get(url))
@@ -209,7 +208,7 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testResetPassword_forbidden() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
         ResetPasswordVM vm = FactoryUtils.createResetPasswordVM("1");
@@ -249,7 +248,7 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testSendResetPasswordCode_forbidden() throws Exception {
         ForgotPasswordVM vm = FactoryUtils.createForgotPasswordVM("test_user_new");
         String requestBody = objectMapper.writeValueAsString(vm);
