@@ -3,8 +3,6 @@ package com.persoff68.fatodo.security.util;
 import com.persoff68.fatodo.config.AppProperties;
 import org.springframework.http.HttpHeaders;
 
-import javax.servlet.http.HttpServletResponse;
-
 public class ResponseUtils {
 
     private ResponseUtils() {
