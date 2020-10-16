@@ -10,7 +10,7 @@ import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.model.vm.LoginVM;
+import com.persoff68.fatodo.web.rest.vm.LoginVM;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.model.vm;
+package com.persoff68.fatodo.web.rest.vm;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
