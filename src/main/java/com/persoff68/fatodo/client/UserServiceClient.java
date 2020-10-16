@@ -14,29 +14,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "user-service", primary = false)
 public interface UserServiceClient {
 
-    @GetMapping(value = "/api/auth/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/system/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByUsername(@PathVariable String username);
 
-    @GetMapping(value = "/api/auth/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/system/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable String email);
 
-    @GetMapping(value = "/api/auth/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/system/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalById(@PathVariable String id);
 
-    @PostMapping(value = "/api/auth/oauth2",
+    @PostMapping(value = "/api/system/oauth2",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO createOAuth2User(@RequestBody OAuth2UserDTO oAuth2UserDTO);
 
-    @PostMapping(value = "/api/auth/local",
+    @PostMapping(value = "/api/system/local",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO createLocalUser(@RequestBody LocalUserDTO userLocalDTO);
 
-    @GetMapping(value = "/api/auth/activate/{userId}")
+    @GetMapping(value = "/api/system/activate/{userId}")
     void activate(@PathVariable String userId);
 
-    @PostMapping(value = "/api/auth/reset-password")
+    @PostMapping(value = "/api/system/reset-password")
     void resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO);
 
 }
