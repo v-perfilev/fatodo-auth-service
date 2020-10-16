@@ -4,7 +4,6 @@ import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.filter.SecurityLocaleFilter;
 import com.persoff68.fatodo.security.filter.SecurityProblemSupport;
 import com.persoff68.fatodo.security.local.LocalAuthenticationProvider;
-import com.persoff68.fatodo.security.local.LocalPasswordEncoder;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.persoff68.fatodo.service.OAuth2UserDetailsService;
@@ -16,7 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,11 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final SecurityLocaleFilter securityLocaleFilter;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new LocalPasswordEncoder();
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
