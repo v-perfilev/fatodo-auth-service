@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Document(collection = "ftd_activation")
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class Activation extends AbstractAuditingModel {
 
     @NotNull

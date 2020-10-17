@@ -1,6 +1,5 @@
 package com.persoff68.fatodo.model;
 
-import com.persoff68.fatodo.config.constant.AppConstants;
 import com.persoff68.fatodo.config.constant.Provider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,11 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class UserPrincipal extends AbstractModel implements UserDetails, OAuth2User {
-    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
-    private String id;
     private String email;
     private String username;
     private String password;

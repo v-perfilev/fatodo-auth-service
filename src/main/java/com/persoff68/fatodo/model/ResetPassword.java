@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Document(collection = "ftd_reset_password")
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ResetPassword extends AbstractAuditingModel {
 
     @NotNull
