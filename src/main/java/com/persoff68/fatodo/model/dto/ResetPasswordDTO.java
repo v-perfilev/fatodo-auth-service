@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 public class ResetPasswordDTO implements Serializable {
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
-    private String userId;
+    private UUID userId;
     private String password;
 
 }

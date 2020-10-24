@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class MongoEventListener<E> extends AbstractMongoEventListener<E> {
@@ -23,7 +25,7 @@ public class MongoEventListener<E> extends AbstractMongoEventListener<E> {
 
     private void onBeforeAuditingConvert(E source) {
         AbstractAuditingModel sourceModel = (AbstractAuditingModel) source;
-        String id = sourceModel.getId();
+        UUID id = sourceModel.getId();
         if (id != null) {
             AbstractAuditingModel dbModel = (AbstractAuditingModel) mongoTemplate.findById(id, source.getClass());
             if (dbModel != null) {

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -15,9 +16,9 @@ public class ActivationMailDTO implements Serializable {
     private String language;
     private String email;
     private String username;
-    private String code;
+    private UUID code;
 
-    public ActivationMailDTO(UserPrincipal user, String code) {
+    public ActivationMailDTO(UserPrincipal user, UUID code) {
         this.language = user.getLanguage();
         this.email = user.getEmail();
         this.username = user.getUsername();

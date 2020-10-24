@@ -1,20 +1,20 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
+import com.persoff68.fatodo.builder.TestCaptchaResponseDTO;
+import com.persoff68.fatodo.builder.TestRegisterVM;
+import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
 import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
 import com.persoff68.fatodo.config.constant.AuthorityType;
-import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.web.rest.vm.LoginVM;
-import com.persoff68.fatodo.web.rest.vm.RegisterVM;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
+import com.persoff68.fatodo.web.rest.vm.RegisterVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RegisterControllerIT {
     private static final String ENDPOINT = "/api/register";
 
+    private static final String LOCAL_NAME = "local-name";
+    private static final String NEW_NAME = "new-name";
+
     @Autowired
     WebApplicationContext context;
     @Autowired
@@ -60,16 +63,19 @@ public class RegisterControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
-        UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
-                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"));
+        UserPrincipalDTO localUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
+                .username(LOCAL_NAME)
+                .password(passwordEncoder.encode("test_password"))
+                .build();
+
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
-                dto != null && "test_username_new".equals(dto.getUsername()))))
+                dto != null && NEW_NAME.equals(dto.getUsername()))))
                 .thenReturn(localUserPrincipalDTO);
         when(userServiceClient.createLocalUser(argThat((LocalUserDTO dto) ->
-                dto != null && "test_username_local".equals(dto.getUsername()))))
+                dto != null && LOCAL_NAME.equals(dto.getUsername()))))
                 .thenThrow(new ModelDuplicatedException());
 
-        CaptchaResponseDTO captchaResponseDTO = FactoryUtils.createCaptchaResponseDTO(true);
+        CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
     }
 
@@ -77,8 +83,8 @@ public class RegisterControllerIT {
     @Test
     @WithAnonymousUser
     public void testRegister_ok() throws Exception {
-        RegisterVM registerVM = FactoryUtils.createRegisterVM("new", "test_password");
-        String requestBody = objectMapper.writeValueAsString(registerVM);
+        RegisterVM vm = TestRegisterVM.defaultBuilder().username(NEW_NAME).build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
@@ -87,8 +93,8 @@ public class RegisterControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_invalid() throws Exception {
-        RegisterVM registerVM = FactoryUtils.createInvalidRegisterVM();
-        String requestBody = objectMapper.writeValueAsString(registerVM);
+        RegisterVM vm = new RegisterVM();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
@@ -97,8 +103,8 @@ public class RegisterControllerIT {
     @Test
     @WithAnonymousUser
     public void testRegister_duplicated() throws Exception {
-        RegisterVM registerVM = FactoryUtils.createRegisterVM("local", "test_password");
-        String requestBody = objectMapper.writeValueAsString(registerVM);
+        RegisterVM vm = TestRegisterVM.defaultBuilder().username(LOCAL_NAME).build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict());
@@ -108,8 +114,8 @@ public class RegisterControllerIT {
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testRegister_forbidden() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("new", "test_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        RegisterVM vm = TestRegisterVM.defaultBuilder().username(NEW_NAME).build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());

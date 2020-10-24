@@ -3,14 +3,10 @@ package com.persoff68.fatodo;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
-import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
-import com.persoff68.fatodo.model.dto.LocalUserDTO;
-import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
-import com.persoff68.fatodo.web.rest.vm.LoginVM;
 import com.persoff68.fatodo.web.rest.vm.RegisterVM;
 import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
@@ -35,42 +31,11 @@ public class FactoryUtils {
     public static OAuth2User createOAuth2User(String postfix) {
         List<? extends GrantedAuthority> authorityList = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         Map<String, Object> attributeMap = new HashMap<>();
-        attributeMap.put("id", "test_id_" + postfix);
+        attributeMap.put("id", UUID.randomUUID());
         attributeMap.put("name", "test_name" + postfix);
         attributeMap.put("email", "test_" + postfix + "@email.com");
         String nameAttributeKey = "id";
         return new DefaultOAuth2User(authorityList, attributeMap, nameAttributeKey);
-    }
-
-    public static LocalUserDTO createLocalUserDTO(String postfix, String password) {
-        LocalUserDTO dto = new LocalUserDTO();
-        dto.setEmail("test_" + postfix + "@email.com");
-        dto.setUsername("test_username_" + postfix);
-        dto.setPassword(password);
-        dto.setLanguage("en");
-        return dto;
-    }
-
-    public static OAuth2UserDTO createOAuth2UserDTO(String postfix) {
-        OAuth2UserDTO dto = new OAuth2UserDTO();
-        dto.setEmail("test_" + postfix + "@email.com");
-        dto.setUsername("test_" + postfix + "@email.com");
-        dto.setProvider("facebook");
-        dto.setProviderId("test_provider_id");
-        dto.setLanguage("en");
-        return dto;
-    }
-
-    public static LoginVM createUsernameLoginVM(String postfix, String password) {
-        LoginVM vm = new LoginVM();
-        vm.setUser("test_username_" + postfix);
-        vm.setPassword(password);
-        vm.setToken("test_token");
-        return vm;
-    }
-
-    public static LoginVM createInvalidLoginVM() {
-        return new LoginVM();
     }
 
     public static RegisterVM createRegisterVM(String postfix, String password) {
@@ -95,7 +60,7 @@ public class FactoryUtils {
                                                           String password, boolean isActivated) {
         Set<String> authorityList = Collections.singleton("ROLE_USER");
         UserPrincipalDTO dto = new UserPrincipalDTO();
-        dto.setId("test_id_" + postfix);
+        dto.setId(UUID.randomUUID());
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
         dto.setPassword(password);
@@ -118,7 +83,7 @@ public class FactoryUtils {
         return new OAuth2UserRequest(clientRegistration, oAuth2AccessToken);
     }
 
-    public static Activation createActivation(String userId, String code, boolean completed) {
+    public static Activation createActivation(UUID userId, UUID code, boolean completed) {
         Activation activation = new Activation();
         activation.setUserId(userId);
         activation.setCode(code);
@@ -131,14 +96,14 @@ public class FactoryUtils {
         dto.setLanguage("en");
         dto.setEmail("test@email.com");
         dto.setUsername("test_user");
-        dto.setCode(UUID.randomUUID().toString());
+        dto.setCode(UUID.randomUUID());
         return dto;
     }
 
     public static ResetPassword createResetPassword(String userId, String code, boolean completed) {
         ResetPassword resetPassword = new ResetPassword();
         resetPassword.setCode(code);
-        resetPassword.setUserId(userId);
+        resetPassword.setUserId(UUID.randomUUID());
         resetPassword.setCompleted(completed);
         return resetPassword;
     }
@@ -153,7 +118,7 @@ public class FactoryUtils {
 
     public static ResetPasswordDTO createResetPasswordDTO() {
         ResetPasswordDTO dto = new ResetPasswordDTO();
-        dto.setUserId("test_user_id");
+        dto.setUserId(UUID.randomUUID());
         dto.setPassword("test_password");
         return dto;
     }
@@ -166,12 +131,12 @@ public class FactoryUtils {
         dto.setCode(UUID.randomUUID().toString());
         return dto;
     }
-
-    public static CaptchaResponseDTO createCaptchaResponseDTO(boolean success) {
-        CaptchaResponseDTO dto = new CaptchaResponseDTO();
-        dto.setSuccess(success);
-        return dto;
-    }
+//
+//    public static CaptchaResponseDTO createCaptchaResponseDTO(boolean success) {
+//        CaptchaResponseDTO dto = new CaptchaResponseDTO();
+//        dto.setSuccess(success);
+//        return dto;
+//    }
 
     public static ForgotPasswordVM createForgotPasswordVM(String user) {
         ForgotPasswordVM vm = new ForgotPasswordVM();

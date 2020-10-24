@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Document(collection = "ftd_reset_password")
 @Data
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class ResetPassword extends AbstractAuditingModel {
 
     @NotNull
-    private String userId;
+    private UUID userId;
 
     @NotNull
     @Indexed(unique = true)

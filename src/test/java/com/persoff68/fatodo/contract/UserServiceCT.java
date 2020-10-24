@@ -1,6 +1,8 @@
 package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.builder.BuildableOAuth2UserDTO;
+import com.persoff68.fatodo.builder.TestLocalUserDTO;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
@@ -26,14 +28,14 @@ public class UserServiceCT {
 
     @Test
     void testCreateLocalUserDTO() {
-        LocalUserDTO localUserDTO = FactoryUtils.createLocalUserDTO("new", "test_password");
+        LocalUserDTO localUserDTO = TestLocalUserDTO.defaultBuilder().build();
         UserPrincipalDTO dto = userServiceClient.createLocalUser(localUserDTO);
         assertThat(dto).isNotNull();
     }
 
     @Test
     void testCreateOAuth2lUserDTO() {
-        OAuth2UserDTO oAuth2UserDTO = FactoryUtils.createOAuth2UserDTO("facebook");
+        OAuth2UserDTO oAuth2UserDTO = BuildableOAuth2UserDTO.builder().build();
         UserPrincipalDTO dto = userServiceClient.createOAuth2User(oAuth2UserDTO);
         assertThat(dto).isNotNull();
     }
@@ -52,7 +54,7 @@ public class UserServiceCT {
 
     @Test
     void testActivate() {
-        userServiceClient.activate(UUID.randomUUID().toString());
+        userServiceClient.activate(UUID.randomUUID());
         assertThat(true).isTrue();
     }
 

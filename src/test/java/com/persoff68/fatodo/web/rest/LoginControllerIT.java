@@ -2,7 +2,9 @@ package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
-import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.builder.TestCaptchaResponseDTO;
+import com.persoff68.fatodo.builder.TestLoginVM;
+import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
 import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.AppProperties;
@@ -10,8 +12,8 @@ import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.web.rest.vm.LoginVM;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
+import com.persoff68.fatodo.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LoginControllerIT {
     private static final String ENDPOINT = "/api/authenticate";
 
+    private static final String LOCAL_NAME = "local-name";
+    private static final String GOOGLE_NAME = "google-name";
+    private static final String NOT_ACTIVATED_NAME = "not-activated-name";
+    private static final String NOT_EXISTING_NAME = "not-existing-name";
+
     @Autowired
     WebApplicationContext context;
     @Autowired
@@ -57,36 +64,44 @@ public class LoginControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
-        UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
-                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"));
-        UserPrincipalDTO notActivatedUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("not_activated",
-                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"), false);
-        UserPrincipalDTO oAuth2UserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("google",
-                Provider.LOCAL.getValue(), passwordEncoder.encode("test_password"));
+        UserPrincipalDTO localUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
+                .username(LOCAL_NAME)
+                .password(passwordEncoder.encode("test_password"))
+                .build();
 
-        when(userServiceClient.getUserPrincipalByUsername("test_username_local"))
+        UserPrincipalDTO notActivatedUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
+                .username(NOT_ACTIVATED_NAME)
+                .password(passwordEncoder.encode("test_password"))
+                .activated(false)
+                .build();
+
+        UserPrincipalDTO oAuth2UserPrincipalDTO = TestUserPrincipleDTO.builder()
+                .username(GOOGLE_NAME)
+                .provider(Provider.GOOGLE.getValue())
+                .build();
+
+        when(userServiceClient.getUserPrincipalByUsername(LOCAL_NAME))
                 .thenReturn(localUserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByUsername("test_username_not_activated"))
+        when(userServiceClient.getUserPrincipalByUsername(NOT_ACTIVATED_NAME))
                 .thenReturn(notActivatedUserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByUsername("test_username_google"))
+        when(userServiceClient.getUserPrincipalByUsername(GOOGLE_NAME))
                 .thenReturn(oAuth2UserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByUsername("test_username_not_exists"))
+        when(userServiceClient.getUserPrincipalByUsername(NOT_EXISTING_NAME))
                 .thenThrow(new ModelNotFoundException());
 
-        CaptchaResponseDTO captchaResponseDTO = FactoryUtils.createCaptchaResponseDTO(true);
+        CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
     }
 
     @Test
     @WithAnonymousUser
     public void testAuthenticate_ok_username() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "test_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("test_password").build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         ResultActions resultActions = mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(header().exists(appProperties.getAuth().getAuthorizationHeader()));
-
         String authHeader = resultActions.andReturn().getResponse().getHeader(appProperties.getAuth().getAuthorizationHeader());
         assertThat(authHeader).startsWith(appProperties.getAuth().getAuthorizationPrefix());
     }
@@ -94,13 +109,12 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_ok_email() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "test_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("test_password").build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         ResultActions resultActions = mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(header().exists(appProperties.getAuth().getAuthorizationHeader()));
-
         String authHeader = resultActions.andReturn().getResponse().getHeader(appProperties.getAuth().getAuthorizationHeader());
         assertThat(authHeader).startsWith(appProperties.getAuth().getAuthorizationPrefix());
     }
@@ -108,8 +122,8 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_badRequest_wrongPassword() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "wrong_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("wrong_password").build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
@@ -118,8 +132,8 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_badRequest_wrongProvider() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("google", "wrong_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = TestLoginVM.defaultBuilder().user(GOOGLE_NAME).build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
@@ -128,8 +142,8 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_locked_notActivated() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("not_activated", "test_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = TestLoginVM.defaultBuilder().user(NOT_ACTIVATED_NAME).password("test_password").build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isLocked());
@@ -138,8 +152,8 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_invalid() throws Exception {
-        LoginVM loginVM = FactoryUtils.createInvalidLoginVM();
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = new LoginVM();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
@@ -148,8 +162,8 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_notExists() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("not_exists", "test_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = TestLoginVM.defaultBuilder().user(NOT_EXISTING_NAME).build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isNotFound());
@@ -158,8 +172,8 @@ public class LoginControllerIT {
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testAuthenticate_forbidden() throws Exception {
-        LoginVM loginVM = FactoryUtils.createUsernameLoginVM("local", "test_password");
-        String requestBody = objectMapper.writeValueAsString(loginVM);
+        LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).build();
+        String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());

@@ -5,12 +5,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ActivationRepository extends MongoRepository<Activation, String> {
+public interface ActivationRepository extends MongoRepository<Activation, UUID> {
 
-    Optional<Activation> findByCode(String code);
+    Optional<Activation> findByCode(UUID code);
 
-    Optional<Activation> findByUserIdAndCompleted(String userId, boolean completed);
+    Optional<Activation> findByUserIdAndCompleted(UUID userId, boolean completed);
 
 }

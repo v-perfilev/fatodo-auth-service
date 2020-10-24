@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
+import com.persoff68.fatodo.builder.TestCaptchaResponseDTO;
 import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
@@ -67,10 +68,10 @@ public class AccountControllerIT {
 
         Activation activation;
         activationRepository.deleteAll();
-        activation = FactoryUtils.createActivation("test_username_activated", "1", true);
-        activationRepository.save(activation);
-        activation = FactoryUtils.createActivation("test_username_new", "2", false);
-        activationRepository.save(activation);
+//        activation = FactoryUtils.createActivation("test_username_activated", "1", true);
+//        activationRepository.save(activation);
+//        activation = FactoryUtils.createActivation("test_username_new", "2", false);
+//        activationRepository.save(activation);
 
         ResetPassword resetPassword;
         resetPasswordRepository.deleteAll();
@@ -79,7 +80,7 @@ public class AccountControllerIT {
         resetPassword = FactoryUtils.createResetPassword("test_user_2", "2", true);
         resetPasswordRepository.save(resetPassword);
 
-        CaptchaResponseDTO captchaResponseDTO = FactoryUtils.createCaptchaResponseDTO(true);
+        CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
     }
 

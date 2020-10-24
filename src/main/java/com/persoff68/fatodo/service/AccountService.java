@@ -8,13 +8,13 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
-import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
-import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.ResetPasswordNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
+import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
+import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class AccountService {
     private final MailServiceClient mailServiceClient;
     private final PasswordEncoder passwordEncoder;
 
-    public void activate(String code) {
+    public void activate(UUID code) {
         Activation activation = activationRepository.findByCode(code)
                 .orElseThrow(ModelNotFoundException::new);
         if (activation.isCompleted()) {
@@ -52,7 +52,7 @@ public class AccountService {
     }
 
     public void sendActivationCodeMail(UserPrincipal userPrincipal) {
-        String activationCode = getActivationCode(userPrincipal.getId());
+        UUID activationCode = getActivationCode(userPrincipal.getId());
         ActivationMailDTO activationMailDTO = new ActivationMailDTO(userPrincipal, activationCode);
         mailServiceClient.sendActivationCode(activationMailDTO);
     }
@@ -79,19 +79,19 @@ public class AccountService {
         mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);
     }
 
-    private String getActivationCode(String userId) {
+    private UUID getActivationCode(UUID userId) {
         Activation activation = activationRepository.findByUserIdAndCompleted(userId, false)
                 .orElse(null);
         if (activation == null) {
             activation = new Activation();
             activation.setUserId(userId);
         }
-        activation.setCode(UUID.randomUUID().toString());
+        activation.setCode(UUID.randomUUID());
         activationRepository.save(activation);
         return activation.getCode();
     }
 
-    private String getResetPasswordCode(String userId) {
+    private String getResetPasswordCode(UUID userId) {
         resetPasswordRepository.findByUserIdAndCompleted(userId, false)
                 .ifPresent(resetPassword -> {
                     resetPassword.setCompleted(true);

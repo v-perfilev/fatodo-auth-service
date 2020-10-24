@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Document(collection = "ftd_activation")
 @Data
@@ -13,11 +14,11 @@ import javax.validation.constraints.NotNull;
 public class Activation extends AbstractAuditingModel {
 
     @NotNull
-    private String userId;
+    private UUID userId;
 
     @NotNull
     @Indexed(unique = true)
-    private String code;
+    private UUID code;
 
     private boolean completed = false;
 

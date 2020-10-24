@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "user-service", primary = false)
+import java.util.UUID;
+
+@FeignClient(name = "user-service", fallbackFactory = UserServiceFallbackFactory.class)
 public interface UserServiceClient {
 
     @GetMapping(value = "/api/system/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -21,7 +23,7 @@ public interface UserServiceClient {
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable String email);
 
     @GetMapping(value = "/api/system/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    UserPrincipalDTO getUserPrincipalById(@PathVariable String id);
+    UserPrincipalDTO getUserPrincipalById(@PathVariable UUID id);
 
     @PostMapping(value = "/api/system/oauth2",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -34,7 +36,7 @@ public interface UserServiceClient {
     UserPrincipalDTO createLocalUser(@RequestBody LocalUserDTO userLocalDTO);
 
     @GetMapping(value = "/api/system/activate/{userId}")
-    void activate(@PathVariable String userId);
+    void activate(@PathVariable UUID userId);
 
     @PostMapping(value = "/api/system/reset-password")
     void resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO);

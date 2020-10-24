@@ -1,9 +1,9 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
-import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
 import com.persoff68.fatodo.service.AccountService;
 import com.persoff68.fatodo.service.CaptchaService;
+import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
+import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(AccountController.ENDPOINT)
@@ -26,7 +27,7 @@ public class AccountController {
     private final CaptchaService captchaService;
 
     @GetMapping(value = "/activate/{code}")
-    public ResponseEntity<Void> activate(@PathVariable String code) {
+    public ResponseEntity<Void> activate(@PathVariable UUID code) {
         accountService.activate(code);
         return ResponseEntity.ok().build();
     }
