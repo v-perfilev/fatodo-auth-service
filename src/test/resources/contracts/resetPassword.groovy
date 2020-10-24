@@ -14,7 +14,7 @@ Contract.make {
         body(
                 "code": $(
                         consumer(anyNonBlankString()),
-                        producer("1")
+                        producer("34ba7ebf-a43c-4a37-813d-b5a401948857")
                 ),
                 "password": regex(".{5,50}"),
                 "token": anyNonEmptyString()

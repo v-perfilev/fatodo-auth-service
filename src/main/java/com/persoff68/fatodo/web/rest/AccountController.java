@@ -27,7 +27,7 @@ public class AccountController {
     private final CaptchaService captchaService;
 
     @GetMapping(value = "/activate/{code}")
-    public ResponseEntity<Void> activate(@PathVariable UUID code) {
+    public ResponseEntity<Void> activate(@PathVariable("code") UUID code) {
         accountService.activate(code);
         return ResponseEntity.ok().build();
     }

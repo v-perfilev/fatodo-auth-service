@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.contract;
 
-import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.builder.TestActivationMailDTO;
+import com.persoff68.fatodo.builder.TestResetPasswordMailDTO;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
@@ -22,14 +23,14 @@ public class MailServiceCT {
 
     @Test
     void testSendActivationCode() {
-        ActivationMailDTO dto = FactoryUtils.createActivationMailDTO();
+        ActivationMailDTO dto = TestActivationMailDTO.defaultBuilder().build();
         mailServiceClient.sendActivationCode(dto);
         assertThat(true).isTrue();
     }
 
     @Test
     void testSendResetPasswordCode() {
-        ResetPasswordMailDTO dto = FactoryUtils.createResetPasswordMailDTO();
+        ResetPasswordMailDTO dto = TestResetPasswordMailDTO.defaultBuilder().build();
         mailServiceClient.sendResetPasswordCode(dto);
         assertThat(true).isTrue();
     }

@@ -1,24 +1,27 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoAuthServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
+import com.persoff68.fatodo.builder.TestActivation;
 import com.persoff68.fatodo.builder.TestCaptchaResponseDTO;
+import com.persoff68.fatodo.builder.TestForgotPasswordVM;
+import com.persoff68.fatodo.builder.TestResetPassword;
+import com.persoff68.fatodo.builder.TestResetPasswordVM;
+import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
 import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
-import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
+import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
+import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AccountControllerIT {
     private static final String ENDPOINT = "/api/account";
 
+    private static final UUID ACTIVATED_ID = UUID.randomUUID();
+    private static final UUID UNACTIVATED_ID = UUID.randomUUID();
+    private static final UUID ACTIVATED_CODE = UUID.randomUUID();
+    private static final UUID UNACTIVATED_CODE = UUID.randomUUID();
+
+    private static final UUID PASSWORD_NOT_RESET_CODE = UUID.randomUUID();
+    private static final UUID PASSWORD_RESET_CODE = UUID.randomUUID();
+
+    private static final String LOCAL_NAME = "local-name";
+    private static final String NOT_EXISTING_NAME = "not-existing-name";
+
     @Autowired
     WebApplicationContext context;
     @Autowired
@@ -66,19 +80,35 @@ public class AccountControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
-        Activation activation;
+        Activation completedActivation = TestActivation.defaultBuilder()
+                .userId(ACTIVATED_ID)
+                .code(ACTIVATED_CODE)
+                .completed(true)
+                .build();
+        Activation uncompletedActivation = TestActivation.defaultBuilder()
+                .userId(UNACTIVATED_ID)
+                .code(UNACTIVATED_CODE)
+                .completed(false)
+                .build();
         activationRepository.deleteAll();
-//        activation = FactoryUtils.createActivation("test_username_activated", "1", true);
-//        activationRepository.save(activation);
-//        activation = FactoryUtils.createActivation("test_username_new", "2", false);
-//        activationRepository.save(activation);
+        try {
+            activationRepository.save(completedActivation);
+            activationRepository.save(uncompletedActivation);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        ResetPassword resetPassword;
+        ResetPassword resetPasswordNotCompleted = TestResetPassword.defaultBuilder()
+                .code(PASSWORD_NOT_RESET_CODE)
+                .completed(false)
+                .build();
+        ResetPassword resetPasswordCompleted = TestResetPassword.defaultBuilder()
+                .code(PASSWORD_RESET_CODE)
+                .completed(true)
+                .build();
         resetPasswordRepository.deleteAll();
-        resetPassword = FactoryUtils.createResetPassword("test_user_1", "1", false);
-        resetPasswordRepository.save(resetPassword);
-        resetPassword = FactoryUtils.createResetPassword("test_user_2", "2", true);
-        resetPasswordRepository.save(resetPassword);
+        resetPasswordRepository.save(resetPasswordNotCompleted);
+        resetPasswordRepository.save(resetPasswordCompleted);
 
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
@@ -87,7 +117,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testActivate_ok() throws Exception {
-        String url = ENDPOINT + "/activate/2";
+        String url = ENDPOINT + "/activate/" + UNACTIVATED_CODE.toString();
         mvc.perform(get(url))
                 .andExpect(status().isOk());
     }
@@ -95,7 +125,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testActivate_notFound() throws Exception {
-        String url = ENDPOINT + "/activate/notExists";
+        String url = ENDPOINT + "/activate/" + UUID.randomUUID().toString();
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -104,7 +134,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testActivate_conflict() throws Exception {
         doThrow(new UserAlreadyActivatedException()).when(userServiceClient).activate(any());
-        String url = ENDPOINT + "/activate/1";
+        String url = ENDPOINT + "/activate/" + ACTIVATED_CODE.toString();
         mvc.perform(get(url))
                 .andExpect(status().isConflict());
     }
@@ -120,11 +150,10 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testSendActivationCode_ok() throws Exception {
-        UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_new",
-                Provider.LOCAL.getValue(), "test_password", false);
+        UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
-        String url = ENDPOINT + "/request-activation-code/test_username_new";
+        String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isOk());
     }
@@ -132,11 +161,10 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testSendActivationCode_badRequest_alreadyActivated() throws Exception {
-        UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_new",
-                Provider.LOCAL.getValue(), "test_password");
+        UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(ACTIVATED_ID).activated(true).build();
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
-        String url = ENDPOINT + "/request-activation-code/test_username_new";
+        String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isConflict());
     }
@@ -146,7 +174,7 @@ public class AccountControllerIT {
     public void testSendActivationCode_notFound() throws Exception {
         when(userServiceClient.getUserPrincipalByUsername(any())).thenThrow(ModelNotFoundException.class);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(ModelNotFoundException.class);
-        String url = ENDPOINT + "/request-activation-code/test_username_notFound";
+        String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -154,8 +182,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testSendActivationCode_conflict() throws Exception {
-        UserPrincipalDTO dto = FactoryUtils.createUserPrincipalDTO("_activated",
-                Provider.LOCAL.getValue(), "test_password");
+        UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(ACTIVATED_ID).build();
         dto.setActivated(true);
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
@@ -167,7 +194,7 @@ public class AccountControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testSendActivationCode_forbidden() throws Exception {
-        String url = ENDPOINT + "/request-activation-code/test_username_new";
+        String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
@@ -176,7 +203,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testResetPassword_ok() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
-        ResetPasswordVM vm = FactoryUtils.createResetPasswordVM("1");
+        ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(PASSWORD_NOT_RESET_CODE).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
@@ -188,7 +215,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testResetPassword_notFound_notExists() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
-        ResetPasswordVM vm = FactoryUtils.createResetPasswordVM("3");
+        ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(UUID.randomUUID()).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
@@ -200,7 +227,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testResetPassword_notFound_finished() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
-        ResetPasswordVM vm = FactoryUtils.createResetPasswordVM("2");
+        ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(UUID.randomUUID()).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
@@ -212,7 +239,7 @@ public class AccountControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testResetPassword_forbidden() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
-        ResetPasswordVM vm = FactoryUtils.createResetPasswordVM("1");
+        ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(PASSWORD_NOT_RESET_CODE).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
@@ -223,11 +250,11 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testSendResetPasswordCode_ok() throws Exception {
-        UserPrincipalDTO userPrincipalDTO = FactoryUtils.createUserPrincipalDTO("_new",
-                Provider.LOCAL.getValue(), "test_password");
+        UserPrincipalDTO userPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
+                .username(LOCAL_NAME).build();
         when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(userPrincipalDTO);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(userPrincipalDTO);
-        ForgotPasswordVM vm = FactoryUtils.createForgotPasswordVM("test_user_new");
+        ForgotPasswordVM vm = TestForgotPasswordVM.defaultBuilder().user(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";
         mvc.perform(post(url)
@@ -240,7 +267,7 @@ public class AccountControllerIT {
     public void testSendResetPasswordCode_notFound() throws Exception {
         when(userServiceClient.getUserPrincipalByUsername(any())).thenThrow(ModelNotFoundException.class);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(ModelNotFoundException.class);
-        ForgotPasswordVM vm = FactoryUtils.createForgotPasswordVM("test_user_notFound");
+        ForgotPasswordVM vm = TestForgotPasswordVM.defaultBuilder().user(NOT_EXISTING_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";
         mvc.perform(post(url)
@@ -251,7 +278,7 @@ public class AccountControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testSendResetPasswordCode_forbidden() throws Exception {
-        ForgotPasswordVM vm = FactoryUtils.createForgotPasswordVM("test_user_new");
+        ForgotPasswordVM vm = TestForgotPasswordVM.defaultBuilder().user(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";
         mvc.perform(post(url)

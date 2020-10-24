@@ -14,7 +14,7 @@ Contract.make {
         body(
                 "user": $(
                         consumer(regex(".{5,50}")),
-                        producer("test_username_local")
+                        producer("local-name")
                 ),
                 "password": $(
                         consumer(regex(".{5,50}")),

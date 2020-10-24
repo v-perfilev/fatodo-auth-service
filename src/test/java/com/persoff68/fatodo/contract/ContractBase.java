@@ -1,10 +1,12 @@
 package com.persoff68.fatodo.contract;
 
-import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.builder.TestActivation;
+import com.persoff68.fatodo.builder.TestCaptchaResponseDTO;
+import com.persoff68.fatodo.builder.TestResetPassword;
+import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
 import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
-import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
@@ -20,12 +22,20 @@ import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureM
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.UUID;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMessageVerifier
 public class ContractBase {
+
+    private static final UUID LOCAL_ID = UUID.randomUUID();
+    private static final String LOCAL_NAME = "local-name";
+    private static final String NOT_ACTIVATED_NAME = "not-activated-name";
+    private static final UUID NOT_ACTIVATED_CODE = UUID.fromString("34ba7ebf-a43c-4a37-813d-b5a401948857");
+    private static final UUID PASSWORD_NOT_RESET_CODE = UUID.fromString("34ba7ebf-a43c-4a37-813d-b5a401948857");
 
     @Autowired
     WebApplicationContext context;
@@ -46,30 +56,41 @@ public class ContractBase {
     public void setup() {
         RestAssuredMockMvc.webAppContextSetup(context);
 
-        Activation activation;
+        Activation activation = TestActivation.defaultBuilder()
+                .userId(LOCAL_ID)
+                .code(NOT_ACTIVATED_CODE)
+                .completed(false)
+                .build();
         activationRepository.deleteAll();
-        activation = FactoryUtils.createActivation("test_user_local", "1", false);
         activationRepository.save(activation);
 
-        ResetPassword resetPassword;
+        ResetPassword resetPassword = TestResetPassword.defaultBuilder()
+                .id(LOCAL_ID)
+                .code(PASSWORD_NOT_RESET_CODE)
+                .completed(false)
+                .build();
         resetPasswordRepository.deleteAll();
-        resetPassword = FactoryUtils.createResetPassword("test_username_local", "1", false);
         resetPasswordRepository.save(resetPassword);
 
-        UserPrincipalDTO localUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("local",
-                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"));
+        UserPrincipalDTO localUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
+                .username(LOCAL_NAME)
+                .password(passwordEncoder.encode("test_password"))
+                .build();
+
+        UserPrincipalDTO notActivatedUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
+                .username(NOT_ACTIVATED_NAME)
+                .activated(false)
+                .build();
+
         when(userServiceClient.getUserPrincipalByUsername(localUserPrincipalDTO.getUsername()))
                 .thenReturn(localUserPrincipalDTO);
         when(userServiceClient.getUserPrincipalByEmail(localUserPrincipalDTO.getEmail()))
                 .thenReturn(localUserPrincipalDTO);
         when(userServiceClient.createLocalUser(any())).thenReturn(localUserPrincipalDTO);
-
-        UserPrincipalDTO notActivatedUserPrincipalDTO = FactoryUtils.createUserPrincipalDTO("not_activated",
-                Provider.Constants.LOCAL_VALUE, passwordEncoder.encode("test_password"), false);
         when(userServiceClient.getUserPrincipalByUsername(notActivatedUserPrincipalDTO.getUsername()))
                 .thenReturn(notActivatedUserPrincipalDTO);
 
-        CaptchaResponseDTO captchaResponseDTO = FactoryUtils.createCaptchaResponseDTO(true);
+        CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
     }
 

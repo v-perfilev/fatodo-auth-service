@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface ResetPasswordRepository extends MongoRepository<ResetPassword, UUID> {
 
-    Optional<ResetPassword> findByCode(String code);
+    Optional<ResetPassword> findByCode(UUID code);
 
     Optional<ResetPassword> findByUserIdAndCompleted(UUID userId, boolean completed);
 

@@ -74,7 +74,7 @@ public class AccountService {
     public void sendResetPasswordMail(ForgotPasswordVM forgotPasswordVM) {
         UserPrincipal userPrincipal = localUserDetailsService
                 .getUserPrincipalByEmailOrUserName(forgotPasswordVM.getUser());
-        String resetPasswordCode = getResetPasswordCode(userPrincipal.getId());
+        UUID resetPasswordCode = getResetPasswordCode(userPrincipal.getId());
         ResetPasswordMailDTO resetPasswordMailDTO = new ResetPasswordMailDTO(userPrincipal, resetPasswordCode);
         mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);
     }
@@ -91,7 +91,7 @@ public class AccountService {
         return activation.getCode();
     }
 
-    private String getResetPasswordCode(UUID userId) {
+    private UUID getResetPasswordCode(UUID userId) {
         resetPasswordRepository.findByUserIdAndCompleted(userId, false)
                 .ifPresent(resetPassword -> {
                     resetPassword.setCompleted(true);
@@ -99,7 +99,7 @@ public class AccountService {
                 });
         ResetPassword resetPassword = new ResetPassword();
         resetPassword.setUserId(userId);
-        resetPassword.setCode(UUID.randomUUID().toString());
+        resetPassword.setCode(UUID.randomUUID());
         resetPasswordRepository.save(resetPassword);
         return resetPassword.getCode();
     }

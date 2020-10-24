@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.contract;
 
-import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.builder.BuildableOAuth2UserDTO;
 import com.persoff68.fatodo.builder.TestLocalUserDTO;
+import com.persoff68.fatodo.builder.TestOAuth2UserDTO;
+import com.persoff68.fatodo.builder.TestResetPasswordDTO;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
@@ -35,7 +35,7 @@ public class UserServiceCT {
 
     @Test
     void testCreateOAuth2lUserDTO() {
-        OAuth2UserDTO oAuth2UserDTO = BuildableOAuth2UserDTO.builder().build();
+        OAuth2UserDTO oAuth2UserDTO = TestOAuth2UserDTO.defaultBuilder().build();
         UserPrincipalDTO dto = userServiceClient.createOAuth2User(oAuth2UserDTO);
         assertThat(dto).isNotNull();
     }
@@ -60,7 +60,7 @@ public class UserServiceCT {
 
     @Test
     void testResetPassword() {
-        ResetPasswordDTO dto = FactoryUtils.createResetPasswordDTO();
+        ResetPasswordDTO dto = TestResetPasswordDTO.defaultBuilder().build();
         userServiceClient.resetPassword(dto);
         assertThat(true).isTrue();
     }
