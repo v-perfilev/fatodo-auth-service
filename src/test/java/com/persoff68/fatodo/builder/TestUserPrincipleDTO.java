@@ -20,7 +20,7 @@ public class TestUserPrincipleDTO extends UserPrincipalDTO {
     public static TestUserPrincipleDTOBuilder defaultBuilder() {
         return TestUserPrincipleDTO.builder()
                 .id(UUID.randomUUID())
-                .email(DEFAULT_VALUE)
+                .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
                 .password(DEFAULT_VALUE)
                 .provider(Provider.LOCAL.getValue())

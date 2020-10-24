@@ -13,7 +13,7 @@ public class TestLocalUserDTO extends LocalUserDTO {
 
     public static TestLocalUserDTOBuilder defaultBuilder() {
         return TestLocalUserDTO.builder()
-                .email(DEFAULT_VALUE)
+                .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
                 .password(DEFAULT_VALUE)
                 .language(DEFAULT_VALUE);

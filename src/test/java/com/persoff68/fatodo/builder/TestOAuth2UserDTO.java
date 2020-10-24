@@ -13,8 +13,8 @@ public class TestOAuth2UserDTO extends OAuth2UserDTO {
 
     public static TestOAuth2UserDTOBuilder defaultBuilder() {
         return TestOAuth2UserDTO.builder()
-                .email(DEFAULT_VALUE)
-                .username(DEFAULT_VALUE)
+                .email(DEFAULT_VALUE + "@email.com")
+                .username(DEFAULT_VALUE + "@email.com")
                 .provider(DEFAULT_VALUE)
                 .providerId(DEFAULT_VALUE)
                 .language(DEFAULT_VALUE);

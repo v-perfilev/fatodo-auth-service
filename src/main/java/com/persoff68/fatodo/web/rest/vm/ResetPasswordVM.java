@@ -1,7 +1,6 @@
 package com.persoff68.fatodo.web.rest.vm;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
