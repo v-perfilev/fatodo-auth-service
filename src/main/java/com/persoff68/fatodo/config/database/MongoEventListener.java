@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.config.database;
 
 import com.persoff68.fatodo.model.AbstractAuditingModel;
+import com.persoff68.fatodo.model.AbstractModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
@@ -18,8 +19,19 @@ public class MongoEventListener<E> extends AbstractMongoEventListener<E> {
     @Override
     public void onBeforeConvert(BeforeConvertEvent<E> event) {
         E source = event.getSource();
+        if (source instanceof AbstractModel) {
+            onBeforeIdentifiableConvert(source);
+        }
         if (source instanceof AbstractAuditingModel) {
             onBeforeAuditingConvert(source);
+        }
+    }
+
+    private void onBeforeIdentifiableConvert(E source) {
+        AbstractModel sourceModel = (AbstractModel) source;
+        UUID id = sourceModel.getId();
+        if (id == null) {
+            sourceModel.setId(UUID.randomUUID());
         }
     }
 
