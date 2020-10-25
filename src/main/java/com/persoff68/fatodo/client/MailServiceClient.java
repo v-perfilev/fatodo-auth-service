@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "mail-service", fallbackFactory = MailServiceFallbackFactory.class)
+@FeignClient(name = "mail-service", primary = false)
 public interface MailServiceClient {
 
     @GetMapping(value = "/api/mail/activation", consumes = MediaType.APPLICATION_JSON_VALUE)

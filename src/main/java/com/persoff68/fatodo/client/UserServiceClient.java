@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
-@FeignClient(name = "user-service", fallbackFactory = UserServiceFallbackFactory.class)
+@FeignClient(name = "user-service", primary = false)
 public interface UserServiceClient {
 
     @GetMapping(value = "/api/system/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)

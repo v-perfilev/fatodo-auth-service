@@ -7,11 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(
-        name = "captcha-service",
-        url = "https://www.google.com/recaptcha/api/siteverify",
-        fallbackFactory = CaptchaFallbackFactory.class
-)
+@FeignClient(name = "captcha-service", url = "https://www.google.com/recaptcha/api/siteverify", primary = false)
 public interface CaptchaClient {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
