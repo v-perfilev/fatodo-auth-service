@@ -82,13 +82,14 @@ public class ContractBase {
                 .activated(false)
                 .build();
 
-        when(userServiceClient.getUserPrincipalByUsername(localUserPrincipalDTO.getUsername()))
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(localUserPrincipalDTO.getUsername()))
                 .thenReturn(localUserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByEmail(localUserPrincipalDTO.getEmail()))
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(localUserPrincipalDTO.getEmail()))
                 .thenReturn(localUserPrincipalDTO);
-        when(userServiceClient.createLocalUser(any())).thenReturn(localUserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByUsername(notActivatedUserPrincipalDTO.getUsername()))
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(notActivatedUserPrincipalDTO.getUsername()))
                 .thenReturn(notActivatedUserPrincipalDTO);
+
+        when(userServiceClient.createLocalUser(any())).thenReturn(localUserPrincipalDTO);
 
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);

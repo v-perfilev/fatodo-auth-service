@@ -26,6 +26,17 @@ public class UserServiceClientWrapper implements UserServiceClient {
     private final UserServiceClient userServiceClient;
 
     @Override
+    public UserPrincipalDTO getUserPrincipalById(UUID id) {
+        try {
+            return userServiceClient.getUserPrincipalById(id);
+        } catch (FeignException.NotFound e) {
+            throw new ModelNotFoundException();
+        } catch (Exception e) {
+            throw new ClientException();
+        }
+    }
+
+    @Override
     public UserPrincipalDTO getUserPrincipalByUsername(String username) {
         try {
             return userServiceClient.getUserPrincipalByUsername(username);
@@ -48,9 +59,9 @@ public class UserServiceClientWrapper implements UserServiceClient {
     }
 
     @Override
-    public UserPrincipalDTO getUserPrincipalById(UUID id) {
+    public UserPrincipalDTO getUserPrincipalByUsernameOrEmail(String usernameOrEmail) {
         try {
-            return userServiceClient.getUserPrincipalById(id);
+            return userServiceClient.getUserPrincipalByUsernameOrEmail(usernameOrEmail);
         } catch (FeignException.NotFound e) {
             throw new ModelNotFoundException();
         } catch (Exception e) {

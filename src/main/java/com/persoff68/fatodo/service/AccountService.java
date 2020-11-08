@@ -44,7 +44,7 @@ public class AccountService {
     }
 
     public void sendActivationCodeMail(String emailOrUsername) {
-        UserPrincipal userPrincipal = localUserDetailsService.getUserPrincipalByEmailOrUserName(emailOrUsername);
+        UserPrincipal userPrincipal = localUserDetailsService.getUserPrincipalByUsernameOrEmail(emailOrUsername);
         if (userPrincipal.isActivated()) {
             throw new UserAlreadyActivatedException();
         }
@@ -73,7 +73,7 @@ public class AccountService {
 
     public void sendResetPasswordMail(ForgotPasswordVM forgotPasswordVM) {
         UserPrincipal userPrincipal = localUserDetailsService
-                .getUserPrincipalByEmailOrUserName(forgotPasswordVM.getUser());
+                .getUserPrincipalByUsernameOrEmail(forgotPasswordVM.getUser());
         UUID resetPasswordCode = getResetPasswordCode(userPrincipal.getId());
         ResetPasswordMailDTO resetPasswordMailDTO = new ResetPasswordMailDTO(userPrincipal, resetPasswordCode);
         mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);

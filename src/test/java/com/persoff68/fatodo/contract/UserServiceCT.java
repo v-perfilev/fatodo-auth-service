@@ -53,6 +53,20 @@ public class UserServiceCT {
     }
 
     @Test
+    void testGetUserPrincipalByUsernameOrEmail_username() {
+        UserPrincipalDTO userPrincipalDTO = userServiceClient
+                .getUserPrincipalByUsernameOrEmail("test_username_local");
+        assertThat(userPrincipalDTO).isNotNull();
+    }
+
+    @Test
+    void testGetUserPrincipalByUsernameOrEmail_email() {
+        UserPrincipalDTO userPrincipalDTO = userServiceClient
+                .getUserPrincipalByUsernameOrEmail("test@email.com");
+        assertThat(userPrincipalDTO).isNotNull();
+    }
+
+    @Test
     void testActivate() {
         userServiceClient.activate(UUID.randomUUID());
         assertThat(true).isTrue();

@@ -16,14 +16,17 @@ import java.util.UUID;
 @FeignClient(name = "user-service", primary = false)
 public interface UserServiceClient {
 
+    @GetMapping(value = "/api/system/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    UserPrincipalDTO getUserPrincipalById(@PathVariable UUID id);
+
     @GetMapping(value = "/api/system/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByUsername(@PathVariable String username);
 
     @GetMapping(value = "/api/system/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable String email);
 
-    @GetMapping(value = "/api/system/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    UserPrincipalDTO getUserPrincipalById(@PathVariable UUID id);
+    @GetMapping(value = "/api/system/username-or-email/{usernameOrEmail}", produces = MediaType.APPLICATION_JSON_VALUE)
+    UserPrincipalDTO getUserPrincipalByUsernameOrEmail(@PathVariable String usernameOrEmail);
 
     @PostMapping(value = "/api/system/oauth2",
             consumes = MediaType.APPLICATION_JSON_VALUE,

@@ -151,8 +151,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testSendActivationCode_ok() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -162,8 +161,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testSendActivationCode_badRequest_alreadyActivated() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(ACTIVATED_ID).activated(true).build();
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isConflict());
@@ -172,8 +170,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testSendActivationCode_notFound() throws Exception {
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenThrow(ModelNotFoundException.class);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(ModelNotFoundException.class);
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenThrow(ModelNotFoundException.class);
         String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
@@ -184,8 +181,7 @@ public class AccountControllerIT {
     public void testSendActivationCode_conflict() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(ACTIVATED_ID).build();
         dto.setActivated(true);
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(dto);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(dto);
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-activation-code/test_username_activated";
         mvc.perform(get(url))
                 .andExpect(status().isConflict());
@@ -252,8 +248,7 @@ public class AccountControllerIT {
     public void testSendResetPasswordCode_ok() throws Exception {
         UserPrincipalDTO userPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
                 .username(LOCAL_NAME).build();
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenReturn(userPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(userPrincipalDTO);
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(userPrincipalDTO);
         ForgotPasswordVM vm = TestForgotPasswordVM.defaultBuilder().user(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";
@@ -265,8 +260,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testSendResetPasswordCode_notFound() throws Exception {
-        when(userServiceClient.getUserPrincipalByUsername(any())).thenThrow(ModelNotFoundException.class);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(ModelNotFoundException.class);
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenThrow(ModelNotFoundException.class);
         ForgotPasswordVM vm = TestForgotPasswordVM.defaultBuilder().user(NOT_EXISTING_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";

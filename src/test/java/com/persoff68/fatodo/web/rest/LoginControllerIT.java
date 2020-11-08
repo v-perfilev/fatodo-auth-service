@@ -80,13 +80,13 @@ public class LoginControllerIT {
                 .provider(Provider.GOOGLE.getValue())
                 .build();
 
-        when(userServiceClient.getUserPrincipalByUsername(LOCAL_NAME))
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(LOCAL_NAME))
                 .thenReturn(localUserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByUsername(NOT_ACTIVATED_NAME))
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(NOT_ACTIVATED_NAME))
                 .thenReturn(notActivatedUserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByUsername(GOOGLE_NAME))
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(GOOGLE_NAME))
                 .thenReturn(oAuth2UserPrincipalDTO);
-        when(userServiceClient.getUserPrincipalByUsername(NOT_EXISTING_NAME))
+        when(userServiceClient.getUserPrincipalByUsernameOrEmail(NOT_EXISTING_NAME))
                 .thenThrow(new ModelNotFoundException());
 
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
