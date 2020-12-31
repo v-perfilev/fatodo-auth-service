@@ -25,6 +25,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private static final String[] publicUrls = {
+            "/actuator/**",
+            "/v2/api-docs",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"
+    };
+
     private final AppProperties appProperties;
     private final SecurityProblemSupport securityProblemSupport;
     private final LocalAuthenticationProvider localAuthenticationProvider;
@@ -68,9 +78,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .failureHandler(oAuth2AuthenticationFailureHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers(publicUrls).permitAll()
                 .anyRequest().anonymous();
     }
 
