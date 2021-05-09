@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = FatodoAuthServiceApplication.class)
 public class LoginControllerIT {
-    private static final String ENDPOINT = "/api/authenticate";
+    private static final String ENDPOINT = "/api/account";
 
     private static final String LOCAL_NAME = "local-name";
     private static final String GOOGLE_NAME = "google-name";
@@ -96,9 +96,10 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_ok_username() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        ResultActions resultActions = mvc.perform(post(ENDPOINT)
+        ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(header().exists(appProperties.getAuth().getAuthorizationHeader()));
@@ -109,9 +110,10 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_ok_email() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        ResultActions resultActions = mvc.perform(post(ENDPOINT)
+        ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(header().exists(appProperties.getAuth().getAuthorizationHeader()));
@@ -122,9 +124,10 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_badRequest_wrongPassword() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("wrong_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        mvc.perform(post(ENDPOINT)
+        mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
@@ -132,9 +135,10 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_badRequest_wrongProvider() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(GOOGLE_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        mvc.perform(post(ENDPOINT)
+        mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
@@ -142,9 +146,10 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_locked_notActivated() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(NOT_ACTIVATED_NAME).password("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        mvc.perform(post(ENDPOINT)
+        mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isLocked());
     }
@@ -152,9 +157,10 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_invalid() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = new LoginVM();
         String requestBody = objectMapper.writeValueAsString(vm);
-        mvc.perform(post(ENDPOINT)
+        mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
@@ -162,9 +168,10 @@ public class LoginControllerIT {
     @Test
     @WithAnonymousUser
     public void testAuthenticate_notExists() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(NOT_EXISTING_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        mvc.perform(post(ENDPOINT)
+        mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isNotFound());
     }
@@ -172,9 +179,10 @@ public class LoginControllerIT {
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testAuthenticate_forbidden() throws Exception {
+        String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        mvc.perform(post(ENDPOINT)
+        mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }

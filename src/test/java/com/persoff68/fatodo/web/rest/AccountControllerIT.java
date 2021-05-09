@@ -117,7 +117,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testActivate_ok() throws Exception {
-        String url = ENDPOINT + "/activate/" + UNACTIVATED_CODE.toString();
+        String url = ENDPOINT + "/activate/" + UNACTIVATED_CODE;
         mvc.perform(get(url))
                 .andExpect(status().isOk());
     }
@@ -125,7 +125,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testActivate_notFound() throws Exception {
-        String url = ENDPOINT + "/activate/" + UUID.randomUUID().toString();
+        String url = ENDPOINT + "/activate/" + UUID.randomUUID();
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -134,7 +134,7 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testActivate_conflict() throws Exception {
         doThrow(new UserAlreadyActivatedException()).when(userServiceClient).activate(any());
-        String url = ENDPOINT + "/activate/" + ACTIVATED_CODE.toString();
+        String url = ENDPOINT + "/activate/" + ACTIVATED_CODE;
         mvc.perform(get(url))
                 .andExpect(status().isConflict());
     }
@@ -142,7 +142,7 @@ public class AccountControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testActivate_forbidden() throws Exception {
-        String url = ENDPOINT + "/activate/" + UUID.randomUUID().toString();
+        String url = ENDPOINT + "/activate/" + UUID.randomUUID();
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }

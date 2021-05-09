@@ -19,13 +19,13 @@ import javax.validation.Valid;
 @RequestMapping(RegisterController.ENDPOINT)
 @RequiredArgsConstructor
 public class RegisterController {
-    static final String ENDPOINT = "/api/register";
+    static final String ENDPOINT = "/api/account";
 
     private final RegisterService registerService;
     private final CaptchaService captchaService;
     private final UserMapper userMapper;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> registerLocal(@Valid @RequestBody RegisterVM registerVM) {
         captchaService.captchaCheck(registerVM.getToken());
         LocalUserDTO localUserDTO = userMapper.registerVMToLocalUserDTO(registerVM);

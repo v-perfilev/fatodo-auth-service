@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200 and header with jwt'
     request {
         method POST()
-        url("/api/authenticate")
+        url("/api/account/authenticate")
         headers {
             contentType applicationJson()
         }

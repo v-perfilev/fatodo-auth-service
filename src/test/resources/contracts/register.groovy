@@ -7,7 +7,7 @@ Contract.make {
     description 'register: should return status 200'
     request {
         method POST()
-        url("/api/register")
+        url("/api/account/register")
         headers {
             contentType applicationJson()
         }

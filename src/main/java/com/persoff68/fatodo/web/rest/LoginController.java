@@ -25,14 +25,14 @@ import javax.validation.Valid;
 @RequestMapping(LoginController.ENDPOINT)
 @RequiredArgsConstructor
 public class LoginController {
-    static final String ENDPOINT = "/api/authenticate";
+    static final String ENDPOINT = "/api/account";
 
     private final AppProperties appProperties;
     private final CaptchaService captchaService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/authenticate", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> authenticate(@Valid @RequestBody LoginVM loginVM) {
         captchaService.captchaCheck(loginVM.getToken());
         var authenticationToken
