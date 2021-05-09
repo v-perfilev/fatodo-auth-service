@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "mail-service", primary = false)
 public interface MailServiceClient {
 
-    @GetMapping(value = "/api/mail/activation", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/mails/activation", consumes = MediaType.APPLICATION_JSON_VALUE)
     void sendActivationCode(@RequestBody ActivationMailDTO activationMailDTO);
 
-    @GetMapping(value = "/api/mail/reset-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/mails/reset-password", consumes = MediaType.APPLICATION_JSON_VALUE)
     void sendResetPasswordCode(@RequestBody ResetPasswordMailDTO resetPasswordMailDTO);
 
 }
