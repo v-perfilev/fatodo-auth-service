@@ -1,7 +1,6 @@
-package com.persoff68.fatodo.model.dto;
+package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.model.UserPrincipal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResetPasswordMailDTO implements Serializable {
+public class ActivationMail implements Serializable {
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     private String language;
@@ -20,10 +19,10 @@ public class ResetPasswordMailDTO implements Serializable {
     private String username;
     private UUID code;
 
-    public ResetPasswordMailDTO(UserPrincipal userPrincipal, UUID code) {
-        this.language = userPrincipal.getLanguage();
-        this.email = userPrincipal.getEmail();
-        this.username = userPrincipal.getUsername();
+    public ActivationMail(UserPrincipal user, UUID code) {
+        this.language = user.getLanguage();
+        this.email = user.getEmail();
+        this.username = user.getUsername();
         this.code = code;
     }
 

@@ -1,20 +1,20 @@
 package com.persoff68.fatodo.builder;
 
-import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.ActivationMail;
 import lombok.Builder;
 
 import java.util.UUID;
 
-public class TestActivationMailDTO extends ActivationMailDTO {
+public class TestActivationMail extends ActivationMail {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    TestActivationMailDTO(String language, String email, String username, UUID code) {
+    TestActivationMail(String language, String email, String username, UUID code) {
         super(language, email, username, code);
     }
 
-    public static TestActivationMailDTOBuilder defaultBuilder() {
-        return TestActivationMailDTO.builder()
+    public static TestActivationMailBuilder defaultBuilder() {
+        return TestActivationMail.builder()
                 .language(DEFAULT_VALUE)
                 .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
