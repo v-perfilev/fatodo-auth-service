@@ -17,5 +17,6 @@ public class LocalUserDTO implements Serializable {
     private String username;
     private String password;
     private String language;
+    private String timezone;
 
 }

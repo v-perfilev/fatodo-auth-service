@@ -29,6 +29,9 @@ public class RegisterVM {
     @NotNull
     private String language;
 
+    @NotNull
+    private String timezone;
+
     private String token;
 
 }

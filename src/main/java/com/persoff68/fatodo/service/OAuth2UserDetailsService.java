@@ -56,14 +56,17 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
             return userPrincipal;
         } catch (ModelNotFoundException e) {
             String language = getLanguageFromCookies();
-            return registerNewUser(oAuth2UserInfo, providerString, language);
+            String timezone = getTimezoneFromCookies();
+            return registerNewUser(oAuth2UserInfo, providerString, language, timezone);
         }
     }
 
-    private UserPrincipal registerNewUser(OAuth2UserInfo oAuth2UserInfo, String provider, String language) {
+    private UserPrincipal registerNewUser(OAuth2UserInfo oAuth2UserInfo,
+                                          String provider, String language, String timezone) {
         OAuth2UserDTO oAuth2UserDTO = userMapper.oAuth2UserInfoToOAuth2UserDTO(oAuth2UserInfo);
         oAuth2UserDTO.setProvider(provider);
         oAuth2UserDTO.setLanguage(language);
+        oAuth2UserDTO.setTimezone(timezone);
         UserPrincipalDTO userPrincipalDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
         return userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
     }
@@ -73,6 +76,14 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return requestAttributes != null
                 ? cookieAuthorizationRequestRepository.loadLanguage(requestAttributes.getRequest())
+                : null;
+    }
+
+    private String getTimezoneFromCookies() {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return requestAttributes != null
+                ? cookieAuthorizationRequestRepository.loadTimezone(requestAttributes.getRequest())
                 : null;
     }
 }

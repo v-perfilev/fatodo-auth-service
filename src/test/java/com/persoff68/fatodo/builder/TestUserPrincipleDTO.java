@@ -12,8 +12,17 @@ public class TestUserPrincipleDTO extends UserPrincipalDTO {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    TestUserPrincipleDTO(UUID id, String email, String username, String password, String provider, String providerId, Set<String> authorities, String language, boolean activated) {
-        super(email, username, password, provider, providerId, authorities, language, activated);
+    TestUserPrincipleDTO(UUID id,
+                         String email,
+                         String username,
+                         String password,
+                         String provider,
+                         String providerId,
+                         Set<String> authorities,
+                         String language,
+                         String timezone,
+                         boolean activated) {
+        super(email, username, password, provider, providerId, authorities, language, timezone, activated);
         this.setId(id);
     }
 
@@ -27,6 +36,7 @@ public class TestUserPrincipleDTO extends UserPrincipalDTO {
                 .providerId(DEFAULT_VALUE)
                 .authorities(Collections.singleton("ROLE_USER"))
                 .language(DEFAULT_VALUE)
+                .timezone(DEFAULT_VALUE)
                 .activated(true);
     }
 }

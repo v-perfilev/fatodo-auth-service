@@ -16,6 +16,7 @@ Contract.make {
                 "username": regex(".{5,50}"),
                 "password": regex(".{5,50}"),
                 "language": anyNonBlankString(),
+                "timezone": anyNonBlankString(),
                 "token": anyNonEmptyString()
         )
     }

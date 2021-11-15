@@ -16,9 +16,11 @@ public class CookieAuthorizationRequestRepository
 
     public static final String OAUTH2_REQUEST_COOKIE_NAME = "oauth2_request";
     public static final String OAUTH2_LANGUAGE_COOKIE_NAME = "oauth2_language";
+    public static final String OAUTH2_TIMEZONE_COOKIE_NAME = "oauth2_timezone";
     public static final String OAUTH2_REDIRECT_COOKIE_NAME = "oauth2_redirect";
     private static final int COOKIE_EXPIRE_SECONDS = 180;
     public static final String LANGUAGE_REQUEST_PARAM = "language";
+    public static final String TIMEZONE_REQUEST_PARAM = "timezone";
     public static final String REDIRECT_REQUEST_PARAM = "redirect";
 
     @Override
@@ -30,6 +32,10 @@ public class CookieAuthorizationRequestRepository
 
     public String loadLanguage(HttpServletRequest request) {
         return CookieUtils.getCookie(request, OAUTH2_LANGUAGE_COOKIE_NAME).map(Cookie::getValue).orElse(null);
+    }
+
+    public String loadTimezone(HttpServletRequest request) {
+        return CookieUtils.getCookie(request, OAUTH2_TIMEZONE_COOKIE_NAME).map(Cookie::getValue).orElse(null);
     }
 
     public String loadRedirect(HttpServletRequest request) {
@@ -53,6 +59,11 @@ public class CookieAuthorizationRequestRepository
             CookieUtils.addCookie(response, OAUTH2_LANGUAGE_COOKIE_NAME, language, COOKIE_EXPIRE_SECONDS);
         }
 
+        String timezone = request.getParameter(TIMEZONE_REQUEST_PARAM);
+        if (StringUtils.isNoneBlank(timezone)) {
+            CookieUtils.addCookie(response, OAUTH2_TIMEZONE_COOKIE_NAME, language, COOKIE_EXPIRE_SECONDS);
+        }
+
         String redirect = request.getParameter(REDIRECT_REQUEST_PARAM);
         if (StringUtils.isNoneBlank(redirect)) {
             CookieUtils.addCookie(response, OAUTH2_REDIRECT_COOKIE_NAME, redirect, COOKIE_EXPIRE_SECONDS);
@@ -67,6 +78,7 @@ public class CookieAuthorizationRequestRepository
     public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
         CookieUtils.deleteCookie(request, response, OAUTH2_REQUEST_COOKIE_NAME);
         CookieUtils.deleteCookie(request, response, OAUTH2_LANGUAGE_COOKIE_NAME);
+        CookieUtils.deleteCookie(request, response, OAUTH2_TIMEZONE_COOKIE_NAME);
         CookieUtils.deleteCookie(request, response, OAUTH2_REDIRECT_COOKIE_NAME);
     }
 }

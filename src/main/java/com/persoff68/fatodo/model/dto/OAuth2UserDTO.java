@@ -18,5 +18,6 @@ public class OAuth2UserDTO implements Serializable {
     private String provider;
     private String providerId;
     private String language;
+    private String timezone;
 
 }

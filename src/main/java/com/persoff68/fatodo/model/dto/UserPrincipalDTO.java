@@ -20,6 +20,7 @@ public class UserPrincipalDTO extends AbstractDTO {
     private String providerId;
     private Set<String> authorities;
     private String language;
+    private String timezone;
     private boolean activated;
 
 }
