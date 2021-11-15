@@ -19,10 +19,8 @@ public class TestUserPrincipleDTO extends UserPrincipalDTO {
                          String provider,
                          String providerId,
                          Set<String> authorities,
-                         String language,
-                         String timezone,
                          boolean activated) {
-        super(email, username, password, provider, providerId, authorities, language, timezone, activated);
+        super(email, username, password, provider, providerId, authorities, activated);
         this.setId(id);
     }
 
@@ -35,8 +33,6 @@ public class TestUserPrincipleDTO extends UserPrincipalDTO {
                 .provider(Provider.LOCAL.getValue())
                 .providerId(DEFAULT_VALUE)
                 .authorities(Collections.singleton("ROLE_USER"))
-                .language(DEFAULT_VALUE)
-                .timezone(DEFAULT_VALUE)
                 .activated(true);
     }
 }
