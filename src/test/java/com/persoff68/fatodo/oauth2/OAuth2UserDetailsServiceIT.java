@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ExtendWith(MockitoExtension.class)
-public class OAuth2UserDetailsServiceIT {
+class OAuth2UserDetailsServiceIT {
 
     private static final String GOOGLE_NAME = "google-name";
     private static final String FACEBOOK_NAME = "facebook-name";

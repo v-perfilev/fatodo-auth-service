@@ -17,11 +17,12 @@ import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 @AutoConfigureStubRunner(ids = {"com.persoff68.fatodo:userservice:+:stubs"},
         stubsMode = StubRunnerProperties.StubsMode.REMOTE)
-public class UserServiceCT {
+class UserServiceCT {
 
     @Autowired
     UserServiceClient userServiceClient;
@@ -68,15 +69,14 @@ public class UserServiceCT {
 
     @Test
     void testActivate() {
-        userServiceClient.activate(UUID.randomUUID());
-        assertThat(true).isTrue();
+        UUID id = UUID.randomUUID();
+        assertDoesNotThrow(() -> userServiceClient.activate(id));
     }
 
     @Test
     void testResetPassword() {
         ResetPasswordDTO dto = TestResetPasswordDTO.defaultBuilder().build();
-        userServiceClient.resetPassword(dto);
-        assertThat(true).isTrue();
+        assertDoesNotThrow(() -> userServiceClient.resetPassword(dto));
     }
 
 }

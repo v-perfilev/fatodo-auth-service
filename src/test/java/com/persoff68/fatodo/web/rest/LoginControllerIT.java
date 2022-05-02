@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoAuthServiceApplication.class)
-public class LoginControllerIT {
+class LoginControllerIT {
     private static final String ENDPOINT = "/api/account";
 
     private static final String LOCAL_NAME = "local-name";
@@ -61,7 +61,7 @@ public class LoginControllerIT {
     MockMvc mvc;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         UserPrincipalDTO localUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
@@ -95,7 +95,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_ok_username() throws Exception {
+    void testAuthenticate_ok_username() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -109,7 +109,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_ok_email() throws Exception {
+    void testAuthenticate_ok_email() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -123,7 +123,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_badRequest_wrongPassword() throws Exception {
+    void testAuthenticate_badRequest_wrongPassword() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).password("wrong_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -134,7 +134,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_badRequest_wrongProvider() throws Exception {
+    void testAuthenticate_badRequest_wrongProvider() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(GOOGLE_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -145,7 +145,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_locked_notActivated() throws Exception {
+    void testAuthenticate_locked_notActivated() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(NOT_ACTIVATED_NAME).password("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -156,7 +156,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_invalid() throws Exception {
+    void testAuthenticate_invalid() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = new LoginVM();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -167,7 +167,7 @@ public class LoginControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_notExists() throws Exception {
+    void testAuthenticate_notExists() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(NOT_EXISTING_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -178,7 +178,7 @@ public class LoginControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
-    public void testAuthenticate_forbidden() throws Exception {
+    void testAuthenticate_forbidden() throws Exception {
         String url = ENDPOINT + "/authenticate";
         LoginVM vm = TestLoginVM.defaultBuilder().user(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);

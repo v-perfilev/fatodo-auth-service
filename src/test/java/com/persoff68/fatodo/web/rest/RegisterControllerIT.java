@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoAuthServiceApplication.class)
-public class RegisterControllerIT {
+class RegisterControllerIT {
     private static final String ENDPOINT = "/api/account";
 
     private static final String LOCAL_NAME = "local-name";
@@ -60,7 +60,7 @@ public class RegisterControllerIT {
     MockMvc mvc;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         UserPrincipalDTO localUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
@@ -82,46 +82,46 @@ public class RegisterControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testRegister_ok() throws Exception {
+    void testRegister_ok() throws Exception {
         String url = ENDPOINT + "/register";
         RegisterVM vm = TestRegisterVM.defaultBuilder().username(NEW_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithAnonymousUser
-    public void testAuthenticate_invalid() throws Exception {
+    void testAuthenticate_invalid() throws Exception {
         String url = ENDPOINT + "/register";
         RegisterVM vm = new RegisterVM();
         String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithAnonymousUser
-    public void testRegister_duplicated() throws Exception {
+    void testRegister_duplicated() throws Exception {
         String url = ENDPOINT + "/register";
         RegisterVM vm = TestRegisterVM.defaultBuilder().username(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict());
 
     }
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
-    public void testRegister_forbidden() throws Exception {
+    void testRegister_forbidden() throws Exception {
         String url = ENDPOINT + "/register";
         RegisterVM vm = TestRegisterVM.defaultBuilder().username(NEW_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 

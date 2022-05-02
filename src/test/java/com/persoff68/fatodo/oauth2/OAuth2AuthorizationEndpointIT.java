@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = FatodoAuthServiceApplication.class)
 @ExtendWith(MockitoExtension.class)
-public class OAuth2AuthorizationEndpointIT {
+class OAuth2AuthorizationEndpointIT {
     private static final String ENDPOINT = "/api/oauth2/authorize";
 
     @Autowired

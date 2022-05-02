@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoAuthServiceApplication.class)
-public class AccountControllerIT {
+class AccountControllerIT {
     private static final String ENDPOINT = "/api/account";
 
     private static final UUID ACTIVATED_ID = UUID.randomUUID();
@@ -77,7 +77,7 @@ public class AccountControllerIT {
     MockMvc mvc;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         Activation completedActivation = TestActivation.defaultBuilder()
@@ -116,7 +116,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testActivate_ok() throws Exception {
+    void testActivate_ok() throws Exception {
         String url = ENDPOINT + "/activate/" + UNACTIVATED_CODE;
         mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -124,7 +124,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testActivate_notFound() throws Exception {
+    void testActivate_notFound() throws Exception {
         String url = ENDPOINT + "/activate/" + UUID.randomUUID();
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
@@ -132,7 +132,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testActivate_conflict() throws Exception {
+    void testActivate_conflict() throws Exception {
         doThrow(new UserAlreadyActivatedException()).when(userServiceClient).activate(any());
         String url = ENDPOINT + "/activate/" + ACTIVATED_CODE;
         mvc.perform(get(url))
@@ -141,7 +141,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testActivate_forbidden() throws Exception {
+    void testActivate_forbidden() throws Exception {
         String url = ENDPOINT + "/activate/" + UUID.randomUUID();
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
@@ -149,7 +149,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testSendActivationCode_ok() throws Exception {
+    void testSendActivationCode_ok() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-activation-code/test_username";
@@ -159,7 +159,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testSendActivationCode_badRequest_alreadyActivated() throws Exception {
+    void testSendActivationCode_badRequest_alreadyActivated() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(ACTIVATED_ID).activated(true).build();
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
         String url = ENDPOINT + "/request-activation-code/test_username";
@@ -169,7 +169,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testSendActivationCode_notFound() throws Exception {
+    void testSendActivationCode_notFound() throws Exception {
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenThrow(ModelNotFoundException.class);
         String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
@@ -178,7 +178,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testSendActivationCode_conflict() throws Exception {
+    void testSendActivationCode_conflict() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(ACTIVATED_ID).build();
         dto.setActivated(true);
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
@@ -189,7 +189,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testSendActivationCode_forbidden() throws Exception {
+    void testSendActivationCode_forbidden() throws Exception {
         String url = ENDPOINT + "/request-activation-code/test_username";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
@@ -197,7 +197,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testResetPassword_ok() throws Exception {
+    void testResetPassword_ok() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
         ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(PASSWORD_NOT_RESET_CODE).build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -209,7 +209,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testResetPassword_notFound_notExists() throws Exception {
+    void testResetPassword_notFound_notExists() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
         ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(UUID.randomUUID()).build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -221,7 +221,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testResetPassword_notFound_finished() throws Exception {
+    void testResetPassword_notFound_finished() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
         ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(UUID.randomUUID()).build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -233,7 +233,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testResetPassword_forbidden() throws Exception {
+    void testResetPassword_forbidden() throws Exception {
         doNothing().when(userServiceClient).resetPassword(any());
         ResetPasswordVM vm = TestResetPasswordVM.defaultBuilder().code(PASSWORD_NOT_RESET_CODE).build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -245,7 +245,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testSendResetPasswordCode_ok() throws Exception {
+    void testSendResetPasswordCode_ok() throws Exception {
         UserPrincipalDTO userPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
                 .username(LOCAL_NAME).build();
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(userPrincipalDTO);
@@ -259,7 +259,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testSendResetPasswordCode_notFound() throws Exception {
+    void testSendResetPasswordCode_notFound() throws Exception {
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenThrow(ModelNotFoundException.class);
         ForgotPasswordVM vm = TestForgotPasswordVM.defaultBuilder().user(NOT_EXISTING_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
@@ -271,7 +271,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testSendResetPasswordCode_forbidden() throws Exception {
+    void testSendResetPasswordCode_forbidden() throws Exception {
         ForgotPasswordVM vm = TestForgotPasswordVM.defaultBuilder().user(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";

@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -42,7 +42,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
                 OAuth2UserInfoFactory.getOAuth2UserInfo(providerString, oAuth2User.getAttributes());
 
         String email = oAuth2UserInfo.getEmail();
-        if (StringUtils.isEmpty(email)) {
+        if (ObjectUtils.isEmpty(email)) {
             throw new OAuth2UserNotFoundException();
         }
 
