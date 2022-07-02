@@ -22,16 +22,16 @@ import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
 import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
@@ -39,12 +39,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoAuthServiceApplication.class)
+@AutoConfigureMockMvc
 class AccountControllerIT {
     private static final String ENDPOINT = "/api/account";
 
@@ -60,7 +60,8 @@ class AccountControllerIT {
     private static final String NOT_EXISTING_NAME = "not-existing-name";
 
     @Autowired
-    WebApplicationContext context;
+    MockMvc mvc;
+
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
@@ -74,12 +75,8 @@ class AccountControllerIT {
     @MockBean
     CaptchaClient captchaClient;
 
-    MockMvc mvc;
-
     @BeforeEach
     void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-
         Activation completedActivation = TestActivation.defaultBuilder()
                 .userId(ACTIVATED_ID)
                 .code(ACTIVATED_CODE)
@@ -90,13 +87,8 @@ class AccountControllerIT {
                 .code(UNACTIVATED_CODE)
                 .completed(false)
                 .build();
-        activationRepository.deleteAll();
-        try {
-            activationRepository.save(completedActivation);
-            activationRepository.save(uncompletedActivation);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        activationRepository.save(completedActivation);
+        activationRepository.save(uncompletedActivation);
 
         ResetPassword resetPasswordNotCompleted = TestResetPassword.defaultBuilder()
                 .code(PASSWORD_NOT_RESET_CODE)
@@ -106,12 +98,17 @@ class AccountControllerIT {
                 .code(PASSWORD_RESET_CODE)
                 .completed(true)
                 .build();
-        resetPasswordRepository.deleteAll();
         resetPasswordRepository.save(resetPasswordNotCompleted);
         resetPasswordRepository.save(resetPasswordCompleted);
 
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
+    }
+
+    @AfterEach
+    void cleanup() {
+        activationRepository.deleteAll();
+        resetPasswordRepository.deleteAll();
     }
 
     @Test
@@ -203,7 +200,7 @@ class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
     }
 
@@ -215,7 +212,7 @@ class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isNotFound());
     }
 
@@ -227,7 +224,7 @@ class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isNotFound());
     }
 
@@ -239,7 +236,7 @@ class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 
@@ -253,7 +250,7 @@ class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
     }
 
@@ -265,7 +262,7 @@ class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isNotFound());
     }
 
@@ -276,7 +273,7 @@ class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/request-reset-password-code";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 

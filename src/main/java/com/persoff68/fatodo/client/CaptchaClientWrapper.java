@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CaptchaClientWrapper implements CaptchaClient {
 
-    @Qualifier("captchaClient")
+    @Qualifier("feignCaptchaClient")
     private final CaptchaClient captchaClient;
 
     @Override

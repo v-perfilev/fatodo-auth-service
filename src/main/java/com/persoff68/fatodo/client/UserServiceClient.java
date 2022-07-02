@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
-@FeignClient(name = "user-service", primary = false)
+@FeignClient(name = "user-service", primary = false, qualifiers = {"feignUserServiceClient"})
 public interface UserServiceClient {
 
     @GetMapping(value = "/api/system/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

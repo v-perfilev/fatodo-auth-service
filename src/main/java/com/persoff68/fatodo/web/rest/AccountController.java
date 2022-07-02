@@ -48,7 +48,7 @@ public class AccountController {
     @PostMapping(value = "/request-reset-password-code")
     public ResponseEntity<Void> requestResetPasswordCode(@Valid @RequestBody ForgotPasswordVM forgotPasswordVM) {
         captchaService.captchaCheck(forgotPasswordVM.getToken());
-        accountService.sendResetPasswordMail(forgotPasswordVM);
+        accountService.sendResetPasswordMail(forgotPasswordVM.getUser());
         return ResponseEntity.ok().build();
     }
 
