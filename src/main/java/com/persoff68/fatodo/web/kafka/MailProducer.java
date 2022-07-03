@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.kafka.producer;
+package com.persoff68.fatodo.web.kafka;
 
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
@@ -18,11 +18,11 @@ public class MailProducer implements MailServiceClient {
     private final KafkaTemplate<String, ResetPasswordMail> resetPasswordMailKafkaTemplate;
 
     public void sendActivationCode(ActivationMail activationMail) {
-        activationMailKafkaTemplate.send("mail_activation", activationMail);
+        activationMailKafkaTemplate.send("mail_auth", "activation", activationMail);
     }
 
     public void sendResetPasswordCode(ResetPasswordMail resetPasswordMail) {
-        resetPasswordMailKafkaTemplate.send("mail_resetPassword", resetPasswordMail);
+        resetPasswordMailKafkaTemplate.send("mail_auth", "reset-password", resetPasswordMail);
     }
 
 }

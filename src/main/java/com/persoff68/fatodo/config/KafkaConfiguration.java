@@ -30,12 +30,7 @@ public class KafkaConfiguration {
 
     @Bean
     public NewTopic activationNewTopic() {
-        return KafkaUtils.buildTopic("mail_activation", partitions);
-    }
-
-    @Bean
-    public NewTopic resetPasswordNewTopic() {
-        return KafkaUtils.buildTopic("mail_resetPassword", partitions);
+        return KafkaUtils.buildTopic("mail_auth", partitions);
     }
 
     @Bean
