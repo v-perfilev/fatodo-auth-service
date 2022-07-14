@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 })
 @DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
-public class MailProducerIT {
+class MailProducerIT {
 
     private static final UUID UNACTIVATED_ID = UUID.randomUUID();
     private static final UUID UNACTIVATED_CODE = UUID.randomUUID();
@@ -110,7 +110,7 @@ public class MailProducerIT {
 
         ConsumerRecord<String, String> record = authRecords.poll(10, TimeUnit.SECONDS);
 
-        assertThat(mailServiceClient instanceof MailProducer).isTrue();
+        assertThat(mailServiceClient).isInstanceOf(MailProducer.class);
         assertThat(record).isNotNull();
         assertThat(record.key()).isEqualTo("activation");
         verify(mailServiceClient).sendActivationCode(any());
@@ -125,7 +125,7 @@ public class MailProducerIT {
 
         ConsumerRecord<String, String> record = authRecords.poll(10, TimeUnit.SECONDS);
 
-        assertThat(mailServiceClient instanceof MailProducer).isTrue();
+        assertThat(mailServiceClient).isInstanceOf(MailProducer.class);
         assertThat(record).isNotNull();
         assertThat(record.key()).isEqualTo("reset-password");
         verify(mailServiceClient).sendResetPasswordCode(any());

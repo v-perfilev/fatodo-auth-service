@@ -13,16 +13,18 @@ import org.springframework.stereotype.Component;
 @ConditionalOnPropertyNotNull(value = "kafka.bootstrapAddress")
 public class MailProducer implements MailServiceClient {
 
+    private final static String MAIL_AUTH_TOPIC = "mail_auth";
+
     private final KafkaTemplate<String, ActivationMail> activationMailKafkaTemplate;
 
     private final KafkaTemplate<String, ResetPasswordMail> resetPasswordMailKafkaTemplate;
 
     public void sendActivationCode(ActivationMail activationMail) {
-        activationMailKafkaTemplate.send("mail_auth", "activation", activationMail);
+        activationMailKafkaTemplate.send(MAIL_AUTH_TOPIC, "activation", activationMail);
     }
 
     public void sendResetPasswordCode(ResetPasswordMail resetPasswordMail) {
-        resetPasswordMailKafkaTemplate.send("mail_auth", "reset-password", resetPasswordMail);
+        resetPasswordMailKafkaTemplate.send(MAIL_AUTH_TOPIC, "reset-password", resetPasswordMail);
     }
 
 }
