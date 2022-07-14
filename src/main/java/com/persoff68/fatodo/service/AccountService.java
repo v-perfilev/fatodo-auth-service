@@ -13,7 +13,7 @@ import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.ResetPasswordNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
-import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
+import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

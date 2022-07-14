@@ -2,8 +2,8 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.service.AccountService;
 import com.persoff68.fatodo.service.CaptchaService;
-import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
-import com.persoff68.fatodo.web.rest.vm.ResetPasswordVM;
+import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
+import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

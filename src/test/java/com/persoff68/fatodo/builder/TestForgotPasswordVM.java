@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.builder;
 
-import com.persoff68.fatodo.web.rest.vm.ForgotPasswordVM;
+import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
 import lombok.Builder;
 
 import javax.validation.constraints.NotNull;

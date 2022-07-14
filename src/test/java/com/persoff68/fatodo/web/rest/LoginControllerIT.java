@@ -13,7 +13,7 @@ import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
-import com.persoff68.fatodo.web.rest.vm.LoginVM;
+import com.persoff68.fatodo.model.vm.LoginVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

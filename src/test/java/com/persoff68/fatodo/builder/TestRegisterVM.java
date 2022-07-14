@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.builder;
 
-import com.persoff68.fatodo.web.rest.vm.RegisterVM;
+import com.persoff68.fatodo.model.vm.RegisterVM;
 import lombok.Builder;
 
 import javax.validation.constraints.Email;

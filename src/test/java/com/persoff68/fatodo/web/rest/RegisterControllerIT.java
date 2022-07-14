@@ -14,7 +14,7 @@ import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
-import com.persoff68.fatodo.web.rest.vm.RegisterVM;
+import com.persoff68.fatodo.model.vm.RegisterVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
