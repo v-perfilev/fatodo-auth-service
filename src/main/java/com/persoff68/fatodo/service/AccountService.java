@@ -24,12 +24,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountService {
 
+    private final LocalUserDetailsService localUserDetailsService;
     private final ActivationRepository activationRepository;
     private final ResetPasswordRepository resetPasswordRepository;
-    private final LocalUserDetailsService localUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
     private final UserServiceClient userServiceClient;
     private final MailServiceClient mailServiceClient;
-    private final PasswordEncoder passwordEncoder;
 
     public void activate(UUID code) {
         Activation activation = activationRepository.findByCode(code)

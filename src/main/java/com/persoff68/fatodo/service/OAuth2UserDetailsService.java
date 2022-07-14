@@ -25,10 +25,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @AllArgsConstructor
 public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final UserServiceClient userServiceClient;
-    private final UserMapper userMapper;
     private final DefaultOAuth2UserService defaultOAuth2UserService;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final UserMapper userMapper;
+    private final UserServiceClient userServiceClient;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
@@ -86,4 +86,5 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
                 ? cookieAuthorizationRequestRepository.loadTimezone(requestAttributes.getRequest())
                 : null;
     }
+
 }

@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterService {
 
-    private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
     private final UserMapper userMapper;
+    private final UserServiceClient userServiceClient;
 
     public void register(LocalUserDTO localUserDTO) {
         String encodedPassword = passwordEncoder.encode(localUserDTO.getPassword());

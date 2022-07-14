@@ -4,7 +4,7 @@ import com.persoff68.fatodo.config.AppProperties;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.security.util.ResponseUtils;
-import com.persoff68.fatodo.service.CaptchaService;
+import com.persoff68.fatodo.service.client.CaptchaService;
 import com.persoff68.fatodo.model.vm.LoginVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

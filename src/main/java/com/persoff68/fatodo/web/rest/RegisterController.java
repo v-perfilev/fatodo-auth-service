@@ -2,7 +2,7 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
-import com.persoff68.fatodo.service.CaptchaService;
+import com.persoff68.fatodo.service.client.CaptchaService;
 import com.persoff68.fatodo.service.RegisterService;
 import com.persoff68.fatodo.model.vm.RegisterVM;
 import lombok.RequiredArgsConstructor;

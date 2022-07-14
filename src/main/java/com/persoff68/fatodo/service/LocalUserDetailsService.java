@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LocalUserDetailsService {
 
-    private final UserServiceClient userServiceClient;
     private final UserMapper userMapper;
+    private final UserServiceClient userServiceClient;
 
     public UserPrincipal loadUser(String usernameOrEmail) {
         UserPrincipal userPrincipal = getUserPrincipalByUsernameOrEmail(usernameOrEmail);
