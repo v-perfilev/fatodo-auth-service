@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnPropertyNotNull(value = "kafka.bootstrapAddress")
 public class MailProducer implements MailServiceClient {
 
-    private final static String MAIL_AUTH_TOPIC = "mail_auth";
+    private static final String MAIL_AUTH_TOPIC = "mail_auth";
 
     private final KafkaTemplate<String, ActivationMail> activationMailKafkaTemplate;
 
