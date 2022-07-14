@@ -4,7 +4,7 @@ import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.model.mapper.UserMapper;
+import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.security.exception.AuthUserNotFoundException;
 import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
