@@ -163,6 +163,7 @@
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
+
             <!-- Embedded mongo management -->
             <dependency>
                 <groupId>de.flapdoodle.embed</groupId>
