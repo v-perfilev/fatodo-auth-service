@@ -2,8 +2,8 @@ package com.persoff68.fatodo.config;
 
 import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
 import com.persoff68.fatodo.config.util.KafkaUtils;
-import com.persoff68.fatodo.model.ActivationMail;
-import com.persoff68.fatodo.model.ResetPasswordMail;
+import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,12 +34,12 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, ActivationMail> activationMailKafkaTemplate() {
+    public KafkaTemplate<String, ActivationMailDTO> activationMailKafkaTemplate() {
         return KafkaUtils.buildJsonKafkaTemplate(bootstrapAddress);
     }
 
     @Bean
-    public KafkaTemplate<String, ResetPasswordMail> resetPasswordMailKafkaTemplate() {
+    public KafkaTemplate<String, ResetPasswordMailDTO> resetPasswordMailKafkaTemplate() {
         return KafkaUtils.buildJsonKafkaTemplate(bootstrapAddress);
     }
 

@@ -1,20 +1,20 @@
 package com.persoff68.fatodo.builder;
 
-import com.persoff68.fatodo.model.ResetPasswordMail;
+import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import lombok.Builder;
 
 import java.util.UUID;
 
-public class TestResetPasswordMail extends ResetPasswordMail {
+public class TestResetPasswordMailDTO extends ResetPasswordMailDTO {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    public TestResetPasswordMail(String language, String email, String username, UUID code) {
+    public TestResetPasswordMailDTO(String language, String email, String username, UUID code) {
         super(language, email, username, code);
     }
 
-    public static TestResetPasswordMailBuilder defaultBuilder() {
-        return TestResetPasswordMail.builder()
+    public static TestResetPasswordMailDTOBuilder defaultBuilder() {
+        return TestResetPasswordMailDTO.builder()
                 .language(DEFAULT_VALUE)
                 .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)

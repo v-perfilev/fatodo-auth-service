@@ -1,10 +1,10 @@
 package com.persoff68.fatodo.contract;
 
-import com.persoff68.fatodo.builder.TestActivationMail;
-import com.persoff68.fatodo.builder.TestResetPasswordMail;
+import com.persoff68.fatodo.builder.TestActivationMailDTO;
+import com.persoff68.fatodo.builder.TestResetPasswordMailDTO;
 import com.persoff68.fatodo.client.MailServiceClient;
-import com.persoff68.fatodo.model.ActivationMail;
-import com.persoff68.fatodo.model.ResetPasswordMail;
+import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,13 +23,13 @@ class MailServiceCT {
 
     @Test
     void testSendActivationCode() {
-        ActivationMail dto = TestActivationMail.defaultBuilder().build();
+        ActivationMailDTO dto = TestActivationMailDTO.defaultBuilder().build();
         assertDoesNotThrow(() -> mailServiceClient.sendActivationCode(dto));
     }
 
     @Test
     void testSendResetPasswordCode() {
-        ResetPasswordMail dto = TestResetPasswordMail.defaultBuilder().build();
+        ResetPasswordMailDTO dto = TestResetPasswordMailDTO.defaultBuilder().build();
         assertDoesNotThrow(() -> mailServiceClient.sendResetPasswordCode(dto));
     }
 

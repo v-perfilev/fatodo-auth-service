@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.client;
 
 import com.persoff68.fatodo.exception.ClientException;
-import com.persoff68.fatodo.model.ActivationMail;
-import com.persoff68.fatodo.model.ResetPasswordMail;
+import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -15,18 +15,18 @@ public class MailServiceClientWrapper implements MailServiceClient {
     private final MailServiceClient mailServiceClient;
 
     @Override
-    public void sendActivationCode(ActivationMail activationMail) {
+    public void sendActivationCode(ActivationMailDTO activationMailDTO) {
         try {
-            mailServiceClient.sendActivationCode(activationMail);
+            mailServiceClient.sendActivationCode(activationMailDTO);
         } catch (Exception e) {
             throw new ClientException();
         }
     }
 
     @Override
-    public void sendResetPasswordCode(ResetPasswordMail resetPasswordMail) {
+    public void sendResetPasswordCode(ResetPasswordMailDTO resetPasswordMailDTO) {
         try {
-            mailServiceClient.sendResetPasswordCode(resetPasswordMail);
+            mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);
         } catch (Exception e) {
             throw new ClientException();
         }

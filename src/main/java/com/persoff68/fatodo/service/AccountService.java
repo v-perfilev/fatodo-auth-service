@@ -3,9 +3,9 @@ package com.persoff68.fatodo.service;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.Activation;
-import com.persoff68.fatodo.model.ActivationMail;
+import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.ResetPassword;
-import com.persoff68.fatodo.model.ResetPasswordMail;
+import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
@@ -52,7 +52,7 @@ public class AccountService {
 
     public void sendActivationCodeMail(UserPrincipal userPrincipal) {
         UUID activationCode = getActivationCode(userPrincipal.getId());
-        ActivationMail activationMailDTO = new ActivationMail(userPrincipal, activationCode);
+        ActivationMailDTO activationMailDTO = new ActivationMailDTO(userPrincipal, activationCode);
         mailServiceClient.sendActivationCode(activationMailDTO);
     }
 
@@ -74,7 +74,7 @@ public class AccountService {
         UserPrincipal userPrincipal = localUserDetailsService
                 .getUserPrincipalByUsernameOrEmail(user);
         UUID resetPasswordCode = getResetPasswordCode(userPrincipal.getId());
-        ResetPasswordMail resetPasswordMailDTO = new ResetPasswordMail(userPrincipal, resetPasswordCode);
+        ResetPasswordMailDTO resetPasswordMailDTO = new ResetPasswordMailDTO(userPrincipal, resetPasswordCode);
         mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);
     }
 
