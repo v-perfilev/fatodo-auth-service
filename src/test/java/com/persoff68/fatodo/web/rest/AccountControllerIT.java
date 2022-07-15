@@ -10,18 +10,19 @@ import com.persoff68.fatodo.builder.TestResetPassword;
 import com.persoff68.fatodo.builder.TestResetPasswordVM;
 import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
 import com.persoff68.fatodo.client.CaptchaClient;
+import com.persoff68.fatodo.client.EventServiceClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
+import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
-import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
-import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,6 +74,8 @@ class AccountControllerIT {
     @MockBean
     MailServiceClient mailServiceClient;
     @MockBean
+    EventServiceClient eventServiceClient;
+    @MockBean
     CaptchaClient captchaClient;
 
     @BeforeEach
@@ -103,6 +106,7 @@ class AccountControllerIT {
 
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
+        doNothing().when(eventServiceClient).addDefaultEvent(any());
     }
 
     @AfterEach

@@ -2,16 +2,13 @@ package com.persoff68.fatodo.web.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.builder.TestActivation;
-import com.persoff68.fatodo.builder.TestResetPassword;
 import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
-import com.persoff68.fatodo.client.MailServiceClient;
+import com.persoff68.fatodo.client.EventServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.config.util.KafkaUtils;
 import com.persoff68.fatodo.model.Activation;
-import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
-import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.AccountService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.AfterEach;
@@ -47,22 +44,18 @@ import static org.mockito.Mockito.when;
 })
 @DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
-class MailProducerIT {
+class EventProducerIT {
 
     private static final UUID UNACTIVATED_ID = UUID.randomUUID();
     private static final UUID UNACTIVATED_CODE = UUID.randomUUID();
-    private static final UUID PASSWORD_NOT_RESET_CODE = UUID.randomUUID();
 
     @Autowired
     private EmbeddedKafkaBroker embeddedKafkaBroker;
 
     @Autowired
     AccountService accountService;
-
     @Autowired
     ActivationRepository activationRepository;
-    @Autowired
-    ResetPasswordRepository resetPasswordRepository;
     @Autowired
     ObjectMapper objectMapper;
 
@@ -70,10 +63,10 @@ class MailProducerIT {
     UserServiceClient userServiceClient;
 
     @SpyBean
-    MailServiceClient mailServiceClient;
+    EventServiceClient eventServiceClient;
 
-    private ConcurrentMessageListenerContainer<String, String> authContainer;
-    private BlockingQueue<ConsumerRecord<String, String>> authRecords;
+    private ConcurrentMessageListenerContainer<String, String> eventContainer;
+    private BlockingQueue<ConsumerRecord<String, String>> eventRecords;
 
     @BeforeEach
     void setup() {
@@ -84,19 +77,12 @@ class MailProducerIT {
                 .build();
         activationRepository.save(uncompletedActivation);
 
-        ResetPassword resetPasswordNotCompleted = TestResetPassword.defaultBuilder()
-                .code(PASSWORD_NOT_RESET_CODE)
-                .completed(false)
-                .build();
-        resetPasswordRepository.save(resetPasswordNotCompleted);
-
-        startAuthConsumer();
+        startEventConsumer();
     }
 
     @AfterEach
     void cleanup() {
         activationRepository.deleteAll();
-        resetPasswordRepository.deleteAll();
 
         stopAuthConsumer();
     }
@@ -106,43 +92,28 @@ class MailProducerIT {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
 
-        accountService.sendActivationCodeMail("test_username");
+        accountService.activate(UNACTIVATED_CODE);
 
-        ConsumerRecord<String, String> record = authRecords.poll(10, TimeUnit.SECONDS);
+        ConsumerRecord<String, String> record = eventRecords.poll(10, TimeUnit.SECONDS);
 
-        assertThat(mailServiceClient).isInstanceOf(MailProducer.class);
+        assertThat(eventServiceClient).isInstanceOf(EventProducer.class);
         assertThat(record).isNotNull();
-        assertThat(record.key()).isEqualTo("activation");
-        verify(mailServiceClient).sendActivationCode(any());
+        assertThat(record.key()).isEqualTo("default");
+        verify(eventServiceClient).addDefaultEvent(any());
     }
 
-    @Test
-    void testSendResetPasswordCode_ok() throws Exception {
-        UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
-        when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
-
-        accountService.sendResetPasswordMail("test_username");
-
-        ConsumerRecord<String, String> record = authRecords.poll(10, TimeUnit.SECONDS);
-
-        assertThat(mailServiceClient).isInstanceOf(MailProducer.class);
-        assertThat(record).isNotNull();
-        assertThat(record.key()).isEqualTo("reset-password");
-        verify(mailServiceClient).sendResetPasswordCode(any());
-    }
-
-    private void startAuthConsumer() {
+    private void startEventConsumer() {
         ConcurrentKafkaListenerContainerFactory<String, String> stringContainerFactory =
                 KafkaUtils.buildStringContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest");
-        authContainer = stringContainerFactory.createContainer("mail_auth");
-        authRecords = new LinkedBlockingQueue<>();
-        authContainer.setupMessageListener((MessageListener<String, String>) authRecords::add);
-        authContainer.start();
-        ContainerTestUtils.waitForAssignment(authContainer, embeddedKafkaBroker.getPartitionsPerTopic());
+        eventContainer = stringContainerFactory.createContainer("event_add");
+        eventRecords = new LinkedBlockingQueue<>();
+        eventContainer.setupMessageListener((MessageListener<String, String>) eventRecords::add);
+        eventContainer.start();
+        ContainerTestUtils.waitForAssignment(eventContainer, embeddedKafkaBroker.getPartitionsPerTopic());
     }
 
     private void stopAuthConsumer() {
-        authContainer.stop();
+        eventContainer.stop();
     }
 
 }
