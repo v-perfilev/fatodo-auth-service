@@ -2,6 +2,7 @@ package com.persoff68.fatodo.config;
 
 import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
 import com.persoff68.fatodo.config.util.KafkaUtils;
+import com.persoff68.fatodo.model.constant.KafkaTopics;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.dto.CreateEventDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
@@ -31,12 +32,12 @@ public class KafkaConfiguration {
 
     @Bean
     public NewTopic mailAuthNewTopic() {
-        return KafkaUtils.buildTopic("mail_auth", partitions);
+        return KafkaUtils.buildTopic(KafkaTopics.MAIL_AUTH.getValue(), partitions);
     }
 
     @Bean
     public NewTopic eventAddNewTopic() {
-        return KafkaUtils.buildTopic("event_add", partitions);
+        return KafkaUtils.buildTopic(KafkaTopics.EVENT_ADD.getValue(), partitions);
     }
 
     @Bean
