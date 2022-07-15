@@ -10,9 +10,13 @@ import lombok.NoArgsConstructor;
 public class LocalUserDTO {
 
     private String email;
+
     private String username;
+
     private String password;
+
     private String language;
+
     private String timezone;
 
 }

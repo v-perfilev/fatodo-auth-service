@@ -13,8 +13,11 @@ import java.util.UUID;
 public class ResetPasswordMailDTO {
 
     private String language;
+
     private String email;
+
     private String username;
+
     private UUID code;
 
     public ResetPasswordMailDTO(UserPrincipal userPrincipal, UUID code) {

@@ -13,8 +13,11 @@ import java.util.UUID;
 public class ActivationMailDTO {
 
     private String language;
+
     private String email;
+
     private String username;
+
     private UUID code;
 
     public ActivationMailDTO(UserPrincipal user, UUID code) {

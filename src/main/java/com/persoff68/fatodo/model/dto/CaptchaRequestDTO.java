@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 public class CaptchaRequestDTO {
 
     private String secret;
+
     private String response;
 
 }

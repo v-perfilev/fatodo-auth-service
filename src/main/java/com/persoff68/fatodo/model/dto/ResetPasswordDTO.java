@@ -12,6 +12,7 @@ import java.util.UUID;
 public class ResetPasswordDTO {
 
     private UUID userId;
+
     private String password;
 
 }

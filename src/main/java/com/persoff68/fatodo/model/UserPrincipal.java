@@ -15,13 +15,21 @@ import java.util.Set;
 public class UserPrincipal extends AbstractModel implements UserDetails, OAuth2User {
 
     private String email;
+
     private String username;
+
     private String password;
+
     private Provider provider;
+
     private String providerId;
+
     private Set<? extends GrantedAuthority> authorities;
+
     private String language;
+
     private boolean activated;
+
     private transient Map<String, Object> attributes;
 
     @Override

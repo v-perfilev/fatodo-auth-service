@@ -14,11 +14,17 @@ import java.util.Set;
 public class UserPrincipalDTO extends AbstractDTO {
 
     private String email;
+
     private String username;
+
     private String password;
+
     private String provider;
+
     private String providerId;
+
     private Set<String> authorities;
+
     private boolean activated;
 
 }
