@@ -84,7 +84,7 @@ class EventProducerIT {
     void cleanup() {
         activationRepository.deleteAll();
 
-        stopAuthConsumer();
+        stopEventConsumer();
     }
 
     @Test
@@ -112,7 +112,7 @@ class EventProducerIT {
         ContainerTestUtils.waitForAssignment(eventContainer, embeddedKafkaBroker.getPartitionsPerTopic());
     }
 
-    private void stopAuthConsumer() {
+    private void stopEventConsumer() {
         eventContainer.stop();
     }
 
