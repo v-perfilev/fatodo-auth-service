@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.model.constant;
+package com.persoff68.fatodo.config.constant;
 
 import lombok.Getter;
 

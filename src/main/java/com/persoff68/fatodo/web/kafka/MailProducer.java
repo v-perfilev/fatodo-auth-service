@@ -2,7 +2,7 @@ package com.persoff68.fatodo.web.kafka;
 
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
-import com.persoff68.fatodo.model.constant.KafkaTopics;
+import com.persoff68.fatodo.config.constant.KafkaTopics;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import lombok.RequiredArgsConstructor;
