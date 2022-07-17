@@ -42,7 +42,7 @@ public class AccountService {
         UUID userId = activation.getUserId();
         activation.setCompleted(true);
         activationRepository.save(activation);
-        userServiceClient.activate(activation.getUserId());
+        userServiceClient.activate(userId);
         eventService.sendWelcomeEvent(userId);
     }
 
