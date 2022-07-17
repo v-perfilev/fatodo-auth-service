@@ -5,6 +5,7 @@ import com.persoff68.fatodo.builder.TestCaptchaResponseDTO;
 import com.persoff68.fatodo.builder.TestResetPassword;
 import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
 import com.persoff68.fatodo.client.CaptchaClient;
+import com.persoff68.fatodo.client.EventServiceClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.Activation;
@@ -49,6 +50,8 @@ public class ContractBase {
     UserServiceClient userServiceClient;
     @MockBean
     MailServiceClient mailServiceClient;
+    @MockBean
+    EventServiceClient eventServiceClient;
     @MockBean
     CaptchaClient captchaClient;
 
