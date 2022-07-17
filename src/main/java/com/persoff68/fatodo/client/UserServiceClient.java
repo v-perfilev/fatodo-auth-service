@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.client;
 
+import com.persoff68.fatodo.client.configuration.FeignSystemConfiguration;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
-@FeignClient(name = "user-service", primary = false, qualifiers = {"feignUserServiceClient"})
+@FeignClient(name = "user-service", primary = false,
+        configuration = {FeignSystemConfiguration.class},
+        qualifiers = {"feignUserServiceClient"})
 public interface UserServiceClient {
 
     @GetMapping(value = "/api/system/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,17 +1,15 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.UserPrincipal;
-import com.persoff68.fatodo.model.dto.ActivationMailDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
-import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.client.EventService;
+import com.persoff68.fatodo.service.client.MailService;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.ResetPasswordNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
@@ -27,11 +25,11 @@ public class AccountService {
 
     private final LocalUserDetailsService localUserDetailsService;
     private final EventService eventService;
+    private final MailService mailService;
     private final ActivationRepository activationRepository;
     private final ResetPasswordRepository resetPasswordRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserServiceClient userServiceClient;
-    private final MailServiceClient mailServiceClient;
 
     public void activate(UUID code) {
         Activation activation = activationRepository.findByCode(code)
@@ -56,8 +54,7 @@ public class AccountService {
 
     public void sendActivationCodeMail(UserPrincipal userPrincipal) {
         UUID activationCode = getActivationCode(userPrincipal.getId());
-        ActivationMailDTO activationMailDTO = new ActivationMailDTO(userPrincipal, activationCode);
-        mailServiceClient.sendActivationCode(activationMailDTO);
+        mailService.sendActivationCode(userPrincipal, activationCode);
     }
 
     public void resetPassword(ResetPasswordVM resetPasswordVM) {
@@ -78,8 +75,7 @@ public class AccountService {
         UserPrincipal userPrincipal = localUserDetailsService
                 .getUserPrincipalByUsernameOrEmail(user);
         UUID resetPasswordCode = getResetPasswordCode(userPrincipal.getId());
-        ResetPasswordMailDTO resetPasswordMailDTO = new ResetPasswordMailDTO(userPrincipal, resetPasswordCode);
-        mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);
+        mailService.sendResetPasswordCode(userPrincipal, resetPasswordCode);
     }
 
     private UUID getActivationCode(UUID userId) {
