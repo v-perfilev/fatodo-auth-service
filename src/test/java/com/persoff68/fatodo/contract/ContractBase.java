@@ -15,6 +15,7 @@ import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMessageVerifier
-public class ContractBase {
+class ContractBase {
 
     private static final UUID LOCAL_ID = UUID.randomUUID();
     private static final String LOCAL_NAME = "local-name";
@@ -56,7 +57,7 @@ public class ContractBase {
     CaptchaClient captchaClient;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssuredMockMvc.webAppContextSetup(context);
 
         Activation activation = TestActivation.defaultBuilder()
@@ -64,7 +65,6 @@ public class ContractBase {
                 .code(NOT_ACTIVATED_CODE)
                 .completed(false)
                 .build();
-        activationRepository.deleteAll();
         activationRepository.save(activation);
 
         ResetPassword resetPassword = TestResetPassword.defaultBuilder()
@@ -72,7 +72,6 @@ public class ContractBase {
                 .code(PASSWORD_NOT_RESET_CODE)
                 .completed(false)
                 .build();
-        resetPasswordRepository.deleteAll();
         resetPasswordRepository.save(resetPassword);
 
         UserPrincipalDTO localUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
@@ -96,6 +95,12 @@ public class ContractBase {
 
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
+    }
+
+    @AfterEach
+    void cleanup() {
+        activationRepository.deleteAll();
+        resetPasswordRepository.deleteAll();
     }
 
 }
