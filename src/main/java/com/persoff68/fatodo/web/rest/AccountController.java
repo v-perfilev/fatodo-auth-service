@@ -1,11 +1,10 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.service.AccountService;
-import com.persoff68.fatodo.service.client.CaptchaService;
 import com.persoff68.fatodo.model.vm.ForgotPasswordVM;
 import com.persoff68.fatodo.model.vm.ResetPasswordVM;
+import com.persoff68.fatodo.service.AccountService;
+import com.persoff68.fatodo.service.client.CaptchaService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +37,7 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/reset-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/reset-password")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordVM resetPasswordVM) {
         captchaService.captchaCheck(resetPasswordVM.getToken());
         accountService.resetPassword(resetPasswordVM);

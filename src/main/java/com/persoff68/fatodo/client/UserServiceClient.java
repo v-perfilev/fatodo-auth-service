@@ -6,7 +6,6 @@ import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,26 +18,22 @@ import java.util.UUID;
         qualifiers = {"feignUserServiceClient"})
 public interface UserServiceClient {
 
-    @GetMapping(value = "/api/system/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/system/principal/{id}/id")
     UserPrincipalDTO getUserPrincipalById(@PathVariable UUID id);
 
-    @GetMapping(value = "/api/system/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/system/principal/{username}/username")
     UserPrincipalDTO getUserPrincipalByUsername(@PathVariable String username);
 
-    @GetMapping(value = "/api/system/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/system/principal/{email}/email")
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable String email);
 
-    @GetMapping(value = "/api/system/username-or-email/{usernameOrEmail}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/system/principal/{usernameOrEmail}/username-or-email")
     UserPrincipalDTO getUserPrincipalByUsernameOrEmail(@PathVariable String usernameOrEmail);
 
-    @PostMapping(value = "/api/system/oauth2",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/system/oauth2")
     UserPrincipalDTO createOAuth2User(@RequestBody OAuth2UserDTO oAuth2UserDTO);
 
-    @PostMapping(value = "/api/system/local",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/system/local")
     UserPrincipalDTO createLocalUser(@RequestBody LocalUserDTO userLocalDTO);
 
     @GetMapping(value = "/api/system/activate/{userId}")

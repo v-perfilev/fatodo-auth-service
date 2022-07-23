@@ -1,12 +1,11 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.mapper.UserMapper;
-import com.persoff68.fatodo.service.client.CaptchaService;
-import com.persoff68.fatodo.service.RegisterService;
+import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.vm.RegisterVM;
+import com.persoff68.fatodo.service.RegisterService;
+import com.persoff68.fatodo.service.client.CaptchaService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,7 @@ public class RegisterController {
     private final CaptchaService captchaService;
     private final UserMapper userMapper;
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register")
     public ResponseEntity<Void> registerLocal(@Valid @RequestBody RegisterVM registerVM) {
         captchaService.captchaCheck(registerVM.getToken());
         LocalUserDTO localUserDTO = userMapper.registerVMToLocalUserDTO(registerVM);
