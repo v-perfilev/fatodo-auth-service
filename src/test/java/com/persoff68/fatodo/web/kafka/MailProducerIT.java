@@ -108,7 +108,7 @@ class MailProducerIT {
 
         accountService.sendActivationCodeMail("test_username");
 
-        ConsumerRecord<String, String> record = authRecords.poll(10, TimeUnit.SECONDS);
+        ConsumerRecord<String, String> record = authRecords.poll(5, TimeUnit.SECONDS);
 
         assertThat(mailServiceClient).isInstanceOf(MailProducer.class);
         assertThat(record).isNotNull();
@@ -123,7 +123,7 @@ class MailProducerIT {
 
         accountService.sendResetPasswordMail("test_username");
 
-        ConsumerRecord<String, String> record = authRecords.poll(10, TimeUnit.SECONDS);
+        ConsumerRecord<String, String> record = authRecords.poll(5, TimeUnit.SECONDS);
 
         assertThat(mailServiceClient).isInstanceOf(MailProducer.class);
         assertThat(record).isNotNull();

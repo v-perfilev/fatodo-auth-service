@@ -94,7 +94,7 @@ class EventProducerIT {
 
         accountService.activate(UNACTIVATED_CODE);
 
-        ConsumerRecord<String, String> record = eventRecords.poll(10, TimeUnit.SECONDS);
+        ConsumerRecord<String, String> record = eventRecords.poll(5, TimeUnit.SECONDS);
 
         assertThat(eventServiceClient).isInstanceOf(EventProducer.class);
         assertThat(record).isNotNull();
