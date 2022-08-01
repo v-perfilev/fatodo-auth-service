@@ -18,28 +18,28 @@ import java.util.UUID;
         qualifiers = {"feignUserServiceClient"})
 public interface UserServiceClient {
 
-    @GetMapping(value = "/api/system/principal/{id}/id")
+    @GetMapping("/api/system/principal/{id}/id")
     UserPrincipalDTO getUserPrincipalById(@PathVariable UUID id);
 
-    @GetMapping(value = "/api/system/principal/{username}/username")
+    @GetMapping("/api/system/principal/{username}/username")
     UserPrincipalDTO getUserPrincipalByUsername(@PathVariable String username);
 
-    @GetMapping(value = "/api/system/principal/{email}/email")
+    @GetMapping("/api/system/principal/{email}/email")
     UserPrincipalDTO getUserPrincipalByEmail(@PathVariable String email);
 
-    @GetMapping(value = "/api/system/principal/{usernameOrEmail}/username-or-email")
+    @GetMapping("/api/system/principal/{usernameOrEmail}/username-or-email")
     UserPrincipalDTO getUserPrincipalByUsernameOrEmail(@PathVariable String usernameOrEmail);
 
-    @PostMapping(value = "/api/system/oauth2")
+    @PostMapping("/api/system/oauth2")
     UserPrincipalDTO createOAuth2User(@RequestBody OAuth2UserDTO oAuth2UserDTO);
 
-    @PostMapping(value = "/api/system/local")
+    @PostMapping("/api/system/local")
     UserPrincipalDTO createLocalUser(@RequestBody LocalUserDTO userLocalDTO);
 
-    @GetMapping(value = "/api/system/activate/{userId}")
+    @GetMapping("/api/system/activate/{userId}")
     void activate(@PathVariable UUID userId);
 
-    @PostMapping(value = "/api/system/reset-password")
+    @PostMapping("/api/system/reset-password")
     void resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO);
 
 }

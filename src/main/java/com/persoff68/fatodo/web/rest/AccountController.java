@@ -25,26 +25,26 @@ public class AccountController {
     private final AccountService accountService;
     private final CaptchaService captchaService;
 
-    @GetMapping(value = "/activate/{code}")
+    @GetMapping("/activate/{code}")
     public ResponseEntity<Void> activate(@PathVariable("code") UUID code) {
         accountService.activate(code);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/request-activation-code/{user}")
+    @GetMapping("/request-activation-code/{user}")
     public ResponseEntity<Void> requestActivationCode(@PathVariable String user) {
         accountService.sendActivationCodeMail(user);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/reset-password")
+    @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordVM resetPasswordVM) {
         captchaService.captchaCheck(resetPasswordVM.getToken());
         accountService.resetPassword(resetPasswordVM);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/request-reset-password-code")
+    @PostMapping("/request-reset-password-code")
     public ResponseEntity<Void> requestResetPasswordCode(@Valid @RequestBody ForgotPasswordVM forgotPasswordVM) {
         captchaService.captchaCheck(forgotPasswordVM.getToken());
         accountService.sendResetPasswordMail(forgotPasswordVM.getUser());

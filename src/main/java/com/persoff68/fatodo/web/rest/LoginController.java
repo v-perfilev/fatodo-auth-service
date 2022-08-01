@@ -31,7 +31,7 @@ public class LoginController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping(value = "/authenticate")
+    @PostMapping("/authenticate")
     public ResponseEntity<Void> authenticate(@Valid @RequestBody LoginVM loginVM) {
         captchaService.captchaCheck(loginVM.getToken());
         var authenticationToken
