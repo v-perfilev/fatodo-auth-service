@@ -13,6 +13,7 @@ import com.persoff68.fatodo.client.CaptchaClient;
 import com.persoff68.fatodo.client.EventServiceClient;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.client.UserServiceClient;
+import com.persoff68.fatodo.client.WsServiceClient;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.dto.CaptchaResponseDTO;
@@ -76,6 +77,8 @@ class AccountControllerIT {
     @MockBean
     EventServiceClient eventServiceClient;
     @MockBean
+    WsServiceClient wsServiceClient;
+    @MockBean
     CaptchaClient captchaClient;
 
     @BeforeEach
@@ -107,6 +110,7 @@ class AccountControllerIT {
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
         doNothing().when(eventServiceClient).addDefaultEvent(any());
+        doNothing().when(wsServiceClient).sendEvent(any());
     }
 
     @AfterEach

@@ -10,6 +10,7 @@ import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.client.EventService;
 import com.persoff68.fatodo.service.client.MailService;
+import com.persoff68.fatodo.service.client.WsService;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.ResetPasswordNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
@@ -25,6 +26,7 @@ public class AccountService {
 
     private final LocalUserDetailsService localUserDetailsService;
     private final EventService eventService;
+    private final WsService wsService;
     private final MailService mailService;
     private final ActivationRepository activationRepository;
     private final ResetPasswordRepository resetPasswordRepository;
@@ -42,6 +44,7 @@ public class AccountService {
         activationRepository.save(activation);
         userServiceClient.activate(userId);
         eventService.sendWelcomeEvent(userId);
+        wsService.sendWelcomeEvent(userId);
     }
 
     public void sendActivationCodeMail(String emailOrUsername) {

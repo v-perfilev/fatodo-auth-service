@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.web.kafka;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.builder.TestActivation;
 import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
@@ -9,6 +10,7 @@ import com.persoff68.fatodo.client.WsServiceClient;
 import com.persoff68.fatodo.config.util.KafkaUtils;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.dto.WsEventWithUsersDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.service.AccountService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -45,7 +47,7 @@ import static org.mockito.Mockito.when;
 })
 @DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
-class EventProducerIT {
+class WsProducerIT {
 
     private static final UUID UNACTIVATED_ID = UUID.randomUUID();
     private static final UUID UNACTIVATED_CODE = UUID.randomUUID();
@@ -63,13 +65,13 @@ class EventProducerIT {
     @MockBean
     UserServiceClient userServiceClient;
     @MockBean
-    WsServiceClient wsServiceClient;
-
-    @SpyBean
     EventServiceClient eventServiceClient;
 
-    private ConcurrentMessageListenerContainer<String, String> eventContainer;
-    private BlockingQueue<ConsumerRecord<String, String>> eventRecords;
+    @SpyBean
+    WsServiceClient wsServiceClient;
+
+    private ConcurrentMessageListenerContainer<String, WsEventWithUsersDTO> wsContainer;
+    private BlockingQueue<ConsumerRecord<String, WsEventWithUsersDTO>> wsRecords;
 
     @BeforeEach
     void setup() {
@@ -91,32 +93,33 @@ class EventProducerIT {
     }
 
     @Test
-    void testSendActivationCode_ok() throws Exception {
+    void testSendEvent_ok() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
 
         accountService.activate(UNACTIVATED_CODE);
 
-        ConsumerRecord<String, String> record = eventRecords.poll(5, TimeUnit.SECONDS);
+        ConsumerRecord<String, WsEventWithUsersDTO> record = wsRecords.poll(5, TimeUnit.SECONDS);
 
-        assertThat(eventServiceClient).isInstanceOf(EventProducer.class);
+        assertThat(wsServiceClient).isInstanceOf(WsProducer.class);
         assertThat(record).isNotNull();
-        assertThat(record.key()).isEqualTo("default");
-        verify(eventServiceClient).addDefaultEvent(any());
+        verify(wsServiceClient).sendEvent(any());
     }
 
     private void startEventConsumer() {
-        ConcurrentKafkaListenerContainerFactory<String, String> stringContainerFactory =
-                KafkaUtils.buildStringContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest");
-        eventContainer = stringContainerFactory.createContainer("event_add");
-        eventRecords = new LinkedBlockingQueue<>();
-        eventContainer.setupMessageListener((MessageListener<String, String>) eventRecords::add);
-        eventContainer.start();
-        ContainerTestUtils.waitForAssignment(eventContainer, embeddedKafkaBroker.getPartitionsPerTopic());
+        JavaType javaType = objectMapper.getTypeFactory().constructType(WsEventWithUsersDTO.class);
+        ConcurrentKafkaListenerContainerFactory<String, WsEventWithUsersDTO> stringContainerFactory =
+                KafkaUtils.buildJsonContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest",
+                        javaType);
+        wsContainer = stringContainerFactory.createContainer("ws");
+        wsRecords = new LinkedBlockingQueue<>();
+        wsContainer.setupMessageListener((MessageListener<String, WsEventWithUsersDTO>) wsRecords::add);
+        wsContainer.start();
+        ContainerTestUtils.waitForAssignment(wsContainer, embeddedKafkaBroker.getPartitionsPerTopic());
     }
 
     private void stopEventConsumer() {
-        eventContainer.stop();
+        wsContainer.stop();
     }
 
 }

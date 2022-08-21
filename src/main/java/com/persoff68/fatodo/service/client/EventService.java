@@ -20,8 +20,8 @@ public class EventService {
     public void sendWelcomeEvent(UUID userId) {
         CreateEventDTO.EventType eventType = CreateEventDTO.EventType.WELCOME;
         List<UUID> recipientIdList = Collections.singletonList(userId);
-        CreateEventDTO dto = new CreateEventDTO(eventType, recipientIdList);
-        eventServiceClient.addDefaultEvent(dto);
+        CreateEventDTO createEventDTO = new CreateEventDTO(eventType, recipientIdList);
+        eventServiceClient.addDefaultEvent(createEventDTO);
     }
 
 }
