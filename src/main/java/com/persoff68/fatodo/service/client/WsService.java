@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.service.client;
 
 import com.persoff68.fatodo.client.WsServiceClient;
-import com.persoff68.fatodo.model.constants.WsEventType;
+import com.persoff68.fatodo.model.constant.WsEventType;
 import com.persoff68.fatodo.model.dto.WsEventWithUsersDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.model.dto;
 
-import com.persoff68.fatodo.model.constants.WsEventType;
+import com.persoff68.fatodo.model.constant.WsEventType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
