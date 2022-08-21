@@ -17,6 +17,6 @@ public class WsEventWithUsersDTO {
 
     private WsEventType type;
 
-    private String payload;
+    private Object payload;
 
 }
