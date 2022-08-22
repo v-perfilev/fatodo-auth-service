@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class WsServiceCT {
 
     @Autowired
-    WsServiceClient eventServiceClient;
+    WsServiceClient wsServiceClient;
 
     @Test
     void testSendEvent() {
         WsEventWithUsersDTO dto = TestWsEventWithUsersDTO.defaultBuilder().build();
-        assertDoesNotThrow(() -> eventServiceClient.sendEvent(dto));
+        assertDoesNotThrow(() -> wsServiceClient.sendEvent(dto));
     }
 
 }
