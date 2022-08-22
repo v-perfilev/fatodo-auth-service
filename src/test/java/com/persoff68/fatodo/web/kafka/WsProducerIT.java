@@ -10,7 +10,7 @@ import com.persoff68.fatodo.client.WsServiceClient;
 import com.persoff68.fatodo.config.util.KafkaUtils;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.model.dto.WsEventWithUsersDTO;
+import com.persoff68.fatodo.model.dto.WsEventDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.service.AccountService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -70,8 +70,8 @@ class WsProducerIT {
     @SpyBean
     WsServiceClient wsServiceClient;
 
-    private ConcurrentMessageListenerContainer<String, WsEventWithUsersDTO> wsContainer;
-    private BlockingQueue<ConsumerRecord<String, WsEventWithUsersDTO>> wsRecords;
+    private ConcurrentMessageListenerContainer<String, WsEventDTO> wsContainer;
+    private BlockingQueue<ConsumerRecord<String, WsEventDTO>> wsRecords;
 
     @BeforeEach
     void setup() {
@@ -82,14 +82,14 @@ class WsProducerIT {
                 .build();
         activationRepository.save(uncompletedActivation);
 
-        startEventConsumer();
+        startWsConsumer();
     }
 
     @AfterEach
     void cleanup() {
         activationRepository.deleteAll();
 
-        stopEventConsumer();
+        stopWsConsumer();
     }
 
     @Test
@@ -99,26 +99,26 @@ class WsProducerIT {
 
         accountService.activate(UNACTIVATED_CODE);
 
-        ConsumerRecord<String, WsEventWithUsersDTO> record = wsRecords.poll(5, TimeUnit.SECONDS);
+        ConsumerRecord<String, WsEventDTO> record = wsRecords.poll(5, TimeUnit.SECONDS);
 
         assertThat(wsServiceClient).isInstanceOf(WsProducer.class);
         assertThat(record).isNotNull();
         verify(wsServiceClient).sendEvent(any());
     }
 
-    private void startEventConsumer() {
-        JavaType javaType = objectMapper.getTypeFactory().constructType(WsEventWithUsersDTO.class);
-        ConcurrentKafkaListenerContainerFactory<String, WsEventWithUsersDTO> stringContainerFactory =
+    private void startWsConsumer() {
+        JavaType javaType = objectMapper.getTypeFactory().constructType(WsEventDTO.class);
+        ConcurrentKafkaListenerContainerFactory<String, WsEventDTO> stringContainerFactory =
                 KafkaUtils.buildJsonContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest",
                         javaType);
         wsContainer = stringContainerFactory.createContainer("ws");
         wsRecords = new LinkedBlockingQueue<>();
-        wsContainer.setupMessageListener((MessageListener<String, WsEventWithUsersDTO>) wsRecords::add);
+        wsContainer.setupMessageListener((MessageListener<String, WsEventDTO>) wsRecords::add);
         wsContainer.start();
         ContainerTestUtils.waitForAssignment(wsContainer, embeddedKafkaBroker.getPartitionsPerTopic());
     }
 
-    private void stopEventConsumer() {
+    private void stopWsConsumer() {
         wsContainer.stop();
     }
 
