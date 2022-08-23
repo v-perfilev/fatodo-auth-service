@@ -19,7 +19,7 @@ public class EventService {
 
     public void sendWelcomeEvent(UUID userId) {
         List<UUID> userIdList = List.of(userId);
-        EventDTO eventDTO = new EventDTO(userIdList, EventType.WELCOME, null);
+        EventDTO eventDTO = new EventDTO(userIdList, EventType.WELCOME);
         eventServiceClient.addEvent(eventDTO);
     }
 

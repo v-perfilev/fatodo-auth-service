@@ -10,8 +10,8 @@ import java.util.UUID;
 public class TestWsEventDTO extends WsEventDTO {
 
     @Builder
-    TestWsEventDTO(List<UUID> userIdList, WsEventType type, Object payload) {
-        super(userIdList, type, payload);
+    TestWsEventDTO(List<UUID> userIdList, WsEventType type) {
+        super(userIdList, type);
     }
 
     public static TestWsEventDTOBuilder defaultBuilder() {

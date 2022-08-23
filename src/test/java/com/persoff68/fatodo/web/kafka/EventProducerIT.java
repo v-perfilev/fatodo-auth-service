@@ -93,7 +93,7 @@ class EventProducerIT {
     }
 
     @Test
-    void testSendEvent_ok() throws Exception {
+    void testAddEvent_ok() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
 

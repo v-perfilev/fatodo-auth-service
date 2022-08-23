@@ -18,7 +18,7 @@ public class WsService {
     private final WsServiceClient wsServiceClient;
 
     public void sendWelcomeEvent(UUID userId) {
-        WsEventDTO wsEventDTO = new WsEventDTO(List.of(userId), WsEventType.WELCOME, null);
+        WsEventDTO wsEventDTO = new WsEventDTO(List.of(userId), WsEventType.WELCOME);
         wsServiceClient.sendEvent(wsEventDTO);
     }
 

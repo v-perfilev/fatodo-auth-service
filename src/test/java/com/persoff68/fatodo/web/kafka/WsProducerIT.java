@@ -109,8 +109,8 @@ class WsProducerIT {
     private void startWsConsumer() {
         JavaType javaType = objectMapper.getTypeFactory().constructType(WsEventDTO.class);
         ConcurrentKafkaListenerContainerFactory<String, WsEventDTO> stringContainerFactory =
-                KafkaUtils.buildJsonContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest",
-                        javaType);
+                KafkaUtils.buildJsonContainerFactory(embeddedKafkaBroker.getBrokersAsString(),
+                        "test", "earliest", javaType);
         wsContainer = stringContainerFactory.createContainer("ws");
         wsRecords = new LinkedBlockingQueue<>();
         wsContainer.setupMessageListener((MessageListener<String, WsEventDTO>) wsRecords::add);
