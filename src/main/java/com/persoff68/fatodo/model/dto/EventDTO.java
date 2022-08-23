@@ -16,6 +16,7 @@ public class EventDTO {
 
     private EventType type;
 
+    private Object payload;
 
     private UUID userId;
 
