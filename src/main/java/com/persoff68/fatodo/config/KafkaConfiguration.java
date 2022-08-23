@@ -4,7 +4,7 @@ import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
 import com.persoff68.fatodo.config.constant.KafkaTopics;
 import com.persoff68.fatodo.config.util.KafkaUtils;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
-import com.persoff68.fatodo.model.dto.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import com.persoff68.fatodo.model.dto.WsEventDTO;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -37,8 +37,8 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public NewTopic eventAddNewTopic() {
-        return KafkaUtils.buildTopic(KafkaTopics.EVENT_ADD.getValue(), partitions);
+    public NewTopic eventNewTopic() {
+        return KafkaUtils.buildTopic(KafkaTopics.EVENT.getValue(), partitions);
     }
 
     @Bean
@@ -57,7 +57,7 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, CreateEventDTO> eventKafkaTemplate() {
+    public KafkaTemplate<String, EventDTO> eventKafkaTemplate() {
         return KafkaUtils.buildJsonKafkaTemplate(bootstrapAddress);
     }
 

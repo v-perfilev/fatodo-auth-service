@@ -109,7 +109,7 @@ class AccountControllerIT {
 
         CaptchaResponseDTO captchaResponseDTO = TestCaptchaResponseDTO.defaultBuilder().build();
         when(captchaClient.sendVerificationRequest(any())).thenReturn(captchaResponseDTO);
-        doNothing().when(eventServiceClient).addDefaultEvent(any());
+        doNothing().when(eventServiceClient).addEvent(any());
         doNothing().when(wsServiceClient).sendEvent(any());
     }
 

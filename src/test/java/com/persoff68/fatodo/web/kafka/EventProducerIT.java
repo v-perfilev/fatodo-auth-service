@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.web.kafka;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.builder.TestActivation;
 import com.persoff68.fatodo.builder.TestUserPrincipleDTO;
@@ -8,6 +9,7 @@ import com.persoff68.fatodo.client.UserServiceClient;
 import com.persoff68.fatodo.client.WsServiceClient;
 import com.persoff68.fatodo.config.util.KafkaUtils;
 import com.persoff68.fatodo.model.Activation;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.service.AccountService;
@@ -68,8 +70,8 @@ class EventProducerIT {
     @SpyBean
     EventServiceClient eventServiceClient;
 
-    private ConcurrentMessageListenerContainer<String, String> eventContainer;
-    private BlockingQueue<ConsumerRecord<String, String>> eventRecords;
+    private ConcurrentMessageListenerContainer<String, EventDTO> eventContainer;
+    private BlockingQueue<ConsumerRecord<String, EventDTO>> eventRecords;
 
     @BeforeEach
     void setup() {
@@ -91,26 +93,27 @@ class EventProducerIT {
     }
 
     @Test
-    void testSendActivationCode_ok() throws Exception {
+    void testSendEvent_ok() throws Exception {
         UserPrincipalDTO dto = TestUserPrincipleDTO.defaultBuilder().id(UNACTIVATED_ID).activated(false).build();
         when(userServiceClient.getUserPrincipalByUsernameOrEmail(any())).thenReturn(dto);
 
         accountService.activate(UNACTIVATED_CODE);
 
-        ConsumerRecord<String, String> record = eventRecords.poll(5, TimeUnit.SECONDS);
+        ConsumerRecord<String, EventDTO> record = eventRecords.poll(5, TimeUnit.SECONDS);
 
         assertThat(eventServiceClient).isInstanceOf(EventProducer.class);
         assertThat(record).isNotNull();
-        assertThat(record.key()).isEqualTo("default");
-        verify(eventServiceClient).addDefaultEvent(any());
+        verify(eventServiceClient).addEvent(any());
     }
 
     private void startEventConsumer() {
-        ConcurrentKafkaListenerContainerFactory<String, String> stringContainerFactory =
-                KafkaUtils.buildStringContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest");
-        eventContainer = stringContainerFactory.createContainer("event_add");
+        JavaType javaType = objectMapper.getTypeFactory().constructType(EventDTO.class);
+        ConcurrentKafkaListenerContainerFactory<String, EventDTO> stringContainerFactory =
+                KafkaUtils.buildJsonContainerFactory(embeddedKafkaBroker.getBrokersAsString(),
+                        "test", "earliest", javaType);
+        eventContainer = stringContainerFactory.createContainer("event");
         eventRecords = new LinkedBlockingQueue<>();
-        eventContainer.setupMessageListener((MessageListener<String, String>) eventRecords::add);
+        eventContainer.setupMessageListener((MessageListener<String, EventDTO>) eventRecords::add);
         eventContainer.start();
         ContainerTestUtils.waitForAssignment(eventContainer, embeddedKafkaBroker.getPartitionsPerTopic());
     }

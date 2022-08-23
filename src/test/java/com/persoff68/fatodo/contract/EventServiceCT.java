@@ -1,16 +1,13 @@
 package com.persoff68.fatodo.contract;
 
+import com.persoff68.fatodo.builder.TestEventDTO;
 import com.persoff68.fatodo.client.EventServiceClient;
-import com.persoff68.fatodo.model.dto.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -23,12 +20,9 @@ class EventServiceCT {
     EventServiceClient eventServiceClient;
 
     @Test
-    void testAddDefaultEvent() {
-        CreateEventDTO.EventType eventType = CreateEventDTO.EventType.WELCOME;
-        UUID userId = UUID.randomUUID();
-        List<UUID> recipientIdList = Collections.singletonList(userId);
-        CreateEventDTO dto = new CreateEventDTO(eventType, recipientIdList);
-        assertDoesNotThrow(() -> eventServiceClient.addDefaultEvent(dto));
+    void testAddEvent() {
+        EventDTO dto = TestEventDTO.defaultBuilder().build();
+        assertDoesNotThrow(() -> eventServiceClient.addEvent(dto));
     }
 
 }

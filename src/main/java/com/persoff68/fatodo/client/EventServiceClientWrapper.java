@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.client;
 
 import com.persoff68.fatodo.exception.ClientException;
-import com.persoff68.fatodo.model.dto.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -14,9 +14,9 @@ public class EventServiceClientWrapper implements EventServiceClient {
     private final EventServiceClient eventServiceClient;
 
     @Override
-    public void addDefaultEvent(CreateEventDTO createEventDTO) {
+    public void addEvent(EventDTO eventDTO) {
         try {
-            eventServiceClient.addDefaultEvent(createEventDTO);
+            eventServiceClient.addEvent(eventDTO);
         } catch (Exception e) {
             throw new ClientException();
         }
