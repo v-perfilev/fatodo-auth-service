@@ -132,9 +132,9 @@ class MailProducerIT {
     }
 
     private void startAuthConsumer() {
-        ConcurrentKafkaListenerContainerFactory<String, String> stringContainerFactory =
+        ConcurrentKafkaListenerContainerFactory<String, String> сontainerFactory =
                 KafkaUtils.buildStringContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest");
-        authContainer = stringContainerFactory.createContainer("mail_auth");
+        authContainer = сontainerFactory.createContainer("mail_auth");
         authRecords = new LinkedBlockingQueue<>();
         authContainer.setupMessageListener((MessageListener<String, String>) authRecords::add);
         authContainer.start();

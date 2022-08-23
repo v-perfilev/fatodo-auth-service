@@ -108,10 +108,10 @@ class EventProducerIT {
 
     private void startEventConsumer() {
         JavaType javaType = objectMapper.getTypeFactory().constructType(EventDTO.class);
-        ConcurrentKafkaListenerContainerFactory<String, EventDTO> stringContainerFactory =
+        ConcurrentKafkaListenerContainerFactory<String, EventDTO> сontainerFactory =
                 KafkaUtils.buildJsonContainerFactory(embeddedKafkaBroker.getBrokersAsString(),
                         "test", "earliest", javaType);
-        eventContainer = stringContainerFactory.createContainer("event");
+        eventContainer = сontainerFactory.createContainer("event");
         eventRecords = new LinkedBlockingQueue<>();
         eventContainer.setupMessageListener((MessageListener<String, EventDTO>) eventRecords::add);
         eventContainer.start();
