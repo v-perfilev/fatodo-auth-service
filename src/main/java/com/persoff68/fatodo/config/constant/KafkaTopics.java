@@ -4,8 +4,7 @@ import lombok.Getter;
 
 public enum KafkaTopics {
     EVENT("event"),
-    MAIL_AUTH("mail_auth"),
-    WS("ws");
+    MAIL_AUTH("mail_auth");
 
     @Getter
     private final String value;
