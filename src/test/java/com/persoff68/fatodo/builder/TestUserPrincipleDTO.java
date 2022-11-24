@@ -15,12 +15,13 @@ public class TestUserPrincipleDTO extends UserPrincipalDTO {
     TestUserPrincipleDTO(UUID id,
                          String email,
                          String username,
+                         Set<String> authorities,
                          String password,
                          String provider,
                          String providerId,
-                         Set<String> authorities,
-                         boolean activated) {
-        super(email, username, password, provider, providerId, authorities, activated);
+                         boolean activated,
+                         Info info) {
+        super(email, username, authorities, password, provider, providerId, activated, info);
         this.setId(id);
     }
 
