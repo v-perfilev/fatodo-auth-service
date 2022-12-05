@@ -29,6 +29,8 @@ public class UserPrincipalDTO extends AbstractDTO {
 
     private Info info;
 
+    private Settings settings;
+
     @Data
     public static class Info {
 
@@ -36,9 +38,14 @@ public class UserPrincipalDTO extends AbstractDTO {
 
         private String lastname;
 
+        private String gender;
+
         private String imageFilename;
 
-        private String gender;
+    }
+
+    @Data
+    public static class Settings {
 
         private String language;
 

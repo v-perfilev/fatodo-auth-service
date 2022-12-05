@@ -22,7 +22,7 @@ public interface UserMapper {
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsToGrantedAuthorities")
     @Mapping(source = "provider", target = "provider", qualifiedByName = "stringToProvider")
-    @Mapping(source = "info.language", target = "language")
+    @Mapping(source = "settings.language", target = "language")
     UserPrincipal userPrincipalDTOToUserPrincipal(UserPrincipalDTO userPrincipalDTO);
 
     LocalUserDTO registerVMToLocalUserDTO(RegisterVM registerVM);

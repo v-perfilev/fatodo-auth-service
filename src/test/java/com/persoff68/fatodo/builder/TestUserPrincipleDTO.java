@@ -20,8 +20,9 @@ public class TestUserPrincipleDTO extends UserPrincipalDTO {
                          String provider,
                          String providerId,
                          boolean activated,
-                         Info info) {
-        super(email, username, authorities, password, provider, providerId, activated, info);
+                         Info info,
+                         Settings settings) {
+        super(email, username, authorities, password, provider, providerId, activated, info, settings);
         this.setId(id);
     }
 
