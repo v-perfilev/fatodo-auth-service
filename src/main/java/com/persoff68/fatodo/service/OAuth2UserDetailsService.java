@@ -10,6 +10,7 @@ import com.persoff68.fatodo.security.exception.OAuth2UserNotFoundException;
 import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfoFactory;
+import com.persoff68.fatodo.service.client.EventService;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -29,6 +30,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final UserMapper userMapper;
     private final UserServiceClient userServiceClient;
+    private final EventService eventService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
@@ -68,6 +70,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
         oAuth2UserDTO.setLanguage(language);
         oAuth2UserDTO.setTimezone(timezone);
         UserPrincipalDTO userPrincipalDTO = userServiceClient.createOAuth2User(oAuth2UserDTO);
+        eventService.sendWelcomeEvent(userPrincipalDTO.getId());
         return userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
     }
 
