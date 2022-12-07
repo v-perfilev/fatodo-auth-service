@@ -61,7 +61,7 @@ public class CookieAuthorizationRequestRepository
 
         String timezone = request.getParameter(TIMEZONE_REQUEST_PARAM);
         if (StringUtils.isNoneBlank(timezone)) {
-            CookieUtils.addCookie(response, OAUTH2_TIMEZONE_COOKIE_NAME, language, COOKIE_EXPIRE_SECONDS);
+            CookieUtils.addCookie(response, OAUTH2_TIMEZONE_COOKIE_NAME, timezone, COOKIE_EXPIRE_SECONDS);
         }
 
         String redirect = request.getParameter(REDIRECT_REQUEST_PARAM);
