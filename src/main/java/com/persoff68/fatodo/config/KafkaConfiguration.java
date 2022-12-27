@@ -4,6 +4,7 @@ import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
 import com.persoff68.fatodo.config.constant.KafkaTopics;
 import com.persoff68.fatodo.config.util.KafkaUtils;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.dto.FeedbackMailDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import com.persoff68.fatodo.model.dto.event.EventDTO;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -36,6 +37,11 @@ public class KafkaConfiguration {
     }
 
     @Bean
+    public NewTopic mailFeedbackNewTopic() {
+        return KafkaUtils.buildTopic(KafkaTopics.MAIL_FEEDBACK.getValue(), partitions);
+    }
+
+    @Bean
     public NewTopic eventNewTopic() {
         return KafkaUtils.buildTopic(KafkaTopics.EVENT.getValue(), partitions);
     }
@@ -47,6 +53,11 @@ public class KafkaConfiguration {
 
     @Bean
     public KafkaTemplate<String, ResetPasswordMailDTO> resetPasswordMailKafkaTemplate() {
+        return KafkaUtils.buildJsonKafkaTemplate(bootstrapAddress);
+    }
+
+    @Bean
+    public KafkaTemplate<String, FeedbackMailDTO> feedbackMailKafkaTemplate() {
         return KafkaUtils.buildJsonKafkaTemplate(bootstrapAddress);
     }
 

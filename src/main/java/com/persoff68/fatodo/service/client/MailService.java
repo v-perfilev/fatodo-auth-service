@@ -3,6 +3,7 @@ package com.persoff68.fatodo.service.client;
 import com.persoff68.fatodo.client.MailServiceClient;
 import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.ActivationMailDTO;
+import com.persoff68.fatodo.model.dto.FeedbackMailDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordMailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -25,6 +26,11 @@ public class MailService {
     public void sendResetPasswordCode(UserPrincipal userPrincipal, UUID resetPasswordCode) {
         ResetPasswordMailDTO resetPasswordMailDTO = new ResetPasswordMailDTO(userPrincipal, resetPasswordCode);
         mailServiceClient.sendResetPasswordCode(resetPasswordMailDTO);
+    }
+
+    public void sendFeedback(String name, String email, String message) {
+        FeedbackMailDTO feedbackMailDTO = new FeedbackMailDTO(name, email, message);
+        mailServiceClient.sendFeedback(feedbackMailDTO);
     }
 
 }

@@ -13,6 +13,7 @@ import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
 import com.persoff68.fatodo.service.AccountService;
+import com.persoff68.fatodo.service.FeedbackService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +59,8 @@ class MailProducerIT {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    FeedbackService feedbackService;
 
     @Autowired
     ActivationRepository activationRepository;
@@ -75,6 +78,9 @@ class MailProducerIT {
     private ConcurrentMessageListenerContainer<String, String> authContainer;
     private BlockingQueue<ConsumerRecord<String, String>> authRecords;
 
+    private ConcurrentMessageListenerContainer<String, String> feedbackContainer;
+    private BlockingQueue<ConsumerRecord<String, String>> feedbackRecords;
+
     @BeforeEach
     void setup() {
         Activation uncompletedActivation = TestActivation.defaultBuilder()
@@ -91,6 +97,7 @@ class MailProducerIT {
         resetPasswordRepository.save(resetPasswordNotCompleted);
 
         startAuthConsumer();
+        startFeedbackConsumer();
     }
 
     @AfterEach
@@ -99,6 +106,7 @@ class MailProducerIT {
         resetPasswordRepository.deleteAll();
 
         stopAuthConsumer();
+        stopFeedbackConsumer();
     }
 
     @Test
@@ -131,10 +139,22 @@ class MailProducerIT {
         verify(mailServiceClient).sendResetPasswordCode(any());
     }
 
+    @Test
+    void testSendFeedback_ok() throws Exception {
+        feedbackService.sendFeedback("test", "test@test.test", "test");
+
+        ConsumerRecord<String, String> record = feedbackRecords.poll(5, TimeUnit.SECONDS);
+
+        assertThat(mailServiceClient).isInstanceOf(MailProducer.class);
+        assertThat(record).isNotNull();
+        verify(mailServiceClient).sendFeedback(any());
+    }
+
+
     private void startAuthConsumer() {
-        ConcurrentKafkaListenerContainerFactory<String, String> сontainerFactory =
+        ConcurrentKafkaListenerContainerFactory<String, String> containerFactory =
                 KafkaUtils.buildStringContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest");
-        authContainer = сontainerFactory.createContainer("mail_auth");
+        authContainer = containerFactory.createContainer("mail_auth");
         authRecords = new LinkedBlockingQueue<>();
         authContainer.setupMessageListener((MessageListener<String, String>) authRecords::add);
         authContainer.start();
@@ -143,6 +163,21 @@ class MailProducerIT {
 
     private void stopAuthConsumer() {
         authContainer.stop();
+    }
+
+
+    private void startFeedbackConsumer() {
+        ConcurrentKafkaListenerContainerFactory<String, String> containerFactory =
+                KafkaUtils.buildStringContainerFactory(embeddedKafkaBroker.getBrokersAsString(), "test", "earliest");
+        feedbackContainer = containerFactory.createContainer("mail_feedback");
+        feedbackRecords = new LinkedBlockingQueue<>();
+        feedbackContainer.setupMessageListener((MessageListener<String, String>) feedbackRecords::add);
+        feedbackContainer.start();
+        ContainerTestUtils.waitForAssignment(feedbackContainer, embeddedKafkaBroker.getPartitionsPerTopic());
+    }
+
+    private void stopFeedbackConsumer() {
+        feedbackContainer.stop();
     }
 
 }
