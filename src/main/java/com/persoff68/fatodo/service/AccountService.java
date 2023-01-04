@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.client.UserServiceClient;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Activation;
 import com.persoff68.fatodo.model.ResetPassword;
 import com.persoff68.fatodo.model.UserPrincipal;
@@ -8,6 +9,7 @@ import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.vm.ResetPasswordVM;
 import com.persoff68.fatodo.repository.ActivationRepository;
 import com.persoff68.fatodo.repository.ResetPasswordRepository;
+import com.persoff68.fatodo.security.exception.AuthWrongProviderException;
 import com.persoff68.fatodo.service.client.EventService;
 import com.persoff68.fatodo.service.client.MailService;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
@@ -74,6 +76,10 @@ public class AccountService {
     public void sendResetPasswordMail(String user) {
         UserPrincipal userPrincipal = localUserDetailsService
                 .getUserPrincipalByUsernameOrEmail(user);
+        Provider provider = userPrincipal.getProvider();
+        if (!provider.equals(Provider.LOCAL)) {
+            throw new AuthWrongProviderException(provider.getValue());
+        }
         UUID resetPasswordCode = getResetPasswordCode(userPrincipal.getId());
         mailService.sendResetPasswordCode(userPrincipal, resetPasswordCode);
     }
