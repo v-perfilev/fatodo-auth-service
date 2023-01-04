@@ -90,7 +90,7 @@ class SecurityExceptionTest {
 
     @Test
     void testOAuth2WrongProviderException() {
-        Object exception = new OAuth2WrongProviderException("test_provider");
+        Object exception = new OAuth2WrongProviderException();
         assertThat(exception).isInstanceOf(AbstractException.class);
         AbstractException abstractException = (AbstractException) exception;
         assertThat(abstractException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
