@@ -5,14 +5,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UserPrincipal extends AbstractModel implements UserDetails, OAuth2User {
+public class UserPrincipal extends AbstractModel implements UserDetails, OAuth2User, OidcUser {
 
     private String email;
 
@@ -57,4 +61,18 @@ public class UserPrincipal extends AbstractModel implements UserDetails, OAuth2U
         return true;
     }
 
+    @Override
+    public Map<String, Object> getClaims() {
+        return new HashMap<>();
+    }
+
+    @Override
+    public OidcUserInfo getUserInfo() {
+        return null;
+    }
+
+    @Override
+    public OidcIdToken getIdToken() {
+        return null;
+    }
 }

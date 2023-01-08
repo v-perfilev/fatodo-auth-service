@@ -1,23 +1,26 @@
 package com.persoff68.fatodo.security.oauth2.handler;
 
 import com.persoff68.fatodo.model.UserPrincipal;
-import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
+import com.persoff68.fatodo.security.oauth2.repository.CookieAuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    private static final String TOKEN_PARAM = "token";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
@@ -40,8 +43,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = buildUrlWithToken(redirect, jwt);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
-        log.info("OAuth2 authentication succeed: username {}",
-                ((UserPrincipal) oAuth2Authentication.getPrincipal()).getUsername());
+        log.info("OAuth2 authentication succeed: username {}", userPrincipal.getUsername());
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
@@ -51,7 +53,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private String buildUrlWithToken(String redirect, String jwt) {
         return UriComponentsBuilder.fromUriString(redirect)
-                .pathSegment(jwt)
+                .queryParam(TOKEN_PARAM, jwt)
                 .build().toUriString();
     }
 

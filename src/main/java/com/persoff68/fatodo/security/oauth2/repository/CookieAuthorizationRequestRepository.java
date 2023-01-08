@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.repository;
+package com.persoff68.fatodo.security.oauth2.repository;
 
 import com.persoff68.fatodo.security.util.CookieUtils;
 import org.apache.commons.lang3.StringUtils;

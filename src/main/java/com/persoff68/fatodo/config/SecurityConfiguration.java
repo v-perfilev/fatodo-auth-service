@@ -1,12 +1,13 @@
 package com.persoff68.fatodo.config;
 
-import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
 import com.persoff68.fatodo.security.filter.SecurityLocaleFilter;
 import com.persoff68.fatodo.security.filter.SecurityProblemSupport;
 import com.persoff68.fatodo.security.local.LocalAuthenticationProvider;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.persoff68.fatodo.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
-import com.persoff68.fatodo.service.OAuth2UserDetailsService;
+import com.persoff68.fatodo.security.oauth2.repository.CookieAuthorizationRequestRepository;
+import com.persoff68.fatodo.security.oauth2.service.OAuth2UserDetailsService;
+import com.persoff68.fatodo.security.oauth2.service.OidcUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final SecurityProblemSupport securityProblemSupport;
     private final LocalAuthenticationProvider localAuthenticationProvider;
     private final OAuth2UserDetailsService oAuth2UserDetailsService;
+    private final OidcUserDetailsService oidcUserDetailsService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
@@ -72,6 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .userInfoEndpoint()
                 .userService(oAuth2UserDetailsService)
+                .oidcUserService(oidcUserDetailsService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler)

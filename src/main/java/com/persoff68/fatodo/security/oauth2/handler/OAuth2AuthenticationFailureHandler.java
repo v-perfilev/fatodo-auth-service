@@ -1,14 +1,16 @@
 package com.persoff68.fatodo.security.oauth2.handler;
 
-import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
+import com.persoff68.fatodo.security.oauth2.repository.CookieAuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {

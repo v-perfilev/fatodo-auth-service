@@ -52,36 +52,28 @@ spring:
   security:
     oauth2:
       client:
-        provider:
-          apple:
-            authorizationUri: https://appleid.apple.com/auth/authorize?response_mode=form_post
-            tokenUri: https://appleid.apple.com/auth/token
-            jwkSetUri: https://appleid.apple.com/auth/keys
         registration:
           google:
             clientId: google_clientId
             clientSecret: google_cleintSecret
             redirectUri: "{baseUrl}/api/oauth2/code/{registrationId}"
-            scope:
-              - email
-              - profile
+            scope: email, profile
           facebook:
             clientId: facebook_clientId
             clientSecret: facebook_ClientSecret
             redirectUri: "{baseUrl}/api/oauth2/code/{registrationId}"
-            scope:
-              - email
-              - public_profile
+            scope: email, public_profile
           apple:
-            provider: apple
-            authorizationGrantType: authorization_code
             clientId: apple_clientId
             clientSecret: apple_ClientSecret
             redirectUri: "{baseUrl}/api/oauth2/code/{registrationId}"
-            scope:
-              - email
-              - name
-              - openid
+            scope: openid, email, name
+            authorizationUri: https://appleid.apple.com/auth/authorize?response_mode=form_post
+            tokenUri: https://appleid.apple.com/auth/token
+            jwkSetUri: https://appleid.apple.com/auth/keys
+            appleTeamId: test
+            appleClientId: test
+            appleKeyId: test
 
 mongock:
   change-logs-scan-package:
