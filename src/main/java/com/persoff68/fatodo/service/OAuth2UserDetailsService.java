@@ -34,13 +34,19 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
+        System.out.println('1');
         OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(oAuth2UserRequest);
+        System.out.println('2');
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         String redirectUri = oAuth2UserRequest.getClientRegistration().getRedirectUri();
         String providerString = oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
+
+        System.out.println('3');
+        System.out.println(oAuth2User.getAttributes().toString());
+
         OAuth2UserInfo oAuth2UserInfo =
                 OAuth2UserInfoFactory.getOAuth2UserInfo(redirectUri, providerString, oAuth2User.getAttributes());
 
@@ -48,6 +54,8 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
         if (ObjectUtils.isEmpty(email)) {
             throw new OAuth2InternalException(redirectUri);
         }
+
+        System.out.println('4');
 
         try {
             UserPrincipalDTO userPrincipalDTO = userServiceClient.getUserPrincipalByEmail(email);
