@@ -6,7 +6,7 @@ import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.CookieAuthorizationRequestRepository;
-import com.persoff68.fatodo.security.exception.OAuth2UserNotFoundException;
+import com.persoff68.fatodo.security.exception.OAuth2InternalException;
 import com.persoff68.fatodo.security.exception.OAuth2WrongProviderException;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfo;
 import com.persoff68.fatodo.security.oauth2.userinfo.OAuth2UserInfoFactory;
@@ -39,13 +39,14 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
+        String redirectUri = oAuth2UserRequest.getClientRegistration().getRedirectUri();
         String providerString = oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
         OAuth2UserInfo oAuth2UserInfo =
-                OAuth2UserInfoFactory.getOAuth2UserInfo(providerString, oAuth2User.getAttributes());
+                OAuth2UserInfoFactory.getOAuth2UserInfo(redirectUri, providerString, oAuth2User.getAttributes());
 
         String email = oAuth2UserInfo.getEmail();
         if (ObjectUtils.isEmpty(email)) {
-            throw new OAuth2UserNotFoundException();
+            throw new OAuth2InternalException(redirectUri);
         }
 
         try {
@@ -53,7 +54,7 @@ public class OAuth2UserDetailsService implements OAuth2UserService<OAuth2UserReq
             UserPrincipal userPrincipal = userMapper.userPrincipalDTOToUserPrincipal(userPrincipalDTO);
             String currentProviderString = userPrincipal.getProvider().getValue();
             if (!currentProviderString.equals(providerString)) {
-                throw new OAuth2WrongProviderException();
+                throw new OAuth2WrongProviderException(redirectUri);
             }
             return userPrincipal;
         } catch (ModelNotFoundException e) {
