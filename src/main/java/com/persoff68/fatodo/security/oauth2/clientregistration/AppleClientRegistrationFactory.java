@@ -88,7 +88,8 @@ public class AppleClientRegistrationFactory implements ClientRegistrationFactory
 
     private PrivateKey generatePrivateKey() throws IOException {
         try (
-                InputStream is = getClass().getResourceAsStream("classpath:apple/AuthKey_" + appleKeyId + ".p8");
+                InputStream is = getClass().getClassLoader()
+                        .getResourceAsStream("apple/AuthKey_" + appleKeyId + ".p8");
                 Reader isReader = new InputStreamReader(is);
                 PEMParser pemParser = new PEMParser(isReader)
         ) {
@@ -96,7 +97,7 @@ public class AppleClientRegistrationFactory implements ClientRegistrationFactory
             PrivateKeyInfo object = (PrivateKeyInfo) pemParser.readObject();
             return converter.getPrivateKey(object);
         } catch (NullPointerException e) {
-            throw new IOException("Key file not found");
+            throw new IOException("Key file 'apple/AuthKey_" + appleKeyId + ".p8' not found");
         }
     }
 
