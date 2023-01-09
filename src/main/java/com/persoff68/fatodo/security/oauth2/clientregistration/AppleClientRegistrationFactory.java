@@ -13,11 +13,11 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.security.PrivateKey;
 import java.util.Date;
 import java.util.List;
@@ -87,11 +87,16 @@ public class AppleClientRegistrationFactory implements ClientRegistrationFactory
     }
 
     private PrivateKey generatePrivateKey() throws IOException {
-        File file = ResourceUtils.getFile("classpath:apple/AuthKey_" + appleKeyId + ".p8");
-        try (PEMParser pemParser = new PEMParser(new FileReader(file))) {
+        try (
+                InputStream is = getClass().getResourceAsStream("classpath:apple/AuthKey_" + appleKeyId + ".p8");
+                Reader isReader = new InputStreamReader(is);
+                PEMParser pemParser = new PEMParser(isReader)
+        ) {
             JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
             PrivateKeyInfo object = (PrivateKeyInfo) pemParser.readObject();
             return converter.getPrivateKey(object);
+        } catch (NullPointerException e) {
+            throw new IOException("Key file not found");
         }
     }
 
