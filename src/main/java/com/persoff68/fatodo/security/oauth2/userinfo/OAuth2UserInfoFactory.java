@@ -18,9 +18,6 @@ public class OAuth2UserInfoFactory {
         if (provider.equals(Provider.Constants.GOOGLE_VALUE)) {
             return GoogleOAuth2UserInfo.from(attributes);
         }
-        if (provider.equals(Provider.Constants.FACEBOOK_VALUE)) {
-            return FacebookOAuth2UserInfo.from(attributes);
-        }
         if (provider.equals(Provider.Constants.APPLE_VALUE)) {
             return AppleOAuth2UserInfo.from(attributes);
         }

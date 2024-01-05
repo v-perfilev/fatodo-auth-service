@@ -36,7 +36,6 @@ import static org.mockito.Mockito.when;
 class OAuth2UserDetailsServiceIT {
 
     private static final String GOOGLE_NAME = "google-name";
-    private static final String FACEBOOK_NAME = "facebook-name";
     private static final String APPLE_NAME = "apple-name";
 
     @Autowired
@@ -51,17 +50,11 @@ class OAuth2UserDetailsServiceIT {
     UserServiceClient userServiceClient;
 
     private final OAuth2User googleOAuth2User = TestOAuth2User.create(GOOGLE_NAME);
-    private final OAuth2User facebookOAuth2User = TestOAuth2User.create(FACEBOOK_NAME);
     private final OidcUser appleOidcUser = TestOidcUser.create(APPLE_NAME);
 
     private final UserPrincipalDTO googleUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
             .username(GOOGLE_NAME)
             .provider(Provider.GOOGLE.getValue())
-            .build();
-
-    private final UserPrincipalDTO facebookUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
-            .username(FACEBOOK_NAME)
-            .provider(Provider.FACEBOOK.getValue())
             .build();
 
     private final UserPrincipalDTO appleUserPrincipalDTO = TestUserPrincipleDTO.defaultBuilder()
@@ -70,7 +63,6 @@ class OAuth2UserDetailsServiceIT {
             .build();
 
     private final OAuth2UserRequest googleRequest = TestOAuth2UserRequest.create(Provider.GOOGLE.getValue());
-    private final OAuth2UserRequest facebookRequest = TestOAuth2UserRequest.create(Provider.FACEBOOK.getValue());
     private final OidcUserRequest appleRequest = TestOidcUserRequest.create(Provider.APPLE.getValue());
 
     @BeforeEach
@@ -88,30 +80,20 @@ class OAuth2UserDetailsServiceIT {
     }
 
     @Test
-    void testProcessOAuth2User_facebook_userNotExist() {
-        when(defaultOAuth2UserService.loadUser(any())).thenReturn(facebookOAuth2User);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenThrow(new ModelNotFoundException());
-        when(userServiceClient.createOAuth2User(any())).thenReturn(facebookUserPrincipalDTO);
-
-        OAuth2User resultOAuth2User = oAuth2UserDetailsService.loadUser(facebookRequest);
-        assertThat(resultOAuth2User).isNotNull();
-    }
-
-    @Test
-    void testProcessOAuth2User_facebook_userExist() {
-        when(defaultOAuth2UserService.loadUser(any())).thenReturn(facebookOAuth2User);
-        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(facebookUserPrincipalDTO);
-
-        OAuth2User resultOAuth2User = oAuth2UserDetailsService.loadUser(facebookRequest);
-        assertThat(resultOAuth2User).isNotNull();
-    }
-
-    @Test
-    void testProcessOAuth2User_facebook_userExist_wrongProvider() {
-        when(defaultOAuth2UserService.loadUser(any())).thenReturn(facebookOAuth2User);
+    void testProcessOAuth2User_google_userExist() {
+        when(defaultOAuth2UserService.loadUser(any())).thenReturn(googleOAuth2User);
         when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(googleUserPrincipalDTO);
 
-        assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(facebookRequest))
+        OAuth2User resultOAuth2User = oAuth2UserDetailsService.loadUser(googleRequest);
+        assertThat(resultOAuth2User).isNotNull();
+    }
+
+    @Test
+    void testProcessOAuth2User_google_userExist_wrongProvider() {
+        when(defaultOAuth2UserService.loadUser(any())).thenReturn(googleOAuth2User);
+        when(userServiceClient.getUserPrincipalByEmail(any())).thenReturn(appleUserPrincipalDTO);
+
+        assertThatThrownBy(() -> oAuth2UserDetailsService.loadUser(googleRequest))
                 .isInstanceOf(OAuth2WrongProviderException.class);
     }
 

@@ -10,7 +10,6 @@ class ProviderTest {
     void testEnum() {
         assertThat(Provider.LOCAL.getValue()).isEqualTo("LOCAL");
         assertThat(Provider.GOOGLE.getValue()).isEqualTo("GOOGLE");
-        assertThat(Provider.FACEBOOK.getValue()).isEqualTo("FACEBOOK");
         assertThat(Provider.APPLE.getValue()).isEqualTo("APPLE");
     }
 

@@ -59,11 +59,6 @@ spring:
             clientSecret: google_cleintSecret
             redirectUri: "{baseUrl}/api/oauth2/code/{registrationId}"
             scope: email, profile
-          facebook:
-            clientId: facebook_clientId
-            clientSecret: facebook_ClientSecret
-            redirectUri: "{baseUrl}/api/oauth2/code/{registrationId}"
-            scope: email, public_profile
           apple:
             clientId: apple_clientId
             clientSecret: apple_ClientSecret

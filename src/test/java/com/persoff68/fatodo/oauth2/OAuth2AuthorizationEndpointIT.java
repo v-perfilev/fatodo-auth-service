@@ -44,7 +44,6 @@ class OAuth2AuthorizationEndpointIT {
     @ParameterizedTest
     @CsvSource({
             "/google, accounts.google.com",
-            "/facebook, www.facebook.com",
             "/apple, apple.com",
     })
     void testAuthorizationEndpoint_google(String path, String uri) throws Exception {
